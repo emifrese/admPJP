@@ -4,18 +4,11 @@ import AdminLayout from "./components/layout/AdminLayout";
 import AuthLayout from "./components/layout/AuthLayout";
 import AdministrarPacientes from "./components/pages/AdministrarPacientes";
 import Login from "./components/pages/Login";
+import Router from "./router/Router";
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<AuthLayout />}>
-        <Route index element={<Login />} />
-      </Route>
-
-      <Route path="/admin" element={<AdminLayout />}>
-        <Route index element={<AdministrarPacientes />} />
-      </Route>
-    </Routes>
+    <Router />
   );
 }
 

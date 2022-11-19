@@ -4,6 +4,7 @@ import { useEffect } from "react";
 const Formulario = () => {
   const [nombre, setNombre] = useState("");
   const [apellido, setApellido] = useState("");
+  const [email, setEmail] = useState("");
   const [telefono, setTelefono] = useState("");
   const [fecha, setFecha] = useState("");
   const [hora, setHora] = useState("");
@@ -37,7 +38,7 @@ const Formulario = () => {
     setApellido("");
     setTelefono("");
     setFecha("");
-    setHora("");
+    setHoras("");
     setId(null);
   };
 
@@ -45,19 +46,19 @@ const Formulario = () => {
 
   return (
     <>
-      <h2 className="font-black text-3xl text-center">
+      <h2 className="font-black text-xl text-center">
         Administrador de Pacientes
       </h2>
 
-      <p className="text-xl mt-5 mb-10 text-center">
+      <p className="text-md mt-2 mb-2 text-center">
         Añade tus pacientes {""}
         <span className="text-[#227777] font-bold">Administralos</span>
       </p>
       <form
-        className="bg-zinc-300 border-2 rounded-md shadow-md max-h-max px-5 py-10 mb-10 lg:mb-0"
+        className="bg-white text-sm rounded-md shadow-[10px_10px_10px_2px_rgba(67,56,202,0.3)] max-h-max px-5 py-3 mb-10 lg:mb-0"
         onSubmit={handleSubmit}
       >
-        <div className="mb-5">
+        <div>
           <label htmlFor="nombre" className="text-zinc-700 uppercase font-bold">
             Nombre
           </label>
@@ -88,6 +89,22 @@ const Formulario = () => {
         </div>
         <div className="mb-5">
           <label
+            htmlFor="email"
+            className="text-zinc-700 uppercase font-bold"
+          >
+            Email
+          </label>
+          <input
+            id="email"
+            type="text"
+            placeholder="Email del paciente"
+            className="border-2 w-full p-2 mt-2 placeholder-zinc-400 rounded-md"
+            onChange={(e) => setEmail(e.target.value)}
+            value={email}
+          />
+        </div>
+        <div className="mb-5">
+          <label
             htmlFor="telefono"
             className="text-zinc-700 uppercase font-bold"
           >
@@ -96,7 +113,7 @@ const Formulario = () => {
           <input
             id="telefono"
             type="text"
-            placeholder="Nombre del paciente"
+            placeholder="Telefono del paciente"
             className="border-2 w-full p-2 mt-2 placeholder-zinc-400 rounded-md"
             onChange={(e) => setTelefono(e.target.value)}
             value={telefono}
@@ -134,14 +151,12 @@ const Formulario = () => {
         </div>
         <input
           type="submit"
-          className="bg-[#227777] rounded-md w-full p-3 text-zinc-300 uppercase font-bold hover:bg-[#1b5e5e] cursor-pointer transition-colors"
+          className="bg-indigo-600 rounded-md w-full p-3 text-white uppercase font-bold hover:bg-indigo-700 cursor-pointer transition-colors"
         />
       </form>
 
-      {msg  && <p>Faltan datos</p>}
+      {msg && <p>Faltan datos</p>}
     </>
-
-
   );
 };
 

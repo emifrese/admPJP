@@ -7,7 +7,7 @@ const AdminLayout = () => {
   return (
     <>
       <Header />
-      {<main className="container mx-auto mt-10">
+      {<main className="container mx-auto mt-6">
         <Outlet/>
         </main>}
       <Footer />

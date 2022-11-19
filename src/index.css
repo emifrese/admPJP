@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  :root {
+    --background-yellow: #F6FA84;
+  }
+}
+
 body {
   background-image: url('./assets/background.svg')
 }

@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import Formulario from "../forms/Formulario";
+import ListadoPacientes from "../ListadoPacientes";
+import AddButton from "../UI/AddButton";
 
 const AdministrarPacientes = () => {
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
@@ -19,15 +21,16 @@ const AdministrarPacientes = () => {
       </button>
       <div
         className={`${
-            mostrarFormulario ? 'block' : 'hidden'
+          mostrarFormulario ? "block" : "hidden"
         } md:block md:w-1/2 lg:w-2/5`}
       >
-        <Formulario/>
+        <Formulario />
       </div>
 
-      <div className="md:w-1/2 lg:w-3/5">
-        Listado Pacientes
+      <div className="max-h-full md:w-1/2 lg:w-3/5 overflow-auto md:max-h-[500px] md:overflow-y-scroll">
+        <ListadoPacientes />
       </div>
+      {/* <AddButton /> */}
     </div>
   );
 };
