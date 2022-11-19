@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { auth } from '../../firebase'
 
 const Header = () => {
   return (
@@ -14,15 +15,15 @@ const Header = () => {
       </h1>
 
       <nav className="flex flex-col items-center lg:flex-row gap-4 mt-5 lg:mt-0">
+        <p className="text-zinc-300 text-sm uppercase font-bold px-2 py-1 bg-zinc-800 rounded-lg">
+          BIGG
+        </p>
         <Link to="/admin" className="text-zinc-300 text-xs uppercase font-bold">
           Pacientes
         </Link>
-        <Link to="/admin/perfil" className="text-zinc-300 text-xs uppercase font-bold">
-          Perfil
-        </Link>
         <button
           className="text-zinc-300 text-xs uppercase font-bold"
-        //   onClick={cerrarSesion}
+          onClick={() => auth.signOut()}
         >
           Cerrar Sesión
         </button>
