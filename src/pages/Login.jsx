@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
-import LoginCard from '../UI/LoginCard'
-import LoginHeader from '../UI/LoginHeader'
+import LoginCard from '../components/UI/LoginCard'
+import LoginHeader from '../components/UI/LoginHeader'
 
 const Login = () => {
   return (
