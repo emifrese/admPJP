@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
+import { collection, addDoc, onSnapshot } from "firebase/firestore";
+import { firestore } from "../../firebase";
 
 const Formulario = () => {
   const [nombre, setNombre] = useState("");
@@ -22,6 +24,8 @@ const Formulario = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    console.log(nombre, apellido, telefono, fecha, hora)
+
     if ([nombre, apellido, telefono, fecha, hora].includes("")) {
       setAlert({
         msg: "Todos los campos son obligatorios",
@@ -29,6 +33,12 @@ const Formulario = () => {
       });
       return;
     }
+
+    const turnosRef = collection(firestore, 'BIGG/turnos/diciembre');
+
+    onSnapshot(collection(firestore, 'BIGG/turnos/diciembre'), snapshot => snapshot.docs.map(doc => console.log(doc)))
+
+    console.log(turnosRef)
 
     // Guardamos el paciente y su primer turno
     setAlert({
@@ -66,12 +76,12 @@ const Formulario = () => {
             id="nombre"
             type="text"
             placeholder="Nombre del paciente"
-            className="border-2 w-full p-2 mt-2 placeholder-zinc-400 rounded-md"
+            className="border-2 w-full p-2 my-2 placeholder-zinc-400 rounded-md"
             onChange={(e) => setNombre(e.target.value)}
             value={nombre}
           />
         </div>
-        <div className="mb-5">
+        <div>
           <label
             htmlFor="apellido"
             className="text-zinc-700 uppercase font-bold"
@@ -82,23 +92,20 @@ const Formulario = () => {
             id="apellido"
             type="text"
             placeholder="Apellido del paciente"
-            className="border-2 w-full p-2 mt-2 placeholder-zinc-400 rounded-md"
+            className="border-2 w-full p-2 my-2 placeholder-zinc-400 rounded-md"
             onChange={(e) => setApellido(e.target.value)}
             value={apellido}
           />
         </div>
-        <div className="mb-5">
-          <label
-            htmlFor="email"
-            className="text-zinc-700 uppercase font-bold"
-          >
+        <div>
+          <label htmlFor="email" className="text-zinc-700 uppercase font-bold">
             Email
           </label>
           <input
             id="email"
             type="text"
             placeholder="Email del paciente"
-            className="border-2 w-full p-2 mt-2 placeholder-zinc-400 rounded-md"
+            className="border-2 w-full p-2 my-2 placeholder-zinc-400 rounded-md"
             onChange={(e) => setEmail(e.target.value)}
             value={email}
           />
@@ -114,7 +121,7 @@ const Formulario = () => {
             id="telefono"
             type="text"
             placeholder="Telefono del paciente"
-            className="border-2 w-full p-2 mt-2 placeholder-zinc-400 rounded-md"
+            className="border-2 w-full p-2 my-2 placeholder-zinc-400 rounded-md"
             onChange={(e) => setTelefono(e.target.value)}
             value={telefono}
           />
@@ -126,7 +133,7 @@ const Formulario = () => {
           <select
             id="fecha"
             className="border-2 w-1/5 ml-2 mr-4 rounded-md"
-            onChange={(e) => console.log(e.target.value)}
+            onChange={(e) => setFecha(e.target.value)}
           >
             {/* Aca van las opciones que renderizamos una vez cargadas */}
             <option value={null} disabled></option>
@@ -140,7 +147,7 @@ const Formulario = () => {
           <select
             id="hora"
             className="border-2 w-1/5 ml-2 rounded-md"
-            onChange={(e) => console.log(e.target.value)}
+            onChange={(e) => setHora(e.target.value)}
           >
             {/* Aca van las opciones que renderizamos una vez cargadas */}
             <option value={null} disabled></option>
@@ -155,7 +162,7 @@ const Formulario = () => {
         />
       </form>
 
-      {msg && <p>Faltan datos</p>}
+      {/* {msg && <p>Faltan datos</p>} */}
     </>
   );
 };
