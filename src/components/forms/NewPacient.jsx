@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
-import { collection, addDoc, onSnapshot } from "firebase/firestore";
+import { collection, addDoc } from "firebase/firestore";
+import { useSelector } from "react-redux";
 import { firestore } from "../../firebase";
 
 const Formulario = () => {
@@ -8,37 +9,40 @@ const Formulario = () => {
   const [apellido, setApellido] = useState("");
   const [email, setEmail] = useState("");
   const [telefono, setTelefono] = useState("");
-  const [fecha, setFecha] = useState("");
-  const [hora, setHora] = useState("");
   const [id, setId] = useState(null);
+  const pacients = useSelector((state) => state.pacients);
 
+  console.log(pacients);
   const [alert, setAlert] = useState({});
+  
+  useEffect(() => {});
 
-  const [fechas, setFechas] = useState([]);
-  const [horas, setHoras] = useState([]);
-
-  useEffect(() => {
-    // Carga de pacientes, fechas y horas disponibles
-  }, []);
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log(nombre, apellido, telefono, fecha, hora)
+    console.log(nombre, apellido, telefono);
 
-    if ([nombre, apellido, telefono, fecha, hora].includes("")) {
+    if ([nombre, apellido, telefono, email].includes("")) {
       setAlert({
         msg: "Todos los campos son obligatorios",
         error: true,
       });
+      console.log("Faltan datos");
       return;
     }
 
-    const turnosRef = collection(firestore, 'BIGG/turnos/diciembre');
+    const turnosRef = collection(firestore, "pacientes");
 
-    onSnapshot(collection(firestore, 'BIGG/turnos/diciembre'), snapshot => snapshot.docs.map(doc => console.log(doc)))
+    const newPaciente = {
+      nombre,
+      apellido,
+      telefono,
+      email,
+    };
 
-    console.log(turnosRef)
+    await addDoc(turnosRef, newPaciente);
+
+    // console.log(turnosRef);
 
     // Guardamos el paciente y su primer turno
     setAlert({
@@ -47,8 +51,7 @@ const Formulario = () => {
     setNombre("");
     setApellido("");
     setTelefono("");
-    setFecha("");
-    setHoras("");
+    setEmail("");
     setId(null);
   };
 
@@ -125,36 +128,6 @@ const Formulario = () => {
             onChange={(e) => setTelefono(e.target.value)}
             value={telefono}
           />
-        </div>
-        <div className="mb-5 flex items-center">
-          <label htmlFor="fecha" className="text-zinc-700 uppercase font-bold">
-            Fecha
-          </label>
-          <select
-            id="fecha"
-            className="border-2 w-1/5 ml-2 mr-4 rounded-md"
-            onChange={(e) => setFecha(e.target.value)}
-          >
-            {/* Aca van las opciones que renderizamos una vez cargadas */}
-            <option value={null} disabled></option>
-            <option value="23-10">23/10</option>
-            <option value="25-10">25/10</option>
-            <option value="27-10">27/10</option>
-          </select>
-          <label htmlFor="hora" className="text-zinc-700 uppercase font-bold">
-            Hora
-          </label>
-          <select
-            id="hora"
-            className="border-2 w-1/5 ml-2 rounded-md"
-            onChange={(e) => setHora(e.target.value)}
-          >
-            {/* Aca van las opciones que renderizamos una vez cargadas */}
-            <option value={null} disabled></option>
-            <option value="18:00">18:00</option>
-            <option value="18:30">18:30</option>
-            <option value="19:00">19:00</option>
-          </select>
         </div>
         <input
           type="submit"

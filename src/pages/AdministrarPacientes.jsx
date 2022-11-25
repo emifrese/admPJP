@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import Formulario from "../forms/Formulario";
-import ListadoPacientes from "../ListadoPacientes";
-import AddButton from "../UI/AddButton";
+import NewAppointment from "../components/forms/NewAppointment";
+import ListadoPacientes from '../components/ListadoPacientes'
 
 const AdministrarPacientes = () => {
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
@@ -24,7 +23,7 @@ const AdministrarPacientes = () => {
           mostrarFormulario ? "block" : "hidden"
         } md:block md:w-1/2 lg:w-2/5`}
       >
-        <Formulario />
+        <NewAppointment />
       </div>
 
       <div className="max-h-full md:w-1/2 lg:w-3/5 overflow-auto md:max-h-[500px] md:overflow-y-scroll">

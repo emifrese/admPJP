@@ -2,16 +2,19 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialTurnosState = {
   firstDay: "",
-  turnos: [],
+  appointments: [],
 };
 
-const turnosSlice = createSlice({
+const appointmentsSlice = createSlice({
   name: "turnos",
   initialState: initialTurnosState,
   reducers: {
     firstEnteredData(state, action) {
-      const result = { ...state, ...action.payload };
-      return result;
+      return action.payload;
     },
   },
 });
+
+export const appointmentsActions = appointmentsSlice.actions;
+
+export default appointmentsSlice.reducer;

@@ -1,8 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
+import appointmentsReducer from "./states/appointments";
+import pacientsReducer from "./states/pacients";
 
-export default store = configureStore({
-    reducer: {
-        turnos: turno
-    }
-})
+const store = configureStore({
+  reducer: {
+    appointments: appointmentsReducer,
+    pacients: pacientsReducer,
+  },
+});
 
+export default store;

@@ -18,7 +18,7 @@ const Header = () => {
         <p className="text-zinc-300 text-sm uppercase font-bold px-2 py-1 bg-zinc-800 rounded-lg">
           BIGG
         </p>
-        <Link to="/admin" className="text-zinc-300 text-xs uppercase font-bold">
+        <Link to="/newPacient" className="text-zinc-300 text-xs uppercase font-bold">
           Pacientes
         </Link>
         <button
