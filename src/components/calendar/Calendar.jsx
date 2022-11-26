@@ -3,11 +3,11 @@ import { useSelector } from "react-redux";
 import { days, getDays, months } from "../../helpers/date";
 
 const Calendar = ({ totalDays, month, year, initialDay, finalDay }) => {
-  const turnos = useSelector((state) => state.appointments.appointments[0]);
+  const turnos = useSelector((state) => state.appointments.appointments);
   console.log(turnos);
-  if(turnos) {
-      Object.keys(turnos['12']).forEach((el) => console.log(el, turnos['12'][el].pacientId));
-  } 
+  if (turnos) {
+    const twelveAppoint = turnos.find((el) => el.id === "12");
+  }
   let squareDays = [];
   let diffInitialDay = initialDay;
   let diffFinalDay = 6 - finalDay;
@@ -30,6 +30,25 @@ const Calendar = ({ totalDays, month, year, initialDay, finalDay }) => {
 
   for (let i = 0; i < totalDays; i++) {
     const day = new Date(year, month, i + 1);
+    const dayAppointments = turnos.find(
+      (el) => el.id === day.getDate().toString()
+    );
+    let appointmentsDisplay;
+    if (dayAppointments) {
+      
+      appointmentsDisplay = Object.entries(dayAppointments).filter(el => el[0] !== 'id').map((el) => {
+        return (
+          <p
+            className={
+              "border-2 border-zinc-300 rounded-md py-2 px-4 " +
+              (el[1].pacientId !== null ? "bg-red-300" : "bg-green-300")
+            }
+          >
+            {el[0]}
+          </p>
+        );
+      });
+    }
     squareDays.push(
       <div
         key={Math.random().toString(16).slice(2)}
@@ -37,12 +56,12 @@ const Calendar = ({ totalDays, month, year, initialDay, finalDay }) => {
       >
         {day.toDateString()}
         {days[day.getDay()]}
-        {/* {months[month]} */}
+        {appointmentsDisplay !== null && appointmentsDisplay}
       </div>
     );
   }
 
-  if (finalDay !== 0) {
+  if (diffFinalDay !== 0) {
     for (let i = 0; i < finalDay; i++) {
       const day = new Date(year, month + 1, i + 1);
       squareDays.push(
