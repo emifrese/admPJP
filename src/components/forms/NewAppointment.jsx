@@ -16,7 +16,7 @@ const NewAppointment = () => {
       if (nombre.trim() === "") {
         return null;
       } else {
-        return el.apellido.toLowerCase().includes(nombre);
+        return el.apellido.toLowerCase().includes(nombre.trim());
       }
     });
 
@@ -42,17 +42,22 @@ const NewAppointment = () => {
             id="nombre"
             type="text"
             placeholder="Nombre del paciente"
-            className="border-2 w-full p-2 my-2 placeholder-zinc-400 rounded-md"
+            className="border-2 w-full p-2 mt-2 placeholder-zinc-400 rounded-md"
             onChange={(e) => setNombre(e.target.value)}
             value={nombre}
           />
-          {filterLastName.length > 0 && (
-            <div className="absolute top-14 border-2 border-red-500">
+          {filterLastName.length > 0 && nombre.length > 0 && (
+            <div className="absolute border-2 border-[#e5e7eb] bg-white rounded-b-md border-t-0 w-full">
               {filterLastName.map((e) => (
-                <p>
+                <p className="py-2 cursor-pointer hover:bg-zinc-300">
                   {e.apellido}, {e.nombre}
                 </p>
               ))}
+            </div>
+          )}
+          {(filterLastName.length === 0 && nombre.length > 0) && (
+            <div className="absolute border-2 border-[#e5e7eb] bg-white rounded-b-md border-t-0 w-full py-2 cursor-pointer hover:bg-zinc-300">
+              Agregar nuevo paciente
             </div>
           )}
         </div>

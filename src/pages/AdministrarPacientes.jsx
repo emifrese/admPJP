@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import NewAppointment from "../components/forms/NewAppointment";
 import ListadoPacientes from '../components/ListadoPacientes'
+import Modal from "../components/UI/Modal";
 
 const AdministrarPacientes = () => {
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
@@ -25,7 +26,6 @@ const AdministrarPacientes = () => {
       >
         <NewAppointment />
       </div>
-
       <div className="max-h-full md:w-1/2 lg:w-3/5 overflow-auto md:max-h-[500px] md:overflow-y-scroll">
         <ListadoPacientes />
       </div>

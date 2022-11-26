@@ -1,16 +1,27 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { months } from "../../helpers/date";
+
+const actualDate = new Date();
 
 const initialTurnosState = {
-  firstDay: "",
+  place: "BIGG",
+  month: months[actualDate.getMonth()].toLowerCase(),
   appointments: [],
 };
 
 const appointmentsSlice = createSlice({
-  name: "turnos",
+  name: "appointments",
   initialState: initialTurnosState,
   reducers: {
+    togglePlace(state, action) {
+      if (action.payload !== state.place) {
+        return { ...state, ...action.payload };
+      } else {
+        return state;
+      }
+    },
     firstEnteredData(state, action) {
-      return action.payload;
+      return { ...state, appointments: action.payload };
     },
   },
 });

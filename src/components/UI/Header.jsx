@@ -21,6 +21,9 @@ const Header = () => {
         <Link to="/newPacient" className="text-zinc-300 text-xs uppercase font-bold">
           Pacientes
         </Link>
+        <Link to="/appointmentsAdmin" className="text-zinc-300 text-xs uppercase font-bold">
+          Turnos
+        </Link>
         <button
           className="text-zinc-300 text-xs uppercase font-bold"
           onClick={() => auth.signOut()}
