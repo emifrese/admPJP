@@ -10,10 +10,6 @@ const AppointmentsAdmin = () => {
   const year = actualDate.getFullYear();
   const totalDays = getDays(actualDate.getFullYear(), month);
 
-  const dayOne = new Date(year, month, 1);
-  const initialDay = dayOne.getDay();
-  const dayEnd = new Date(year, month, totalDays);
-  const finalDay = dayEnd.getDay();
 
   return (
     <>
@@ -21,13 +17,7 @@ const AppointmentsAdmin = () => {
       <p>
         Tiene {totalDays} días {month}
       </p>
-      <Calendar
-        totalDays={totalDays}
-        month={month}
-        year={year}
-        initialDay={initialDay}
-        finalDay={finalDay}
-      />
+      <Calendar/>
       <p>{actualDate.getDay()}</p>
     </>
   );

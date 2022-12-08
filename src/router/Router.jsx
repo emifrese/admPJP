@@ -14,12 +14,15 @@ import { collection, onSnapshot } from "firebase/firestore";
 import { pacientsActions } from "../store/states/pacients";
 import AppointmentsAdmin from "../pages/AppointmentsAdmin";
 import { appointmentsActions } from "../store/states/appointments";
+import { months } from "../helpers/date";
 
 const Router = () => {
   const [user, setUser] = useState(null);
   const dispatch = useDispatch();
   const month = useSelector((state) => state.appointments.month);
   const place = useSelector((state) => state.appointments.place);
+
+  const monthString = months[month].toLowerCase();
 
   useEffect(() => {
     onAuthStateChanged(auth, setUser);
@@ -34,16 +37,31 @@ const Router = () => {
         dispatch(pacientsActions.fetchPacients(pacientsArray));
       });
 
-      onSnapshot(collection(firestore, `${place}/turnos/${month}`), snapshot => {
-        let turnosArray = snapshot.docs.map((doc) => ({
-          ...doc.data(),
-          id: doc.id
-        }))
-        console.log(turnosArray);
-        dispatch(appointmentsActions.firstEnteredData(turnosArray))
-      });
+      onSnapshot(
+        collection(firestore, `${place}/turnos/${monthString}`),
+        (snapshot) => {
+          let turnosArray = snapshot.docs.map((doc) => ({
+            ...doc.data(),
+            id: doc.id,
+          }));
+          console.log(turnosArray);
+          dispatch(appointmentsActions.firstEnteredData(turnosArray));
+        }
+      );
+
+      onSnapshot(
+        collection(firestore, `${place}/turnos/predeterminados`),
+        (snapshot) => {
+          let defAppointments = snapshot.docs.map((doc) => ({
+            ...doc.data(),
+            id: doc.id,
+          }));
+          console.log(defAppointments);
+          dispatch(appointmentsActions.defaultAppointments(defAppointments));
+        }
+      );
     }
-  }, [auth, user]);
+  }, [auth, user, month]);
 
   return (
     <Suspense fallback={<Loader />}>

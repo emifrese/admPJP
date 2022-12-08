@@ -1,12 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { months } from "../../helpers/date";
 
 const actualDate = new Date();
 
 const initialTurnosState = {
   place: "BIGG",
-  month: months[actualDate.getMonth()].toLowerCase(),
+  defAppointments: [],
+  month: actualDate.getMonth(),
   appointments: [],
+  year: actualDate.getFullYear(),
 };
 
 const appointmentsSlice = createSlice({
@@ -20,8 +21,44 @@ const appointmentsSlice = createSlice({
         return state;
       }
     },
+    defaultAppointments(state, action){
+      return {...state, defAppointments: action.payload}
+    }
+    ,
     firstEnteredData(state, action) {
       return { ...state, appointments: action.payload };
+    },
+    moveMonth(state, action) {
+      const currentYear = state.year;
+      const currentMonth = state.month;
+      switch (action.payload) {
+        case 'increment':
+          if (currentMonth === 11) {
+            return {
+              ...state,
+              month: 0,
+              year: currentYear + 1
+            };
+          }
+          return {
+            ...state,
+            month: currentMonth + 1,
+          };
+        case 'reduction':
+          if (currentMonth === 0){
+            return {
+              ...state,
+              month: 11,
+              year: currentYear - 1
+            }
+          } 
+          return {
+            ...state, 
+            month: currentMonth - 1
+          }
+        default:
+          break;
+      }  
     },
   },
 });

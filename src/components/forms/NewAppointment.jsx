@@ -1,14 +1,19 @@
+import { current } from "@reduxjs/toolkit";
 import React from "react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const NewAppointment = () => {
   const [nombre, setNombre] = useState("");
+  const [currentPacient, setCurrentPacient] = useState({});
   const pacients = useSelector((state) => state.pacients);
 
   const handleSubmit = (e) => {
     e.preventDefault();
   };
+
+  console.log(Object.keys(currentPacient));
 
   const filterLastName =
     pacients.length > 0 &&
@@ -49,19 +54,42 @@ const NewAppointment = () => {
           {filterLastName.length > 0 && nombre.length > 0 && (
             <div className="absolute border-2 border-[#e5e7eb] bg-white rounded-b-md border-t-0 w-full">
               {filterLastName.map((e) => (
-                <p className="py-2 cursor-pointer hover:bg-zinc-300">
+                <button
+                  className="block w-full text-start py-2 cursor-pointer hover:bg-zinc-300"
+                  onClick={() => {
+                    setCurrentPacient(e);
+                    setNombre("");
+                  }}
+                  key={Math.random().toString(32).slice(2)}
+                >
                   {e.apellido}, {e.nombre}
-                </p>
+                </button>
               ))}
             </div>
           )}
-          {(filterLastName.length === 0 && nombre.length > 0) && (
-            <div className="absolute border-2 border-[#e5e7eb] bg-white rounded-b-md border-t-0 w-full py-2 cursor-pointer hover:bg-zinc-300">
+          {filterLastName.length === 0 && nombre.length > 0 && (
+            <Link
+              to="/newPacient"
+              className="block absolute border-2 border-[#e5e7eb] bg-white rounded-b-md border-t-0 w-full py-2 cursor-pointer hover:bg-zinc-300"
+            >
               Agregar nuevo paciente
-            </div>
+            </Link>
           )}
         </div>
       </form>
+      {Object.keys(currentPacient).length > 0 && (
+        <div className="bg-white text-sm rounded-md shadow-[10px_10px_10px_2px_rgba(67,56,202,0.3)] max-h-max px-5 py-3 mt-10 mb-10 lg:mb-0">
+          <p>Nombre: {currentPacient.nombre}</p>
+          <p>Apellido: {currentPacient.apellido}</p>
+          <p>Email: {currentPacient.email}</p>
+          <p>Telefono: {currentPacient.telefono}</p>
+          {currentPacient.turnos ? (
+            <p>Paciente Control</p>
+          ) : (
+            <p>Paciente Nuevo</p>
+          )}
+        </div>
+      )}
     </>
   );
 };
