@@ -1,31 +1,39 @@
-import { current } from "@reduxjs/toolkit";
 import React from "react";
 import { useState } from "react";
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import NewPacient from "../../pages/NewPacient";
+import { pacientsActions } from "../../store/states/pacients";
+import Modal from "../UI/Modal";
+import RecurringPacient from "./RecurringPacients";
 
 const NewAppointment = () => {
   const [nombre, setNombre] = useState("");
   const [currentPacient, setCurrentPacient] = useState({});
-  const pacients = useSelector((state) => state.pacients);
+  const [modal, setModal] = useState(["", false]);
+  const dispatch = useDispatch();
+  const place = useSelector((state) => state.appointments.place);
+  const pacients = useSelector((state) => state.pacients.pacients);
+  const currentPacient0 = useSelector((state) => state.pacients.currentPacient);
+  console.log(currentPacient0);
 
   const handleSubmit = (e) => {
     e.preventDefault();
   };
 
-  console.log(Object.keys(currentPacient));
+  const toggleModal = (type) => {
+    setModal((state) => [type, !state[1]]);
+  };
 
   const filterLastName =
-    pacients.length > 0 &&
-    pacients.filter((el) => {
-      if (nombre.trim() === "") {
-        return null;
-      } else {
-        return el.apellido.toLowerCase().includes(nombre.trim());
-      }
-    });
-
-  console.log(filterLastName);
+    pacients.length > 0
+      ? pacients.filter((el) => {
+          if (nombre.trim() === "") {
+            return null;
+          } else {
+            return el.apellido.toLowerCase().includes(nombre.trim());
+          }
+        })
+      : [];
 
   return (
     <>
@@ -57,7 +65,9 @@ const NewAppointment = () => {
                 <button
                   className="block w-full text-start py-2 cursor-pointer hover:bg-zinc-300"
                   onClick={() => {
-                    setCurrentPacient(e);
+                    // setCurrentPacient(e);
+                    dispatch(pacientsActions.setCurrentPacient(e));
+                    toggleModal("recurring");
                     setNombre("");
                   }}
                   key={Math.random().toString(32).slice(2)}
@@ -68,12 +78,16 @@ const NewAppointment = () => {
             </div>
           )}
           {filterLastName.length === 0 && nombre.length > 0 && (
-            <Link
-              to="/newPacient"
+            <button
+              // to="/newPacient"
+              onClick={() => {
+                toggleModal("new");
+                setNombre("");
+              }}
               className="block absolute border-2 border-[#e5e7eb] bg-white rounded-b-md border-t-0 w-full py-2 cursor-pointer hover:bg-zinc-300"
             >
               Agregar nuevo paciente
-            </Link>
+            </button>
           )}
         </div>
       </form>
@@ -89,6 +103,16 @@ const NewAppointment = () => {
             <p>Paciente Nuevo</p>
           )}
         </div>
+      )}
+      {modal[1] && modal[0] === "new" && (
+        <Modal Toggle={toggleModal}>
+          <NewPacient Toggle={toggleModal} />
+        </Modal>
+      )}
+      {modal[1] && modal[0] === "recurring" && (
+        <Modal Toggle={toggleModal}>
+          <RecurringPacient />
+        </Modal>
       )}
     </>
   );

@@ -5,8 +5,8 @@ const actualDate = new Date();
 const initialTurnosState = {
   place: "BIGG",
   defAppointments: [],
-  month: actualDate.getMonth(),
   appointments: [],
+  month: actualDate.getMonth(),
   year: actualDate.getFullYear(),
 };
 

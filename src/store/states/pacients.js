@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialPacientsState = {
   pacients: [],
+  currentPacient: [],
 };
 
 const pacientsSlice = createSlice({
@@ -9,7 +10,10 @@ const pacientsSlice = createSlice({
   initialState: initialPacientsState,
   reducers: {
     fetchPacients(state, action) {
-      return action.payload;
+      return { ...state, pacients: action.payload };
+    },
+    setCurrentPacient(state, action) {
+      return { ...state, currentPacient: action.payload };
     },
   },
 });

@@ -1,9 +1,9 @@
 import React from 'react'
-import Formulario from '../components/forms/NewPacient'
+import NewPacientForm from '../components/forms/NewPacientForm'
 
-const NewPacient = () => {
+const NewPacient = ({Toggle}) => {
   return (
-    <Formulario />
+    <NewPacientForm Toggle={Toggle} />
   )
 }
 

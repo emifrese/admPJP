@@ -4,7 +4,8 @@ import { collection, addDoc } from "firebase/firestore";
 import { useSelector } from "react-redux";
 import { firestore } from "../../firebase";
 
-const Formulario = () => {
+const NewPacientForm = ({Toggle}) => {
+  console.log(Toggle)
   const [nombre, setNombre] = useState("");
   const [apellido, setApellido] = useState("");
   const [email, setEmail] = useState("");
@@ -12,7 +13,6 @@ const Formulario = () => {
   const [id, setId] = useState(null);
   const pacients = useSelector((state) => state.pacients);
 
-  console.log(pacients);
   const [alert, setAlert] = useState({});
   
   useEffect(() => {});
@@ -42,9 +42,6 @@ const Formulario = () => {
 
     await addDoc(turnosRef, newPaciente);
 
-    // console.log(turnosRef);
-
-    // Guardamos el paciente y su primer turno
     setAlert({
       msg: "Guardado correctamente",
     });
@@ -53,12 +50,13 @@ const Formulario = () => {
     setTelefono("");
     setEmail("");
     setId(null);
+    Toggle()
   };
 
   const { msg } = alert;
 
   return (
-    <>
+    <div className="bg-white text-sm rounded-md max-h-max px-5 py-3 mb-10 lg:mb-0">
       <h2 className="font-black text-xl text-center">
         Administrador de Pacientes
       </h2>
@@ -68,7 +66,7 @@ const Formulario = () => {
         <span className="text-[#227777] font-bold">Administralos</span>
       </p>
       <form
-        className="bg-white text-sm rounded-md shadow-[10px_10px_10px_2px_rgba(67,56,202,0.3)] max-h-max px-5 py-3 mb-10 lg:mb-0"
+        className="px-5 py-3 mb-10 lg:mb-0"
         onSubmit={handleSubmit}
       >
         <div>
@@ -136,8 +134,8 @@ const Formulario = () => {
       </form>
 
       {/* {msg && <p>Faltan datos</p>} */}
-    </>
+    </div>
   );
 };
 
-export default Formulario;
+export default NewPacientForm;

@@ -33,7 +33,6 @@ const Router = () => {
           ...doc.data(),
           id: doc.id,
         }));
-        console.log(pacientsArray);
         dispatch(pacientsActions.fetchPacients(pacientsArray));
       });
 
@@ -44,7 +43,6 @@ const Router = () => {
             ...doc.data(),
             id: doc.id,
           }));
-          console.log(turnosArray);
           dispatch(appointmentsActions.firstEnteredData(turnosArray));
         }
       );
@@ -56,7 +54,6 @@ const Router = () => {
             ...doc.data(),
             id: doc.id,
           }));
-          console.log(defAppointments);
           dispatch(appointmentsActions.defaultAppointments(defAppointments));
         }
       );
@@ -75,7 +72,6 @@ const Router = () => {
           ) : (
             <Route element={<AdminLayout />}>
               <Route path="/" index element={<AdministrarPacientes />} />
-              <Route path="/newPacient" element={<NewPacient />} />
               <Route
                 path="/appointmentsAdmin"
                 element={<AppointmentsAdmin />}
