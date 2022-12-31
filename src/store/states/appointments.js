@@ -6,6 +6,7 @@ const initialTurnosState = {
   place: "BIGG",
   defAppointments: [],
   appointments: [],
+  day: actualDate.getDay(),
   month: actualDate.getMonth(),
   year: actualDate.getFullYear(),
 };
@@ -60,6 +61,12 @@ const appointmentsSlice = createSlice({
           break;
       }  
     },
+    setDay(state,action){
+      return {
+        ...state,
+        day: action.payload
+      }
+    }
   },
 });
 

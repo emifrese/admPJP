@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, doc, updateDoc, deleteField } from "firebase/firestore";
 import { useSelector } from "react-redux";
 import { firestore } from "../../firebase";
 
@@ -11,22 +11,25 @@ const RecurringPacient = () => {
   const [telefono, setTelefono] = useState("");
   const [id, setId] = useState(null);
   const currentPacient = useSelector((state) => state.pacients.currentPacient);
+  const currentPlace = useSelector((state) => state.appointments.place);
   console.log(currentPacient)
   const [alert, setAlert] = useState({});
+  const appointmentRef = doc(firestore, `${currentPlace}/turnos/diciembre/5`);
+  console.log(appointmentRef)
   
   useEffect(() => {});
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if ([nombre, apellido, telefono, email].includes("")) {
-      setAlert({
-        msg: "Todos los campos son obligatorios",
-        error: true,
-      });
-      console.log("Faltan datos");
-      return;
-    }
+    // if ([nombre, apellido, telefono, email].includes("")) {
+    //   setAlert({
+    //     msg: "Todos los campos son obligatorios",
+    //     error: true,
+    //   });
+    //   console.log("Faltan datos");
+    //   return;
+    // }
 
     const turnosRef = collection(firestore, "pacientes");
 
@@ -37,7 +40,19 @@ const RecurringPacient = () => {
       email,
     };
 
-    await addDoc(turnosRef, newPaciente);
+    // await addDoc(turnosRef, newPaciente);
+    await updateDoc(appointmentRef, {
+      1700: {
+        hour: '1700',
+        pacientId: "vUPumtHxSPZsDKHNzXtv"
+      },
+      // 1730: deleteField(), borra ese campo
+      1730: {
+        hour: '1700',
+        pacientId: "vUPumtHxSPZsDKHNzXtv"
+      },
+      day: "5"
+    })
 
     // Guardamos el paciente y su primer turno
     setAlert({

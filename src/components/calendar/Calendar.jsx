@@ -10,12 +10,14 @@ import Modal from "../UI/Modal";
 const Calendar = () => {
   const month = useSelector((state) => state.appointments.month);
   const year = useSelector((state) => state.appointments.year);
+  const daySelected = useSelector((state) => state.appointments.day)
   const turnos = useSelector((state) => state.appointments.appointments);
   const defAppointments = useSelector(
     (state) => state.appointments.defAppointments
   );
+  // console.log(defAppointments);
   const pacients = useSelector((state) => state.pacients.pacients);
-  
+
   const [modal, setModal] = useState(["", false]);
   const today = new Date();
   const dispatch = useDispatch();
@@ -25,6 +27,8 @@ const Calendar = () => {
   const initialDay = dayOne.getDay();
   const dayEnd = new Date(year, month, totalDays);
   const finalDay = dayEnd.getDay();
+
+  console.log(daySelected)
 
   let squareDays = [];
   const diffFinalDay = 6 - finalDay;
@@ -52,16 +56,16 @@ const Calendar = () => {
   for (let i = 0; i < totalDays; i++) {
     const day = new Date(year, month, i + 1);
     const defDayAppointments = defAppointments.find(
-      (el) => el.id === day.getDay().toString()
+      (el) => el.day === day.getDay().toString()
     );
     const dayAppointments = turnos.find(
-      (el) => el.id === day.getDate().toString()
+      (el) => el.day === day.getDate().toString()
     );
     let appointmentsDisplay;
     let scheduleAppointments;
     if (defDayAppointments) {
       appointmentsDisplay = Object.entries(defDayAppointments)
-        .filter((el) => el[0] !== "id")
+        .filter((el) => el[0] !== "id" && el[0] !== "day")
         .map((el) => {
           // console.log(el)
           return (
@@ -73,15 +77,16 @@ const Calendar = () => {
               data-day={day.getDate()}
               key={Math.random().toString(32).slice(2)}
             >
-              {el[0]}
+              {el[1].hour}
             </p>
           );
         });
     }
     if (dayAppointments) {
       scheduleAppointments = Object.entries(dayAppointments).filter(
-        (el) => el[0] !== "id"
+        (el) => el[0] !== "id" && el[0] !== "day"
       );
+      console.log(scheduleAppointments)
     }
     if (
       scheduleAppointments &&
@@ -100,11 +105,14 @@ const Calendar = () => {
             className:
               "border-2 border-zinc-300 rounded-md py-2 px-4 bg-red-300",
             onClick: (e) => {
-              console.log(e.target.getAttribute('id'));
-              const id = e.target.getAttribute('id');
-              const currentPacient = pacients.filter(pacient => pacient.id === id)
-              dispatch(pacientsActions.setCurrentPacient(currentPacient))
-              toggleModal("recurring")
+              // console.log(e.target.getAttribute("id"));
+              const id = e.target.getAttribute("id");
+              const currentPacient = pacients.filter(
+                (pacient) => pacient.id === id
+              );
+              dispatch(pacientsActions.setCurrentPacient(currentPacient));
+              toggleModal("recurring");
+              dispatch(appointmentsActions.setDay(newTemp.props["data-day"]))
               // const diaConsultado = turnos.filter((turn) => {
               //   console.log(turn.id);
               //   return turn.id === e.target.getAttribute("data-day");
