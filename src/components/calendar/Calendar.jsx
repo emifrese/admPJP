@@ -3,6 +3,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { days, getDays, months } from "../../helpers/date";
 import { appointmentsActions } from "../../store/states/appointments";
 import { pacientsActions } from "../../store/states/pacients";
+import NewAppointment from "../forms/NewAppointment";
+import NewOrRecurring from "../forms/NewOrRecurring";
 import NewPacientForm from "../forms/NewPacientForm";
 import RecurringPacient from "../forms/RecurringPacients";
 import Modal from "../UI/Modal";
@@ -10,7 +12,7 @@ import Modal from "../UI/Modal";
 const Calendar = () => {
   const month = useSelector((state) => state.appointments.month);
   const year = useSelector((state) => state.appointments.year);
-  const daySelected = useSelector((state) => state.appointments.day)
+  const daySelected = useSelector((state) => state.appointments.day);
   const turnos = useSelector((state) => state.appointments.appointments);
   const defAppointments = useSelector(
     (state) => state.appointments.defAppointments
@@ -28,7 +30,7 @@ const Calendar = () => {
   const dayEnd = new Date(year, month, totalDays);
   const finalDay = dayEnd.getDay();
 
-  console.log(daySelected)
+  console.log(daySelected);
 
   let squareDays = [];
   const diffFinalDay = 6 - finalDay;
@@ -73,8 +75,21 @@ const Calendar = () => {
               className={
                 "border-2 border-zinc-300 rounded-md py-2 px-4 bg-green-300"
               }
-              onClick={() => toggleModal("new")}
+              onClick={(e) => {
+                dispatch(
+                  appointmentsActions.setDay(
+                    parseInt(e.target.getAttribute("data-day"))
+                  )
+                );
+                dispatch(
+                  appointmentsActions.setTime(
+                    e.target.getAttribute["data-time"]
+                  )
+                );
+                toggleModal("new");
+              }}
               data-day={day.getDate()}
+              data-time={el[1].hour}
               key={Math.random().toString(32).slice(2)}
             >
               {el[1].hour}
@@ -86,7 +101,7 @@ const Calendar = () => {
       scheduleAppointments = Object.entries(dayAppointments).filter(
         (el) => el[0] !== "id" && el[0] !== "day"
       );
-      console.log(scheduleAppointments)
+      // console.log(scheduleAppointments)
     }
     if (
       scheduleAppointments &&
@@ -111,8 +126,9 @@ const Calendar = () => {
                 (pacient) => pacient.id === id
               );
               dispatch(pacientsActions.setCurrentPacient(currentPacient));
+              dispatch(appointmentsActions.setDay(newTemp.props["data-day"]));
+              dispatch(appointmentsActions.setTime(newTemp.props["data-time"]));
               toggleModal("recurring");
-              dispatch(appointmentsActions.setDay(newTemp.props["data-day"]))
               // const diaConsultado = turnos.filter((turn) => {
               //   console.log(turn.id);
               //   return turn.id === e.target.getAttribute("data-day");
@@ -179,7 +195,7 @@ const Calendar = () => {
       </div>
       {modal[1] && modal[0] === "new" && (
         <Modal Toggle={toggleModal}>
-          <NewPacientForm Toggle={toggleModal} />
+          <NewOrRecurring Toggle={toggleModal} />
         </Modal>
       )}
       {modal[1] && modal[0] === "recurring" && (

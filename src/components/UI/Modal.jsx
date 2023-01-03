@@ -8,7 +8,7 @@ const Backdrop = (props) => {
 const ModalOverlay = ({children}) => {
   return (
     <div className="flex justify-center items-center max-w-full">
-      <div className="flex justify-center rounded-xl fixed top-12 p-4 z-30 text-center max-h-[85%]">
+      <div className="flex justify-center rounded-xl fixed top-12 p-4 z-30 text-center">
         <>{children}</>
       </div>
     </div>

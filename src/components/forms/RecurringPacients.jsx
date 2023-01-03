@@ -11,6 +11,7 @@ const RecurringPacient = () => {
   const [telefono, setTelefono] = useState("");
   const [id, setId] = useState(null);
   const currentPacient = useSelector((state) => state.pacients.currentPacient);
+  console.log(currentPacient)
   const currentPlace = useSelector((state) => state.appointments.place);
   console.log(currentPacient)
   const [alert, setAlert] = useState({});

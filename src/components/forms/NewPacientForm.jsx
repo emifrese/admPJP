@@ -1,21 +1,17 @@
 import React, { useState } from "react";
-import { useEffect } from "react";
 import { collection, addDoc } from "firebase/firestore";
-import { useSelector } from "react-redux";
 import { firestore } from "../../firebase";
+import { useDispatch } from "react-redux";
+import { pacientsActions } from "../../store/states/pacients";
 
-const NewPacientForm = ({Toggle}) => {
-  console.log(Toggle)
+const NewPacientForm = ({ moveToggle, Toggle }) => {
   const [nombre, setNombre] = useState("");
   const [apellido, setApellido] = useState("");
   const [email, setEmail] = useState("");
   const [telefono, setTelefono] = useState("");
-  const [id, setId] = useState(null);
-  const pacients = useSelector((state) => state.pacients);
+  const dispatch = useDispatch();
 
   const [alert, setAlert] = useState({});
-  
-  useEffect(() => {});
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -27,7 +23,9 @@ const NewPacientForm = ({Toggle}) => {
         msg: "Todos los campos son obligatorios",
         error: true,
       });
-      console.log("Faltan datos");
+      setTimeout(() => {
+        setAlert({});
+      }, 1500);
       return;
     }
 
@@ -49,26 +47,22 @@ const NewPacientForm = ({Toggle}) => {
     setApellido("");
     setTelefono("");
     setEmail("");
-    setId(null);
-    Toggle()
+    setTimeout(() => {
+      dispatch(pacientsActions.setCurrentPacient({}));
+      moveToggle("recurring");
+    }, 1500);
   };
 
   const { msg } = alert;
 
   return (
     <div className="bg-white text-sm rounded-md max-h-max px-5 py-3 mb-10 lg:mb-0">
-      <h2 className="font-black text-xl text-center">
-        Administrador de Pacientes
+      <button onClick={() => moveToggle("home")}>BACK</button>
+      <h2 className="font-black text-xl mt-2 mb-2 text-center">
+        Añade tu nuevo {""}
+        <span className="text-[#227777] font-bold">Paciente</span>
       </h2>
-
-      <p className="text-md mt-2 mb-2 text-center">
-        Añade tus pacientes {""}
-        <span className="text-[#227777] font-bold">Administralos</span>
-      </p>
-      <form
-        className="px-5 py-3 mb-10 lg:mb-0"
-        onSubmit={handleSubmit}
-      >
+      <form className="px-5 py-3 mb-10 lg:mb-0" onSubmit={handleSubmit}>
         <div>
           <label htmlFor="nombre" className="text-zinc-700 uppercase font-bold">
             Nombre
@@ -133,7 +127,7 @@ const NewPacientForm = ({Toggle}) => {
         />
       </form>
 
-      {/* {msg && <p>Faltan datos</p>} */}
+      {msg}
     </div>
   );
 };
