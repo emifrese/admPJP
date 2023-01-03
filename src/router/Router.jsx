@@ -20,10 +20,12 @@ const Router = () => {
   const [user, setUser] = useState(null);
   const dispatch = useDispatch();
   const month = useSelector((state) => state.appointments.month);
+  const year = useSelector((state) => state.appointments.year)
   const place = useSelector((state) => state.appointments.place);
 
   const monthString = months[month].toLowerCase();
 
+  // Left logic for fetching the appointments, gonna change the collections name from {month} to {month}{year}
   useEffect(() => {
     onAuthStateChanged(auth, setUser);
 

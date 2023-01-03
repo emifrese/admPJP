@@ -1,24 +1,44 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
-import { collection, addDoc, doc, updateDoc, deleteField } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  doc,
+  updateDoc,
+  deleteField,
+} from "firebase/firestore";
 import { useSelector } from "react-redux";
 import { firestore } from "../../firebase";
+import { months } from "../../helpers/date";
 
-const RecurringPacient = () => {
+const RecurringPacient = ({ Toggle }) => {
   const [nombre, setNombre] = useState("");
   const [apellido, setApellido] = useState("");
   const [email, setEmail] = useState("");
   const [telefono, setTelefono] = useState("");
-  const [id, setId] = useState(null);
   const currentPacient = useSelector((state) => state.pacients.currentPacient);
-  console.log(currentPacient)
+  console.log(currentPacient);
   const currentPlace = useSelector((state) => state.appointments.place);
-  console.log(currentPacient)
+  console.log(currentPacient);
+  const year = useSelector((state) => state.appointments.year);
+  const month = useSelector((state) => state.appointments.month);
+  const day = useSelector((state) => state.appointments.day);
+  const time = parseInt(useSelector((state) => state.appointments.time));
   const [alert, setAlert] = useState({});
-  const appointmentRef = doc(firestore, `${currentPlace}/turnos/diciembre/5`);
-  console.log(appointmentRef)
-  
-  useEffect(() => {});
+
+  const appointmentRef = doc(
+    firestore,
+    `${currentPlace}/turnos/${months[month].toLowerCase()}${year}/${day}`
+  );
+  console.log(appointmentRef);
+
+  const deleteAppointment = async () => {
+    await updateDoc(appointmentRef, {
+      [time]: deleteField(),
+    });
+
+    Toggle("");
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -44,16 +64,16 @@ const RecurringPacient = () => {
     // await addDoc(turnosRef, newPaciente);
     await updateDoc(appointmentRef, {
       1700: {
-        hour: '1700',
-        pacientId: "vUPumtHxSPZsDKHNzXtv"
+        hour: "1700",
+        pacientId: "vUPumtHxSPZsDKHNzXtv",
       },
       // 1730: deleteField(), borra ese campo
       1730: {
-        hour: '1700',
-        pacientId: "vUPumtHxSPZsDKHNzXtv"
+        hour: "1700",
+        pacientId: "vUPumtHxSPZsDKHNzXtv",
       },
-      day: "5"
-    })
+      day: "5",
+    });
 
     // Guardamos el paciente y su primer turno
     setAlert({
@@ -63,19 +83,16 @@ const RecurringPacient = () => {
     setApellido("");
     setTelefono("");
     setEmail("");
-    setId(null);
   };
 
   const { msg } = alert;
 
   return (
     <div className="bg-white text-sm rounded-md max-h-max px-5 py-3 mb-10 lg:mb-0">
-      <h2 className="font-black text-xl text-center">
-        Agenda un turno
-      </h2>
-      <form
+      <h2 className="font-black text-xl text-center">Agenda un turno</h2>
+      <div
         className="px-5 py-3 mb-10 lg:mb-0"
-        onSubmit={handleSubmit}
+        // onSubmit={handleSubmit}
       >
         <div className="flex justify-between items-center">
           <label htmlFor="nombre" className="text-zinc-700 uppercase font-bold">
@@ -139,7 +156,8 @@ const RecurringPacient = () => {
           type="submit"
           className="bg-indigo-600 rounded-md w-full p-3 text-white uppercase font-bold hover:bg-indigo-700 cursor-pointer transition-colors"
         />
-      </form>
+        <button onClick={() => deleteAppointment()}>Eliminar turno</button>
+      </div>
 
       {/* {msg && <p>Faltan datos</p>} */}
     </div>

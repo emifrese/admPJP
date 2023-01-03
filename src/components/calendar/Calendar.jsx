@@ -17,6 +17,7 @@ const Calendar = () => {
   const defAppointments = useSelector(
     (state) => state.appointments.defAppointments
   );
+  console.log(turnos)
   // console.log(defAppointments);
   const pacients = useSelector((state) => state.pacients.pacients);
 
