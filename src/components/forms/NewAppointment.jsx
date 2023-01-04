@@ -2,6 +2,7 @@ import { setDoc, doc } from "firebase/firestore";
 import React from "react";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { firestore } from "../../firebase";
 import { months } from "../../helpers/date";
 import NewPacient from "../../pages/NewPacient";
 import { pacientsActions } from "../../store/states/pacients";
@@ -11,12 +12,17 @@ const NewAppointment = ({ moveToggle }) => {
   const dispatch = useDispatch();
   const pacients = useSelector((state) => state.pacients.pacients);
   const currentPacient = useSelector((state) => state.pacients.currentPacient);
+  const currentPlace = useSelector((state) => state.appointments.place);
   const day = useSelector((state) => state.appointments.day);
   console.log(currentPacient);
   const month = useSelector((state) => state.appointments.month);
+  const year = useSelector((state => state.appointments.year))
   const time = useSelector((state) => state.appointments.time);
 
-  console.log(time)
+  const appointmentRef = doc(firestore, `${currentPlace}/turnos/${months[month].toLowerCase()}${year}/${day}`);
+  console.log(appointmentRef)
+
+  console.log(time);
   const filterLastName =
     pacients.length > 0
       ? pacients.filter((el) => {
@@ -27,6 +33,16 @@ const NewAppointment = ({ moveToggle }) => {
           }
         })
       : [];
+
+  const saveAppointment = async () => {
+    await setDoc(appointmentRef, {
+      [time]: {
+        hour: time,
+        pacientId: currentPacient.id
+      },
+      day: day.toString()
+    })
+  }
 
   return (
     <>
@@ -94,9 +110,10 @@ const NewAppointment = ({ moveToggle }) => {
       {Object.keys(currentPacient).length > 0 && (
         <>
           <h2>
-            Desea agendar un turno para el {day} de {months[month]} a las {time}?
+            Desea agendar un turno para el {day} de {months[month]} a las{" "}
+            {time.substring(0, 2)}:{time.substring(2)}?
           </h2>
-          <div className="bg-white text-sm rounded-md shadow-[0px_3px_5px_2px_rgba(67,56,202,0.3)] max-h-max px-5 py-3 mb-10 lg:mb-0">
+          <div className="bg-white text-sm rounded-md shadow-[0px_3px_5px_2px_rgba(67,56,202,0.3)] max-h-max px-5 py-3 lg:mb-0">
             <p>Nombre: {currentPacient.nombre}</p>
             <p>Apellido: {currentPacient.apellido}</p>
             <p>
@@ -117,6 +134,9 @@ const NewAppointment = ({ moveToggle }) => {
               <p>Paciente Nuevo</p>
             )} */}
           </div>
+          <button className="border-2  border-red-500 px-2 rounded-2xl" onClick={() => saveAppointment()}>
+            Agendar
+          </button>
         </>
       )}
     </>

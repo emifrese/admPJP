@@ -84,7 +84,7 @@ const Calendar = () => {
                 );
                 dispatch(
                   appointmentsActions.setTime(
-                    e.target.getAttribute["data-time"]
+                    e.target.getAttribute("data-time")
                   )
                 );
                 toggleModal("new");
@@ -179,6 +179,8 @@ const Calendar = () => {
   return (
     <>
       <div className="flex flex-col">
+        {/* Test new redux logic for date */}
+        <button className=""></button>
         <h2 className="w-full text-center">{months[month]}</h2>
         <div className="w-full grid justify-center content-center grid-cols-[repeat(7,_100px)] grid-rows-[repeat(7,_100px)]">
           {squareDays}

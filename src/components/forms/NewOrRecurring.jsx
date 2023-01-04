@@ -17,7 +17,7 @@ const NewOrRecurring = ({ Toggle }) => {
   };
 
   return (
-    <div className="bg-white flex flex-col gap-10 text-md rounded-md min-w-[50vw] px-5 py-3 mb-10 lg:mb-0">
+    <div className="bg-white flex flex-col gap-10 items-center text-md rounded-md min-w-[50vw] px-5 py-3 mb-10 lg:mb-0">
       {!answer && (
         <>
           <h2>Ya se atendió antes?</h2>

@@ -39,7 +39,7 @@ const Router = () => {
       });
 
       onSnapshot(
-        collection(firestore, `${place}/turnos/${monthString}`),
+        collection(firestore, `${place}/turnos/${monthString}${year}`),
         (snapshot) => {
           let turnosArray = snapshot.docs.map((doc) => ({
             ...doc.data(),

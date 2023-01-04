@@ -1,8 +1,6 @@
 import React, { useState } from "react";
-import { useEffect } from "react";
 import {
   collection,
-  addDoc,
   doc,
   updateDoc,
   deleteField,
