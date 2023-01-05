@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { firestore } from "../../firebase";
 import { months } from "../../helpers/date";
-import NewPacient from "../../pages/NewPacient";
 import { pacientsActions } from "../../store/states/pacients";
 
 const NewAppointment = ({ moveToggle }) => {
@@ -14,15 +13,18 @@ const NewAppointment = ({ moveToggle }) => {
   const currentPacient = useSelector((state) => state.pacients.currentPacient);
   const currentPlace = useSelector((state) => state.appointments.place);
   const day = useSelector((state) => state.appointments.day);
-  console.log(currentPacient);
+  // console.log(currentPacient);
   const month = useSelector((state) => state.appointments.month);
-  const year = useSelector((state => state.appointments.year))
+  const year = useSelector((state) => state.appointments.year);
   const time = useSelector((state) => state.appointments.time);
 
-  const appointmentRef = doc(firestore, `${currentPlace}/turnos/${months[month].toLowerCase()}${year}/${day}`);
-  console.log(appointmentRef)
+  const appointmentRef = doc(
+    firestore,
+    `${currentPlace}/turnos/${months[month].toLowerCase()}${year}/${day}`
+  );
+  // console.log(appointmentRef)
 
-  console.log(time);
+  // console.log(time);
   const filterLastName =
     pacients.length > 0
       ? pacients.filter((el) => {
@@ -38,11 +40,11 @@ const NewAppointment = ({ moveToggle }) => {
     await setDoc(appointmentRef, {
       [time]: {
         hour: time,
-        pacientId: currentPacient.id
+        pacientId: currentPacient.id,
       },
-      day: day.toString()
-    })
-  }
+      day: day.toString(),
+    });
+  };
 
   return (
     <>
@@ -134,7 +136,10 @@ const NewAppointment = ({ moveToggle }) => {
               <p>Paciente Nuevo</p>
             )} */}
           </div>
-          <button className="border-2  border-red-500 px-2 rounded-2xl" onClick={() => saveAppointment()}>
+          <button
+            className="border-2  border-red-500 px-2 rounded-2xl"
+            onClick={() => saveAppointment()}
+          >
             Agendar
           </button>
         </>

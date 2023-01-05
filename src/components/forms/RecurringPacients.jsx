@@ -83,6 +83,8 @@ const RecurringPacient = ({ Toggle }) => {
     setEmail("");
   };
 
+  console.log(currentPacient.nombre)
+
   const { msg } = alert;
 
   return (
@@ -102,7 +104,7 @@ const RecurringPacient = ({ Toggle }) => {
             placeholder="Nombre del paciente"
             className="border-2 p-2 my-2 placeholder-zinc-400 rounded-md"
             // onChange={(e) => setNombre(e.target.value)}
-            value={currentPacient[0].nombre}
+            value={currentPacient.nombre}
           />
         </div>
         <div className="flex justify-between items-center">
@@ -118,7 +120,7 @@ const RecurringPacient = ({ Toggle }) => {
             placeholder="Apellido del paciente"
             className="border-2 p-2 my-2 placeholder-zinc-400 rounded-md"
             // onChange={(e) => setApellido(e.target.value)}
-            value={currentPacient[0].apellido}
+            value={currentPacient.apellido}
           />
         </div>
         <div className="flex justify-between items-center">
@@ -131,7 +133,7 @@ const RecurringPacient = ({ Toggle }) => {
             placeholder="Email del paciente"
             className="border-2 p-2 my-2 placeholder-zinc-400 rounded-md"
             // onChange={(e) => setEmail(e.target.value)}
-            value={currentPacient[0].email}
+            value={currentPacient.email}
           />
         </div>
         <div className="flex justify-between items-center mb-5">
@@ -147,7 +149,7 @@ const RecurringPacient = ({ Toggle }) => {
             placeholder="Telefono del paciente"
             className="border-2 p-2 my-2 placeholder-zinc-400 rounded-md"
             // onChange={(e) => setTelefono(e.target.value)}
-            value={currentPacient[0].telefono}
+            value={currentPacient.telefono}
           />
         </div>
         <input
