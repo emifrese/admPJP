@@ -2,12 +2,17 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { days, getDays } from "../../helpers/date";
 import { appointmentsActions } from "../../store/states/appointments";
+import { pacientsActions } from "../../store/states/pacients";
+import NewOrRecurring from "../forms/NewOrRecurring";
+import RecurringPacient from "../forms/RecurringPacients";
+import Modal from "../UI/Modal";
 
-const Day = () => {
+const Day = ({ toggleModal, modal }) => {
   const day = useSelector((state) => state.appointments.day);
   const month = useSelector((state) => state.appointments.month);
   const year = useSelector((state) => state.appointments.year);
   const turnos = useSelector((state) => state.appointments.appointments);
+  console.log(turnos)
   const defAppointments = useSelector(
     (state) => state.appointments.defAppointments
   );
@@ -21,7 +26,9 @@ const Day = () => {
     (el) => el.day === weekDay.getDay().toString()
   );
 
-  const dayAppointments = turnos.find((el) => el.day === day);
+  const dayAppointments = turnos.find((el) => el.day === day.toString());
+
+  console.log(day)
 
   let appointmentsDisplay;
   let scheduleAppointments;
@@ -65,9 +72,11 @@ const Day = () => {
     Object.keys(appointmentsDisplay).length > 0
   ) {
     for (let el of scheduleAppointments) {
+      console.log(el)
       const temp = {
         ...appointmentsDisplay.filter((app) => app.props.children === el[0]),
       };
+      console.log(temp)
       const index = appointmentsDisplay.indexOf(temp[0]);
       const newTemp = Object.keys(temp).length > 0 && {
         ...temp[0],
@@ -92,7 +101,7 @@ const Day = () => {
     }
   }
 
-  console.log(appointmentsDisplay)
+  // console.log(appointmentsDisplay);
 
   const squareDay = (
     <div
@@ -103,37 +112,55 @@ const Day = () => {
     >
       {weekDay.toDateString()}
       {days[weekDay.getDay()]}
-      {appointmentsDisplay !== null && appointmentsDisplay !== undefined ? appointmentsDisplay : "No hay disponible"}
+      {appointmentsDisplay !== null && appointmentsDisplay !== undefined
+        ? appointmentsDisplay
+        : "No hay disponible"}
     </div>
   );
 
   return (
     <>
-      <button onClick={() => {
-        if(day === 1){
-            let finalDay
-            if(month === 0){
-                finalDay = getDays(year - 1, 11)
+      <button
+        onClick={() => {
+          if (day === 1) {
+            let finalDay;
+            if (month === 0) {
+              finalDay = getDays(year - 1, 11);
             } else {
-                finalDay = getDays(year, month - 1)
+              finalDay = getDays(year, month - 1);
             }
-            dispatch(appointmentsActions.moveMonth("reduction"))
-            dispatch(appointmentsActions.setDay(finalDay))
-        } else {
-            dispatch(appointmentsActions.setDay(day - 1))
-        }
-      }}>Prev</button>
+            dispatch(appointmentsActions.moveMonth("reduction"));
+            dispatch(appointmentsActions.setDay(finalDay));
+          } else {
+            dispatch(appointmentsActions.setDay(day - 1));
+          }
+        }}
+      >
+        Prev
+      </button>
       <div>{squareDay}</div>
       <button
         onClick={() => {
-            if(day === totalDays){
-                dispatch(appointmentsActions.moveMonth("increment"))
-                dispatch(appointmentsActions.setDay(1))
-            } else {
-                dispatch(appointmentsActions.setDay(day + 1))
-            }
+          if (day === totalDays) {
+            dispatch(appointmentsActions.moveMonth("increment"));
+            dispatch(appointmentsActions.setDay(1));
+          } else {
+            dispatch(appointmentsActions.setDay(day + 1));
+          }
         }}
-      >Next</button>
+      >
+        Next
+      </button>
+      {modal[1] && modal[0] === "new" && (
+        <Modal Toggle={toggleModal}>
+          <NewOrRecurring Toggle={toggleModal} />
+        </Modal>
+      )}
+      {modal[1] && modal[0] === "recurring" && (
+        <Modal Toggle={toggleModal}>
+          <RecurringPacient Toggle={toggleModal} />
+        </Modal>
+      )}
     </>
   );
 };

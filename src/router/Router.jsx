@@ -1,15 +1,14 @@
 import { onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from "react";
-import { Suspense, Lazy } from "react";
+import { Suspense } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Route, BrowserRouter, Navigate, Routes } from "react-router-dom";
+import { Route, BrowserRouter, Routes } from "react-router-dom";
 import AdminLayout from "../components/layout/AdminLayout";
 import AuthLayout from "../components/layout/AuthLayout";
 import Loader from "../components/loader/Loader";
 import AdministrarPacientes from "../pages/AdministrarPacientes";
 import Login from "../pages/Login";
 import { auth, firestore } from "../firebase";
-import NewPacient from "../pages/NewPacient";
 import { collection, onSnapshot } from "firebase/firestore";
 import { pacientsActions } from "../store/states/pacients";
 import AppointmentsAdmin from "../pages/AppointmentsAdmin";
@@ -23,7 +22,7 @@ const Router = () => {
   const year = useSelector((state) => state.appointments.year);
   const place = useSelector((state) => state.appointments.place);
   const currentPacient = useSelector((state) => state.pacients.currentPacient);
-  console.log(currentPacient);
+  // console.log(currentPacient);
 
   const monthString = months[month].toLowerCase();
 
