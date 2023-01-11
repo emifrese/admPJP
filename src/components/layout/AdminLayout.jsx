@@ -21,7 +21,7 @@ const AdminLayout = () => {
   return (
     <>
       <Header />
-      {<main className="container mx-auto mt-6">
+      {<main className="container mx-auto mt-6 h-screen">
         <Outlet/>
         </main>}
       <Footer />

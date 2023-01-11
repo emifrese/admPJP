@@ -12,6 +12,7 @@ const NewAppointment = ({ moveToggle }) => {
   const pacients = useSelector((state) => state.pacients.pacients);
   const currentPacient = useSelector((state) => state.pacients.currentPacient);
   const currentPlace = useSelector((state) => state.appointments.place);
+  const turnos = useSelector((state) => state.appointments.appointments);
   const day = useSelector((state) => state.appointments.day);
   // console.log(currentPacient);
   const month = useSelector((state) => state.appointments.month);
@@ -22,9 +23,26 @@ const NewAppointment = ({ moveToggle }) => {
     firestore,
     `${currentPlace}/turnos/${months[month].toLowerCase()}${year}/${day}`
   );
-  // console.log(appointmentRef)
 
-  // console.log(time);
+  const pacientRef = doc(firestore, `pacientes/${currentPacient.id}`);
+  console.log(appointmentRef);
+  console.log(currentPacient);
+
+  const todayAppointmentsArray = turnos.find((el) => el.day === day.toString());
+
+  const todayAppointmentsInfo = Object.entries(todayAppointmentsArray).filter(
+    (el) => el[0] !== "day" && el[0] !== "id"
+  );
+
+  let index;
+
+  if (Object.entries(currentPacient).length > 0) {
+    index = todayAppointmentsInfo.filter(
+      (el) => el[1].pacientId === currentPacient.id
+    );
+  }
+  console.log(index);
+
   const filterLastName =
     pacients.length > 0
       ? pacients.filter((el) => {
@@ -37,13 +55,31 @@ const NewAppointment = ({ moveToggle }) => {
       : [];
 
   const saveAppointment = async () => {
-    await setDoc(appointmentRef, {
-      [time]: {
-        hour: time,
-        pacientId: currentPacient.id,
+    await setDoc(
+      appointmentRef,
+      {
+        [time]: {
+          hour: time,
+          pacientId: currentPacient.id,
+        },
+        day: day.toString(),
       },
-      day: day.toString(),
-    });
+      { merge: true }
+    );
+    
+    const appointments = [...Object.entries(currentPacient).filter(el => el[0] === "appointments")[0][1]]
+    console.log(appointments)
+    appointments.push(`${time}${day}${month}${year}`)
+
+    await setDoc(
+      pacientRef,
+      {
+        appointments,
+      },
+      { merge: true }
+    );
+
+    dispatch(pacientsActions.setCurrentPacient([]));
   };
 
   return (
@@ -139,8 +175,14 @@ const NewAppointment = ({ moveToggle }) => {
           <button
             className="border-2  border-red-500 px-2 rounded-2xl"
             onClick={() => saveAppointment()}
+            disabled={index !== undefined && index.length > 0}
           >
             Agendar
+          </button>
+          <button
+            onClick={() => dispatch(pacientsActions.setCurrentPacient({}))}
+          >
+            Reset
           </button>
         </>
       )}

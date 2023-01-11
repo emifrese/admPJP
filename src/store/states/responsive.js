@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialResponsiveState = {
-  width: 0
+  width: window.innerWidth
 };
 
 const responsiveSlice = createSlice({

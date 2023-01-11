@@ -5,7 +5,8 @@ module.exports = {
     extend: {
       animation: {
         "day-animation": "growth 0.3s linear 1 forwards",
-        "modal-animation": "slideDown 0.3s ease-out forwards"
+        "modal-animation": "slideDown 0.3s ease-out forwards",
+        "menu-animation": "menuSlide 0.3s ease-out forwards"
       },
       keyframes: {
         growth: {
@@ -26,6 +27,18 @@ module.exports = {
             transform: "translateY(0)",
           },
         },
+        menuSlide: {
+          "0%": {
+            zIndex: "-10",
+            opacity: "0",
+            transform: "translate(0)"
+          },
+          "100%": {
+            zIndex: "1",
+            opacity: "1",
+            transform: "translateY(4rem)"
+          }
+        }
       },
     },
   },

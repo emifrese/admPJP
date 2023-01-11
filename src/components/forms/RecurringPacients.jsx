@@ -28,12 +28,24 @@ const RecurringPacient = ({ Toggle }) => {
     firestore,
     `${currentPlace}/turnos/${months[month].toLowerCase()}${year}/${day}`
   );
+
+  const pacientRef = doc(
+    firestore,
+    `pacientes/${currentPacient.id}`
+  )
   console.log(appointmentRef);
 
   const deleteAppointment = async () => {
     await updateDoc(appointmentRef, {
       [time]: deleteField(),
     });
+
+    const appointments = [...Object.entries(currentPacient).filter(el => el[0] === "appointments")[0][1]];
+    const newAppointments = appointments.filter(el => el !== `${time}${day}${month}${year}`)
+
+    await updateDoc(pacientRef, {
+      appointments: newAppointments
+    })
 
     Toggle("");
   };

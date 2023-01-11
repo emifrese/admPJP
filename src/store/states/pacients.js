@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialPacientsState = {
   pacients: [],
-  currentPacient: [],
+  currentPacient: {},
 };
 
 const pacientsSlice = createSlice({

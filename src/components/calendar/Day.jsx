@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { days, getDays } from "../../helpers/date";
+import { days, getDays, months } from "../../helpers/date";
 import { appointmentsActions } from "../../store/states/appointments";
 import { pacientsActions } from "../../store/states/pacients";
 import NewOrRecurring from "../forms/NewOrRecurring";
@@ -28,18 +28,17 @@ const Day = ({ toggleModal, modal }) => {
 
   const dayAppointments = turnos.find((el) => el.day === day.toString());
 
-  console.log(day)
-
-  let appointmentsDisplay;
+  let appointmentsDisplay = [];
+  let freeAppointments = [];
   let scheduleAppointments;
   if (defDayAppointments) {
-    appointmentsDisplay = Object.entries(defDayAppointments)
+    freeAppointments = Object.entries(defDayAppointments)
       .filter((el) => el[0] !== "id" && el[0] !== "day")
       .map((el) => {
         return (
           <p
             className={
-              "border-2 border-zinc-300 rounded-md py-2 px-4 bg-green-300"
+              "inline-block border-2 border-zinc-300 rounded-md py-2 px-4 bg-green-300"
             }
             onClick={(e) => {
               dispatch(
@@ -56,7 +55,7 @@ const Day = ({ toggleModal, modal }) => {
             data-time={el[1].hour}
             key={Math.random().toString(32).slice(2)}
           >
-            {el[1].hour}
+            {el[1].hour.substring(0, 2)}:{el[1].hour.substring(2)}
           </p>
         );
       });
@@ -68,89 +67,106 @@ const Day = ({ toggleModal, modal }) => {
   }
   if (
     scheduleAppointments &&
-    appointmentsDisplay &&
-    Object.keys(appointmentsDisplay).length > 0
+    freeAppointments &&
+    Object.keys(freeAppointments).length > 0
   ) {
     for (let el of scheduleAppointments) {
-      console.log(el)
       const temp = {
-        ...appointmentsDisplay.filter((app) => app.props.children === el[0]),
+        ...freeAppointments.filter((app) => app.props["data-time"] === el[0]),
       };
-      console.log(temp)
-      const index = appointmentsDisplay.indexOf(temp[0]);
+      const currentPacient = pacients.filter(
+        (pacient) => pacient.id === el[1].pacientId
+      );
+      console.log(currentPacient);
+      const index = freeAppointments.indexOf(temp[0]);
+      let newChildren = [...temp[0].props.children];
+      newChildren.push(
+        ` ${currentPacient[0].nombre} ${currentPacient[0].apellido}`
+      );
+      console.log(newChildren);
       const newTemp = Object.keys(temp).length > 0 && {
         ...temp[0],
         props: {
           ...temp[0].props,
           className: "border-2 border-zinc-300 rounded-md py-2 px-4 bg-red-300",
           onClick: (e) => {
-            // console.log(e.target.getAttribute("id"));
-            const id = e.target.getAttribute("id");
-            const currentPacient = pacients.filter(
-              (pacient) => pacient.id === id
-            );
             dispatch(pacientsActions.setCurrentPacient(currentPacient[0]));
             dispatch(appointmentsActions.setDay(newTemp.props["data-day"]));
             dispatch(appointmentsActions.setTime(newTemp.props["data-time"]));
             toggleModal("recurring");
           },
           id: el[1].pacientId,
+          children: newChildren,
         },
       };
-      appointmentsDisplay[index] = newTemp;
+      freeAppointments.splice(index, 1);
+      appointmentsDisplay.push(newTemp);
     }
   }
 
-  // console.log(appointmentsDisplay);
+  let busySquare;
 
-  const squareDay = (
+  if (defDayAppointments) {
+    busySquare = (
+      <div
+        key={Math.random().toString(32).slice(2)}
+        className={"bg-white border-2 border-red-300 w-56 h-56 text-center"}
+      >
+        {appointmentsDisplay.length > 0
+          ? appointmentsDisplay
+          : "No hay turnos agendados"}
+      </div>
+    );
+  }
+
+  const freeSquare = (
     <div
       key={Math.random().toString(32).slice(2)}
-      className={
-        "bg-white border-2 border-zinc-300 hover:animate-day-animation"
-      }
+      className={"bg-white border-2 border-red-300 w-56 h-56 text-center flex items-start"}
     >
-      {weekDay.toDateString()}
-      {days[weekDay.getDay()]}
-      {appointmentsDisplay !== null && appointmentsDisplay !== undefined
-        ? appointmentsDisplay
-        : "No hay disponible"}
+      {freeAppointments.length > 0 ? freeAppointments : "No hay disponible"}
     </div>
   );
 
   return (
     <>
-      <button
-        onClick={() => {
-          if (day === 1) {
-            let finalDay;
-            if (month === 0) {
-              finalDay = getDays(year - 1, 11);
+      <div className="w-full flex justify-around">
+        <button
+          onClick={() => {
+            if (day === 1) {
+              let finalDay;
+              if (month === 0) {
+                finalDay = getDays(year - 1, 11);
+              } else {
+                finalDay = getDays(year, month - 1);
+              }
+              dispatch(appointmentsActions.moveMonth("reduction"));
+              dispatch(appointmentsActions.setDay(finalDay));
             } else {
-              finalDay = getDays(year, month - 1);
+              dispatch(appointmentsActions.setDay(day - 1));
             }
-            dispatch(appointmentsActions.moveMonth("reduction"));
-            dispatch(appointmentsActions.setDay(finalDay));
-          } else {
-            dispatch(appointmentsActions.setDay(day - 1));
-          }
-        }}
-      >
-        Prev
-      </button>
-      <div>{squareDay}</div>
-      <button
-        onClick={() => {
-          if (day === totalDays) {
-            dispatch(appointmentsActions.moveMonth("increment"));
-            dispatch(appointmentsActions.setDay(1));
-          } else {
-            dispatch(appointmentsActions.setDay(day + 1));
-          }
-        }}
-      >
-        Next
-      </button>
+          }}
+        >
+          Prev
+        </button>
+        <h2>
+          {days[weekDay.getDay()]} {day} de {months[month]}
+        </h2>
+        <button
+          onClick={() => {
+            if (day === totalDays) {
+              dispatch(appointmentsActions.moveMonth("increment"));
+              dispatch(appointmentsActions.setDay(1));
+            } else {
+              dispatch(appointmentsActions.setDay(day + 1));
+            }
+          }}
+        >
+          Next
+        </button>
+      </div>
+      {busySquare}
+      {freeSquare}
       {modal[1] && modal[0] === "new" && (
         <Modal Toggle={toggleModal}>
           <NewOrRecurring Toggle={toggleModal} />

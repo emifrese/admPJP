@@ -36,6 +36,7 @@ const NewPacientForm = ({ moveToggle, Toggle }) => {
       apellido,
       telefono,
       email,
+      appointments: []
     };
 
     await addDoc(turnosRef, newPaciente);
