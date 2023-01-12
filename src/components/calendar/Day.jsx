@@ -77,7 +77,7 @@ const Day = ({ toggleModal, modal }) => {
       const currentPacient = pacients.filter(
         (pacient) => pacient.id === el[1].pacientId
       );
-      console.log(currentPacient);
+      // console.log(currentPacient);
       const index = freeAppointments.indexOf(temp[0]);
       let newChildren = [...temp[0].props.children];
       newChildren.push(

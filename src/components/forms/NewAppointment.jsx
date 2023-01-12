@@ -32,8 +32,9 @@ const NewAppointment = ({ moveToggle }) => {
 
   const todayAppointmentsInfo = Object.entries(todayAppointmentsArray).filter(
     (el) => el[0] !== "day" && el[0] !== "id"
-  );
-
+    );
+    
+    console.log(day.toString().length)
   let index;
 
   if (Object.entries(currentPacient).length > 0) {
@@ -67,8 +68,11 @@ const NewAppointment = ({ moveToggle }) => {
       { merge: true }
     );
     
-    const appointments = [...Object.entries(currentPacient).filter(el => el[0] === "appointments")[0][1]]
-    console.log(appointments)
+    const appointments = Object.entries(currentPacient).filter(el => el[0] === "appointments").length > 0 ? [...Object.entries(currentPacient).filter(el => el[0] === "appointments")[0][1]] : [];
+    
+    const dayString = day.toString().length === 1 ? `0${day}` : day;
+    const monthString = month.toString().length === 1 ? `0${month}` : month;
+
     appointments.push(`${time}${day}${month}${year}`)
 
     await setDoc(

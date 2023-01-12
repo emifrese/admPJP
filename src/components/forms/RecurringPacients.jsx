@@ -40,7 +40,8 @@ const RecurringPacient = ({ Toggle }) => {
       [time]: deleteField(),
     });
 
-    const appointments = [...Object.entries(currentPacient).filter(el => el[0] === "appointments")[0][1]];
+    const appointments = Object.entries(currentPacient).filter(el => el[0] === "appointments").length > 0 ? [...Object.entries(currentPacient).filter(el => el[0] === "appointments")[0][1]] : [];
+    
     const newAppointments = appointments.filter(el => el !== `${time}${day}${month}${year}`)
 
     await updateDoc(pacientRef, {
