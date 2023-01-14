@@ -5,6 +5,7 @@ import { auth } from "../../firebase";
 
 const Header = () => {
   const width = useSelector((state) => state.responsive.width);
+  const place = useSelector(state => state.appointments.place)
   const [responsive, setResponsive] = useState(false);
 
   let navClass = "flex items-center gap-4 bg-[#227777]";
@@ -38,19 +39,19 @@ const Header = () => {
 
         <nav className={navClass}>
           <p className="text-zinc-300 text-sm uppercase font-bold px-2 py-1 bg-zinc-800 rounded-lg">
-            BIGG
+            {place}
           </p>
           <Link
-            to="/newPacient"
+            to="/"
             className="text-zinc-300 text-xs uppercase font-bold"
           >
-            Pacientes
+            Inicio
           </Link>
           <Link
-            to="/appointmentsAdmin"
+            to="/appointmentConfig"
             className="text-zinc-300 text-xs uppercase font-bold"
           >
-            Turnos
+            Configurar
           </Link>
           <button
             className="text-zinc-300 text-xs uppercase font-bold"

@@ -25,24 +25,21 @@ const NewAppointment = ({ moveToggle }) => {
   );
 
   const pacientRef = doc(firestore, `pacientes/${currentPacient.id}`);
-  console.log(appointmentRef);
-  console.log(currentPacient);
 
   const todayAppointmentsArray = turnos.find((el) => el.day === day.toString());
 
-  const todayAppointmentsInfo = Object.entries(todayAppointmentsArray).filter(
-    (el) => el[0] !== "day" && el[0] !== "id"
-    );
-    
-    console.log(day.toString().length)
   let index;
-
-  if (Object.entries(currentPacient).length > 0) {
-    index = todayAppointmentsInfo.filter(
-      (el) => el[1].pacientId === currentPacient.id
-    );
+  
+  if(todayAppointmentsArray !== undefined) {
+    const todayAppointmentsInfo = Object.entries(todayAppointmentsArray).filter(
+      (el) => el[0] !== "day" && el[0] !== "id"
+      );
+      if (Object.entries(currentPacient).length > 0) {
+        index = todayAppointmentsInfo.filter(
+          (el) => el[1].pacientId === currentPacient.id
+        );
+      }
   }
-  console.log(index);
 
   const filterLastName =
     pacients.length > 0
@@ -56,6 +53,12 @@ const NewAppointment = ({ moveToggle }) => {
       : [];
 
   const saveAppointment = async () => {
+
+    if(index !== undefined && index.length > 0) {
+      alert('Ya tienes un turno para este dia')
+      return; 
+    }
+
     await setDoc(
       appointmentRef,
       {
@@ -73,7 +76,7 @@ const NewAppointment = ({ moveToggle }) => {
     const dayString = day.toString().length === 1 ? `0${day}` : day;
     const monthString = month.toString().length === 1 ? `0${month}` : month;
 
-    appointments.push(`${time}${day}${month}${year}`)
+    appointments.push(`${time}${dayString}${monthString}${year}`)
 
     await setDoc(
       pacientRef,
@@ -131,16 +134,6 @@ const NewAppointment = ({ moveToggle }) => {
                 </div>
               )}
               {filterLastName.length === 0 && nombre.length > 0 && (
-                // <button
-                //   // to="/newPacient"
-                //   onClick={() => {
-                //     toggleModal("new");
-                //     setNombre("");
-                //   }}
-                //   className="block border-2 border-[#e5e7eb] bg-white rounded-b-md border-t-0 w-full py-2 cursor-pointer hover:bg-zinc-300"
-                // >
-                //   Agregar nuevo paciente
-                // </button>
                 <p className="block border-2 border-[#e5e7eb] bg-white rounded-b-md border-t-0 w-full py-2 cursor-pointer hover:bg-zinc-300">
                   No existe paciente
                 </p>
@@ -170,16 +163,11 @@ const NewAppointment = ({ moveToggle }) => {
                 {currentPacient.telefono}
               </a>
             </p>
-            {/* {currentPacient.turnos ? (
-              <p>Paciente Control</p>
-            ) : (
-              <p>Paciente Nuevo</p>
-            )} */}
           </div>
           <button
             className="border-2  border-red-500 px-2 rounded-2xl"
             onClick={() => saveAppointment()}
-            disabled={index !== undefined && index.length > 0}
+            // disabled={index !== undefined && index.length > 0}
           >
             Agendar
           </button>

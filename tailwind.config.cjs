@@ -29,12 +29,12 @@ module.exports = {
         },
         menuSlide: {
           "0%": {
-            zIndex: "-10",
-            opacity: "0",
+            // zIndex: "-10",
+            // opacity: "0",
             transform: "translate(0)"
           },
           "100%": {
-            zIndex: "1",
+            // zIndex: "1",
             opacity: "1",
             transform: "translateY(4rem)"
           }

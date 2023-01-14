@@ -11,9 +11,9 @@ import Login from "../pages/Login";
 import { auth, firestore } from "../firebase";
 import { collection, onSnapshot } from "firebase/firestore";
 import { pacientsActions } from "../store/states/pacients";
-import AppointmentsAdmin from "../pages/AppointmentsAdmin";
 import { appointmentsActions } from "../store/states/appointments";
 import { months } from "../helpers/date";
+import Configuracion from "../pages/Configuracion";
 
 const Router = () => {
   const [user, setUser] = useState(null);
@@ -74,10 +74,7 @@ const Router = () => {
           ) : (
             <Route element={<AdminLayout />}>
               <Route path="/" index element={<AdministrarPacientes />} />
-              <Route
-                path="/appointmentsAdmin"
-                element={<AppointmentsAdmin />}
-              />
+              <Route path="/appointmentConfig" element={<Configuracion />} />
             </Route>
           )}
         </Routes>

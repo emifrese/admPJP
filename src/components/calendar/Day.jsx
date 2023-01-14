@@ -12,7 +12,7 @@ const Day = ({ toggleModal, modal }) => {
   const month = useSelector((state) => state.appointments.month);
   const year = useSelector((state) => state.appointments.year);
   const turnos = useSelector((state) => state.appointments.appointments);
-  console.log(turnos)
+  // console.log(turnos);
   const defAppointments = useSelector(
     (state) => state.appointments.defAppointments
   );
@@ -31,34 +31,33 @@ const Day = ({ toggleModal, modal }) => {
   let appointmentsDisplay = [];
   let freeAppointments = [];
   let scheduleAppointments;
+  console.log(defDayAppointments);
   if (defDayAppointments) {
     freeAppointments = Object.entries(defDayAppointments)
       .filter((el) => el[0] !== "id" && el[0] !== "day")
-      .map((el) => {
-        return (
-          <p
-            className={
-              "inline-block border-2 border-zinc-300 rounded-md py-2 px-4 bg-green-300"
-            }
-            onClick={(e) => {
-              dispatch(
-                appointmentsActions.setDay(
-                  parseInt(e.target.getAttribute("data-day"))
-                )
-              );
-              dispatch(
-                appointmentsActions.setTime(e.target.getAttribute("data-time"))
-              );
-              toggleModal("new");
-            }}
-            data-day={day}
-            data-time={el[1].hour}
-            key={Math.random().toString(32).slice(2)}
-          >
-            {el[1].hour.substring(0, 2)}:{el[1].hour.substring(2)}
-          </p>
-        );
-      });
+      .map((el) => (
+        <p
+          className={
+            `border-2 border-zinc-300 rounded-md py-2 px-4 bg-green-300 ${el[1].available ? "inline-block" : "hidden"}`
+          }
+          onClick={(e) => {
+            dispatch(
+              appointmentsActions.setDay(
+                parseInt(e.target.getAttribute("data-day"))
+              )
+            );
+            dispatch(
+              appointmentsActions.setTime(e.target.getAttribute("data-time"))
+            );
+            toggleModal("new");
+          }}
+          data-day={day}
+          data-time={el[1].hour}
+          key={Math.random().toString(32).slice(2)}
+        >
+          {el[1].hour.substring(0, 2)}:{el[1].hour.substring(2)}
+        </p>
+      ));
   }
   if (dayAppointments) {
     scheduleAppointments = Object.entries(dayAppointments).filter(
@@ -79,6 +78,8 @@ const Day = ({ toggleModal, modal }) => {
       );
       // console.log(currentPacient);
       const index = freeAppointments.indexOf(temp[0]);
+      console.log(temp);
+      console.log(el);
       let newChildren = [...temp[0].props.children];
       newChildren.push(
         ` ${currentPacient[0].nombre} ${currentPacient[0].apellido}`
@@ -88,7 +89,8 @@ const Day = ({ toggleModal, modal }) => {
         ...temp[0],
         props: {
           ...temp[0].props,
-          className: "border-2 border-zinc-300 rounded-md py-2 px-4 bg-red-300",
+          className:
+            "border-2 border-zinc-300 rounded-md py-2 px-4 bg-red-300 inline-block",
           onClick: (e) => {
             dispatch(pacientsActions.setCurrentPacient(currentPacient[0]));
             dispatch(appointmentsActions.setDay(newTemp.props["data-day"]));
@@ -122,7 +124,9 @@ const Day = ({ toggleModal, modal }) => {
   const freeSquare = (
     <div
       key={Math.random().toString(32).slice(2)}
-      className={"bg-white border-2 border-red-300 w-56 h-56 text-center flex items-start"}
+      className={
+        "bg-white border-2 border-red-300 w-56 h-56 text-center flex items-start"
+      }
     >
       {freeAppointments.length > 0 ? freeAppointments : "No hay disponible"}
     </div>
