@@ -62,6 +62,7 @@ const Router = () => {
     }
   }, [auth, user, month]);
 
+
   return (
     <Suspense fallback={<Loader />}>
       <BrowserRouter>

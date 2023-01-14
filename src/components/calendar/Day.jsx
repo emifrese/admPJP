@@ -8,7 +8,7 @@ import RecurringPacient from "../forms/RecurringPacients";
 import Modal from "../UI/Modal";
 
 const Day = ({ toggleModal, modal }) => {
-  const day = useSelector((state) => state.appointments.day);
+   const day = useSelector((state) => state.appointments.day);
   const month = useSelector((state) => state.appointments.month);
   const year = useSelector((state) => state.appointments.year);
   const turnos = useSelector((state) => state.appointments.appointments);
@@ -31,15 +31,14 @@ const Day = ({ toggleModal, modal }) => {
   let appointmentsDisplay = [];
   let freeAppointments = [];
   let scheduleAppointments;
-  console.log(defDayAppointments);
   if (defDayAppointments) {
     freeAppointments = Object.entries(defDayAppointments)
       .filter((el) => el[0] !== "id" && el[0] !== "day")
       .map((el) => (
         <p
-          className={
-            `border-2 border-zinc-300 rounded-md py-2 px-4 bg-green-300 ${el[1].available ? "inline-block" : "hidden"}`
-          }
+          className={`border-2 border-zinc-300 rounded-md py-2 px-4 bg-green-300 ${
+            el[1].available ? "inline-block" : "hidden"
+          }`}
           onClick={(e) => {
             dispatch(
               appointmentsActions.setDay(
@@ -70,16 +69,14 @@ const Day = ({ toggleModal, modal }) => {
     Object.keys(freeAppointments).length > 0
   ) {
     for (let el of scheduleAppointments) {
-      const temp = {
+      let temp = {
         ...freeAppointments.filter((app) => app.props["data-time"] === el[0]),
       };
+
       const currentPacient = pacients.filter(
         (pacient) => pacient.id === el[1].pacientId
       );
-      // console.log(currentPacient);
       const index = freeAppointments.indexOf(temp[0]);
-      console.log(temp);
-      console.log(el);
       let newChildren = [...temp[0].props.children];
       newChildren.push(
         ` ${currentPacient[0].nombre} ${currentPacient[0].apellido}`
@@ -90,7 +87,7 @@ const Day = ({ toggleModal, modal }) => {
         props: {
           ...temp[0].props,
           className:
-            "border-2 border-zinc-300 rounded-md py-2 px-4 bg-red-300 inline-block",
+            "w-full rounded-md py-2 px-4 bg-red-300 inline-block",
           onClick: (e) => {
             dispatch(pacientsActions.setCurrentPacient(currentPacient[0]));
             dispatch(appointmentsActions.setDay(newTemp.props["data-day"]));
@@ -112,11 +109,17 @@ const Day = ({ toggleModal, modal }) => {
     busySquare = (
       <div
         key={Math.random().toString(32).slice(2)}
-        className={"bg-white border-2 border-red-300 w-56 h-56 text-center"}
+        className={
+          "flex place-content-start items-start flex-wrap justify-center w-56 h-56 text-center my-8 gap-2"
+        }
       >
-        {appointmentsDisplay.length > 0
-          ? appointmentsDisplay
-          : "No hay turnos agendados"}
+        {appointmentsDisplay.length > 0 ? (
+          appointmentsDisplay
+        ) : (
+          <p className="bg-white border-2 border-red-500 rounded-md w-full text-xl py-2">
+            No hay turnos agendados
+          </p>
+        )}
       </div>
     );
   }
@@ -125,9 +128,10 @@ const Day = ({ toggleModal, modal }) => {
     <div
       key={Math.random().toString(32).slice(2)}
       className={
-        "bg-white border-2 border-red-300 w-56 h-56 text-center flex items-start"
+        "w-56 h-56 text-center flex place-content-start gap-2 justify-center flex-wrap"
       }
     >
+      <h2 className="w-full text-2xl">Turnos disponibles</h2>
       {freeAppointments.length > 0 ? freeAppointments : "No hay disponible"}
     </div>
   );
@@ -153,7 +157,7 @@ const Day = ({ toggleModal, modal }) => {
         >
           Prev
         </button>
-        <h2>
+        <h2 className="text-2xl">
           {days[weekDay.getDay()]} {day} de {months[month]}
         </h2>
         <button

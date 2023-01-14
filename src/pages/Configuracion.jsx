@@ -5,7 +5,6 @@ import { useSelector } from "react-redux";
 import { firestore } from "../firebase";
 import { days } from "../helpers/date";
 
-
 const Configuracion = () => {
   const defAppointments = useSelector(
     (state) => state.appointments.defAppointments
@@ -77,6 +76,18 @@ const Configuracion = () => {
       });
   }
 
+  defDayDisplay.push(
+    <div
+      className={
+        "flex justify-between w-full border-2 border-zinc-300 rounded-md bg-green-300"
+      }
+    >
+      <button
+        className="border-2 border-red-300 w-full flex justify-center py-2 px-4"
+      >Agregar un horario más</button>
+    </div>
+  );
+
   return (
     <>
       <div className="w-full flex justify-center gap-2">
@@ -97,9 +108,9 @@ const Configuracion = () => {
         )}
       </div>
       <div className="flex flex-wrap w-full">{defDayDisplay}</div>
-      <button
-        className="text-4xl p-2 rounded-2xl bg-red-500 fixed bottom-16 right-8"
-      >+</button>
+      <button className="text-4xl p-2 rounded-2xl bg-red-500 fixed bottom-16 right-8">
+        +
+      </button>
     </>
   );
 };

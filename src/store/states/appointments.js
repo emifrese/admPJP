@@ -64,7 +64,6 @@ const appointmentsSlice = createSlice({
     },
     setDay(state,action){
       if(state.day !== action.payload){
-        console.log('not the same')
         return {
           ...state,
           day: action.payload
