@@ -17,19 +17,19 @@ const NewOrRecurring = ({ Toggle }) => {
   };
 
   return (
-    <div className="bg-white flex flex-col gap-10 items-center text-md rounded-md min-w-[50vw] px-5 py-3 mb-10 lg:mb-0">
+    <div className="bg-brighter-yellow flex flex-col gap-10 items-center text-md rounded-md min-w-[50vw] px-5 py-3 mb-10 lg:mb-0">
       {!answer && (
         <>
-          <h2>Ya se atendió antes?</h2>
-          <div className="flex justify-around w-full">
+          <h2 className="text-xl uppercase font-bold">Ya se atendió antes?</h2>
+          <div className="flex gap-2 justify-around w-full">
             <button
-              className="bg-red-400 px-4 py-2 rounded-xl text-white cursor-pointer transition-all hover:bg-red-600"
+              className="bg-header-green px-4 py-2 rounded-xl text-white uppercase w-1/2 cursor-pointer transition-all"
               onClick={() => setAnswer("recurring")}
             >
               Si
             </button>
             <button
-              className="bg-green-400 px-4 py-2 rounded-xl text-white cursor-pointer transition-all hover:bg-green-600"
+              className="bg-red-600 px-4 py-2 rounded-xl text-white cursor-pointer uppercase w-1/2 transition-all hover:bg-green-600"
               onClick={() => setAnswer("new")}
             >
               No

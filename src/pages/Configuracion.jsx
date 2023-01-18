@@ -83,7 +83,7 @@ const Configuracion = () => {
       }
     >
       <button
-        className="border-2 border-red-300 w-full flex justify-center py-2 px-4"
+        className="border-2 border-red-300 w-full flex justify-center py-2"
       >Agregar un horario más</button>
     </div>
   );
@@ -108,9 +108,6 @@ const Configuracion = () => {
         )}
       </div>
       <div className="flex flex-wrap w-full">{defDayDisplay}</div>
-      <button className="text-4xl p-2 rounded-2xl bg-red-500 fixed bottom-16 right-8">
-        +
-      </button>
     </>
   );
 };

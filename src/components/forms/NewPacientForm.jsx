@@ -61,7 +61,7 @@ const NewPacientForm = ({ moveToggle, Toggle }) => {
       <button onClick={() => moveToggle("home")}>BACK</button>
       <h2 className="font-black text-xl mt-2 mb-2 text-center">
         Añade tu nuevo {""}
-        <span className="text-[#227777] font-bold">Paciente</span>
+        <span className="text-header-green font-bold">Paciente</span>
       </h2>
       <form className="px-5 py-3 mb-10 lg:mb-0" onSubmit={handleSubmit}>
         <div>

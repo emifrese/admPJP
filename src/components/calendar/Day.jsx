@@ -6,9 +6,12 @@ import { pacientsActions } from "../../store/states/pacients";
 import NewOrRecurring from "../forms/NewOrRecurring";
 import RecurringPacient from "../forms/RecurringPacients";
 import Modal from "../UI/Modal";
+import whatsappPNG from "../../assets/whatsapp.png";
+import arrowPrev from "../../assets/arrow_back_ios_FILL0_wght400_GRAD0_opsz48.svg";
+import arrowNext from "../../assets/arrow_forward_ios_FILL0_wght400_GRAD0_opsz48.svg"
 
 const Day = ({ toggleModal, modal }) => {
-   const day = useSelector((state) => state.appointments.day);
+  const day = useSelector((state) => state.appointments.day);
   const month = useSelector((state) => state.appointments.month);
   const year = useSelector((state) => state.appointments.year);
   const turnos = useSelector((state) => state.appointments.appointments);
@@ -36,7 +39,7 @@ const Day = ({ toggleModal, modal }) => {
       .filter((el) => el[0] !== "id" && el[0] !== "day")
       .map((el) => (
         <p
-          className={`border-2 border-zinc-300 rounded-md py-2 px-4 bg-green-300 ${
+          className={`font-bold text-white rounded-md py-2 px-4 bg-header-green ${
             el[1].available ? "inline-block" : "hidden"
           }`}
           onClick={(e) => {
@@ -86,9 +89,8 @@ const Day = ({ toggleModal, modal }) => {
         ...temp[0],
         props: {
           ...temp[0].props,
-          className:
-            "w-full rounded-md py-2 px-4 bg-red-300 inline-block",
-          onClick: (e) => {
+          className: "text-header-green uppercase font-bold",
+          onClick: () => {
             dispatch(pacientsActions.setCurrentPacient(currentPacient[0]));
             dispatch(appointmentsActions.setDay(newTemp.props["data-day"]));
             dispatch(appointmentsActions.setTime(newTemp.props["data-time"]));
@@ -98,8 +100,20 @@ const Day = ({ toggleModal, modal }) => {
           children: newChildren,
         },
       };
+      const whatsapp = (
+        <a target="_blank" href={"https://wa.me/" + currentPacient[0].telefono}>
+          <img className="w-4" src={whatsappPNG} />
+        </a>
+      );
+      const appointment = (
+        <div className="w-full flex justify-between items-center rounded-md py-2 px-4 gap-2  bg-brighter-yellow">
+          {newTemp}
+          {whatsapp}
+        </div>
+      );
       freeAppointments.splice(index, 1);
-      appointmentsDisplay.push(newTemp);
+      appointmentsDisplay.push(appointment);
+      console.log(appointmentsDisplay);
     }
   }
 
@@ -110,13 +124,13 @@ const Day = ({ toggleModal, modal }) => {
       <div
         key={Math.random().toString(32).slice(2)}
         className={
-          "flex place-content-start items-start flex-wrap justify-center w-56 h-56 text-center my-8 gap-2"
+          "flex place-content-start items-start flex-wrap justify-center w-64 text-center my-8 gap-2"
         }
       >
         {appointmentsDisplay.length > 0 ? (
           appointmentsDisplay
         ) : (
-          <p className="bg-white border-2 border-red-500 rounded-md w-full text-xl py-2">
+          <p className="bg-brighter-yellow font-bold text-header-green uppercase rounded-md w-full text-xl py-2">
             No hay turnos agendados
           </p>
         )}
@@ -128,11 +142,17 @@ const Day = ({ toggleModal, modal }) => {
     <div
       key={Math.random().toString(32).slice(2)}
       className={
-        "w-56 h-56 text-center flex place-content-start gap-2 justify-center flex-wrap"
+        "w-64 text-center flex place-content-start gap-2 justify-center flex-wrap"
       }
     >
-      <h2 className="w-full text-2xl">Turnos disponibles</h2>
-      {freeAppointments.length > 0 ? freeAppointments : "No hay disponible"}
+      {freeAppointments.length > 0 ? (
+        <>
+          <h2 className="w-full text-2xl">Turnos disponibles</h2>
+          {freeAppointments}
+        </>
+      ) : (
+        "No hay disponible"
+      )}
     </div>
   );
 
@@ -155,9 +175,9 @@ const Day = ({ toggleModal, modal }) => {
             }
           }}
         >
-          Prev
+          <img className="w-8" src={arrowPrev}/>
         </button>
-        <h2 className="text-2xl">
+        <h2 className="text-2xl font-semibold">
           {days[weekDay.getDay()]} {day} de {months[month]}
         </h2>
         <button
@@ -170,7 +190,7 @@ const Day = ({ toggleModal, modal }) => {
             }
           }}
         >
-          Next
+          <img className="w-8" src={arrowNext}/>
         </button>
       </div>
       {busySquare}

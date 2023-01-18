@@ -21,7 +21,7 @@ const AdminLayout = () => {
     <>
       <Header />
       {
-        <main className="container mx-auto mt-6 h-screen">
+        <main className="container mx-auto mt-6 h-full">
           <AdminPageWrapper>
             <Outlet />
           </AdminPageWrapper>

@@ -5,9 +5,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { firestore } from "../../firebase";
 import { months } from "../../helpers/date";
 import { pacientsActions } from "../../store/states/pacients";
+import arrowBack from "../../assets/arrow_back_ios_FILL0_wght400_GRAD0_opsz48.svg"
 
 const NewAppointment = ({ moveToggle }) => {
-  const [nombre, setNombre] = useState("");
+  const [apellido, setApellido] = useState("");
   const dispatch = useDispatch();
   const pacients = useSelector((state) => state.pacients.pacients);
   const currentPacient = useSelector((state) => state.pacients.currentPacient);
@@ -29,34 +30,33 @@ const NewAppointment = ({ moveToggle }) => {
   const todayAppointmentsArray = turnos.find((el) => el.day === day.toString());
 
   let index;
-  
-  if(todayAppointmentsArray !== undefined) {
+
+  if (todayAppointmentsArray !== undefined) {
     const todayAppointmentsInfo = Object.entries(todayAppointmentsArray).filter(
       (el) => el[0] !== "day" && el[0] !== "id"
+    );
+    if (Object.entries(currentPacient).length > 0) {
+      index = todayAppointmentsInfo.filter(
+        (el) => el[1].pacientId === currentPacient.id
       );
-      if (Object.entries(currentPacient).length > 0) {
-        index = todayAppointmentsInfo.filter(
-          (el) => el[1].pacientId === currentPacient.id
-        );
-      }
+    }
   }
 
   const filterLastName =
     pacients.length > 0
-      ? pacients.filter((el) => {
-          if (nombre.trim() === "") {
+      ? pacients.filter((el) => {  
+        if (apellido.trim() === "") {
             return null;
           } else {
-            return el.apellido.toLowerCase().includes(nombre.trim());
+            return el.apellido.toLowerCase().includes(apellido.toLowerCase().trim());
           }
-        })
+        }).slice(0, 3)
       : [];
 
   const saveAppointment = async () => {
-
-    if(index !== undefined && index.length > 0) {
-      alert('Ya tienes un turno para este dia')
-      return; 
+    if (index !== undefined && index.length > 0) {
+      alert("Ya tienes un turno para este dia");
+      return;
     }
 
     await setDoc(
@@ -70,13 +70,21 @@ const NewAppointment = ({ moveToggle }) => {
       },
       { merge: true }
     );
-    
-    const appointments = Object.entries(currentPacient).filter(el => el[0] === "appointments").length > 0 ? [...Object.entries(currentPacient).filter(el => el[0] === "appointments")[0][1]] : [];
-    
+
+    const appointments =
+      Object.entries(currentPacient).filter((el) => el[0] === "appointments")
+        .length > 0
+        ? [
+            ...Object.entries(currentPacient).filter(
+              (el) => el[0] === "appointments"
+            )[0][1],
+          ]
+        : [];
+
     const dayString = day.toString().length === 1 ? `0${day}` : day;
     const monthString = month.toString().length === 1 ? `0${month}` : month;
 
-    appointments.push(`${time}${dayString}${monthString}${year}`)
+    appointments.push(`${time}${dayString}${monthString}${year}`);
 
     await setDoc(
       pacientRef,
@@ -89,34 +97,38 @@ const NewAppointment = ({ moveToggle }) => {
     dispatch(pacientsActions.setCurrentPacient([]));
   };
 
+  console.log(filterLastName)
+
   return (
     <>
-      <button onClick={() => moveToggle("home")}>Back</button>
-      <h2 className="font-black text-xl text-center">Nuevo Turno</h2>
+      <div className="flex justify-start w-full">
+        <button className="absolute" onClick={() => moveToggle("home")}><img src={arrowBack} className="w-6" /></button>
+        <h2 className="w-full font-black text-xl text-center">Nuevo Turno</h2>
+      </div>
 
       {Object.keys(currentPacient).length < 1 && (
         <>
           <p className="text-md text-center">
             Busca a tu paciente por {""}
-            <span className="text-[#227777] font-bold">APELLIDO</span>
+            <span className="text-header-green font-bold">APELLIDO</span>
           </p>
-          <div className="bg-white text-sm rounded-md max-h-max px-5 py-3 mb-10 lg:mb-0">
+          <div className="text-sm rounded-md max-h-max px-5 py-3 mb-10 lg:mb-0">
             <div className="relative">
               <label
-                htmlFor="nombre"
-                className="text-zinc-700 uppercase font-bold"
+                htmlFor="apellido"
+                className="text-header-green uppercase font-bold"
               >
                 Paciente
               </label>
               <input
-                id="nombre"
+                id="apellido"
                 type="text"
                 placeholder="Nombre del paciente"
                 className="border-2 w-full p-2 mt-2 placeholder-zinc-400 rounded-md"
-                onChange={(e) => setNombre(e.target.value)}
-                value={nombre}
+                onChange={(e) => setApellido(e.target.value)}
+                value={apellido}
               />
-              {filterLastName.length > 0 && nombre.length > 0 && (
+              {filterLastName.length > 0 && apellido.length > 0 && (
                 <div className="border-2 border-[#e5e7eb] bg-white rounded-b-md border-t-0 w-full">
                   {filterLastName.map((e) => (
                     <button
@@ -124,7 +136,7 @@ const NewAppointment = ({ moveToggle }) => {
                       onClick={() => {
                         // setCurrentPacient(e);
                         dispatch(pacientsActions.setCurrentPacient(e));
-                        setNombre("");
+                        setApellido("");
                       }}
                       key={Math.random().toString(32).slice(2)}
                     >
@@ -133,7 +145,7 @@ const NewAppointment = ({ moveToggle }) => {
                   ))}
                 </div>
               )}
-              {filterLastName.length === 0 && nombre.length > 0 && (
+              {filterLastName.length === 0 && apellido.length > 0 && (
                 <p className="block border-2 border-[#e5e7eb] bg-white rounded-b-md border-t-0 w-full py-2 cursor-pointer hover:bg-zinc-300">
                   No existe paciente
                 </p>

@@ -104,21 +104,21 @@ const RecurringPacient = ({ Toggle }) => {
   const { msg } = alert;
 
   return (
-    <div className="bg-white text-sm rounded-md max-h-max px-5 py-3 mb-10 lg:mb-0">
-      <h2 className="font-black text-xl text-center">Agenda un turno</h2>
+    <div className="bg-brighter-yellow text-header-green text-sm rounded-md max-h-max px-5 py-3 mb-10 lg:mb-0">
+      <h2 className="text-black font-bold text-2xl text-center">Agenda un turno</h2>
       <div
         className="px-5 py-3 mb-10 lg:mb-0"
         // onSubmit={handleSubmit}
       >
         <div className="flex justify-between items-center">
-          <label htmlFor="nombre" className="text-zinc-700 uppercase font-bold">
+          <label htmlFor="nombre" className="text-base uppercase font-bold">
             Nombre
           </label>
           <input
             id="nombre"
             type="text"
             placeholder="Nombre del paciente"
-            className="border-2 p-2 my-2 placeholder-zinc-400 rounded-md"
+            className="bg-transparent font-semibold text-black p-2 my-2 placeholder-zinc-400 rounded-md"
             // onChange={(e) => setNombre(e.target.value)}
             value={currentPacient.nombre}
           />
@@ -126,7 +126,7 @@ const RecurringPacient = ({ Toggle }) => {
         <div className="flex justify-between items-center">
           <label
             htmlFor="apellido"
-            className="text-zinc-700 uppercase font-bold"
+            className="text-base uppercase font-bold"
           >
             Apellido
           </label>
@@ -134,20 +134,20 @@ const RecurringPacient = ({ Toggle }) => {
             id="apellido"
             type="text"
             placeholder="Apellido del paciente"
-            className="border-2 p-2 my-2 placeholder-zinc-400 rounded-md"
+            className="bg-transparent font-semibold text-black p-2 my-2 placeholder-zinc-400 rounded-md"
             // onChange={(e) => setApellido(e.target.value)}
             value={currentPacient.apellido}
           />
         </div>
         <div className="flex justify-between items-center">
-          <label htmlFor="email" className="text-zinc-700 uppercase font-bold">
+          <label htmlFor="email" className="text-base uppercase font-bold">
             Email
           </label>
           <input
             id="email"
             type="text"
             placeholder="Email del paciente"
-            className="border-2 p-2 my-2 placeholder-zinc-400 rounded-md"
+            className="bg-transparent font-semibold text-black p-2 my-2 placeholder-zinc-400 rounded-md"
             // onChange={(e) => setEmail(e.target.value)}
             value={currentPacient.email}
           />
@@ -155,7 +155,7 @@ const RecurringPacient = ({ Toggle }) => {
         <div className="flex justify-between items-center mb-5">
           <label
             htmlFor="telefono"
-            className="text-zinc-700 uppercase font-bold"
+            className="text-base uppercase font-bold"
           >
             Telefono
           </label>
@@ -163,16 +163,12 @@ const RecurringPacient = ({ Toggle }) => {
             id="telefono"
             type="text"
             placeholder="Telefono del paciente"
-            className="border-2 p-2 my-2 placeholder-zinc-400 rounded-md"
+            className="bg-transparent font-semibold text-black p-2 my-2 placeholder-zinc-400 rounded-md"
             // onChange={(e) => setTelefono(e.target.value)}
             value={currentPacient.telefono}
           />
         </div>
-        <input
-          type="submit"
-          className="bg-indigo-600 rounded-md w-full p-3 text-white uppercase font-bold hover:bg-indigo-700 cursor-pointer transition-colors"
-        />
-        <button onClick={() => deleteAppointment()}>Eliminar turno</button>
+        <button className="border-2 border-red-500 w-full py-2 rounded-md text-lg bg-red-600 text-white font-semibold uppercase" onClick={() => deleteAppointment()}>Eliminar turno</button>
       </div>
 
       {/* {msg && <p>Faltan datos</p>} */}

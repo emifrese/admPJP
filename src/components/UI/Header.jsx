@@ -8,7 +8,7 @@ const Header = () => {
   const place = useSelector(state => state.appointments.place)
   const [responsive, setResponsive] = useState(false);
 
-  let navClass = "flex items-center gap-4 bg-[#227777]";
+  let navClass = "flex items-center gap-4 bg-header-green";
 
   if (width <= 750) {
     if (responsive) {
@@ -19,7 +19,7 @@ const Header = () => {
   }
 
   return (
-    <header className="flex justify-center h-16 py-4 bg-[#227777]">
+    <header className="flex justify-center h-16 py-4 bg-header-green">
       <div className="container flex justify-center items-center">
         <h1 className="font-bold text-xl w-full text-zinc-800 text-start ">
           {width > 750 ? "Administrador de Pacientes " : "A "}
@@ -44,12 +44,14 @@ const Header = () => {
           <Link
             to="/"
             className="text-zinc-300 text-xs uppercase font-bold"
+            onClick={() => width <= 750 && setResponsive(state => !state)}
           >
             Inicio
           </Link>
           <Link
             to="/appointmentConfig"
             className="text-zinc-300 text-xs uppercase font-bold"
+            onClick={() => width <= 750 && setResponsive(state => !state)}
           >
             Configurar
           </Link>

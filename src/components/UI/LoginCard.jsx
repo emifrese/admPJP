@@ -51,7 +51,7 @@ const LoginCard = () => {
         <input
           type="submit"
           value="Inicia Sesión"
-          className="bg-[#227777] w-full py-3 px-10 rounded-xl text-white uppercase font-bold mt-5 hover:cursor-pointer hover:bg-[#1b5e5e] md:w-auto"
+          className="bg-header-green w-full py-3 px-10 rounded-xl text-white uppercase font-bold mt-5 hover:cursor-pointer hover:bg-[#1b5e5e] md:w-auto"
         />
       </form>
 
