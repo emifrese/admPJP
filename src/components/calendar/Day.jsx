@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { days, getDays, months } from "../../helpers/date";
 import { appointmentsActions } from "../../store/states/appointments";
@@ -10,17 +10,20 @@ import whatsappPNG from "../../assets/whatsapp.png";
 import arrowPrev from "../../assets/arrow_back_ios_FILL0_wght400_GRAD0_opsz48.svg";
 import arrowNext from "../../assets/arrow_forward_ios_FILL0_wght400_GRAD0_opsz48.svg"
 
-const Day = ({ toggleModal, modal }) => {
+const Day = () => {
+  const [modal, setModal] = useState(["", false]);
   const day = useSelector((state) => state.appointments.day);
   const month = useSelector((state) => state.appointments.month);
   const year = useSelector((state) => state.appointments.year);
   const turnos = useSelector((state) => state.appointments.appointments);
-  // console.log(turnos);
   const defAppointments = useSelector(
     (state) => state.appointments.defAppointments
   );
   const pacients = useSelector((state) => state.pacients.pacients);
 
+  const places = useSelector(state => state.appointments.places)
+  console.log(places)
+ 
   const dispatch = useDispatch();
   const totalDays = getDays(year, month);
 
@@ -30,6 +33,13 @@ const Day = ({ toggleModal, modal }) => {
   );
 
   const dayAppointments = turnos.find((el) => el.day === day.toString());
+
+  const toggleModal = (type) => {
+    if (modal[0] === "recurring") {
+      dispatch(pacientsActions.setCurrentPacient({}));
+    }
+    setModal((state) => [type, !state[1]]);
+  };
 
   let appointmentsDisplay = [];
   let freeAppointments = [];
@@ -101,7 +111,7 @@ const Day = ({ toggleModal, modal }) => {
         },
       };
       const whatsapp = (
-        <a target="_blank" href={"https://wa.me/" + currentPacient[0].telefono}>
+        <a target="_blank" href={"https://wa.me/" + currentPacient[0].telefono} className="p-2">
           <img className="w-4" src={whatsappPNG} />
         </a>
       );
@@ -142,16 +152,16 @@ const Day = ({ toggleModal, modal }) => {
     <div
       key={Math.random().toString(32).slice(2)}
       className={
-        "w-64 text-center flex place-content-start gap-2 justify-center flex-wrap"
+        "w-64 text-center grid grid-cols-2 place-content-start gap-2 justify-center"
       }
     >
       {freeAppointments.length > 0 ? (
         <>
-          <h2 className="w-full text-2xl">Turnos disponibles</h2>
+          <h2 className="w-full text-2xl col-span-2">Turnos disponibles</h2>
           {freeAppointments}
         </>
       ) : (
-        "No hay disponible"
+        <h2 className="col-span-2 bg-header-green text-brighter-yellow mx-auto mt-6 px-4 py-2 text-xl uppercase font-bold rounded-md">No hay horarios disponibles</h2>
       )}
     </div>
   );

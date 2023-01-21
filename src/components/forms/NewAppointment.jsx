@@ -50,7 +50,8 @@ const NewAppointment = ({ moveToggle }) => {
           } else {
             return el.apellido.toLowerCase().includes(apellido.toLowerCase().trim());
           }
-        }).slice(0, 3)
+        })
+        // .slice(0, 3)
       : [];
 
   const saveAppointment = async () => {
@@ -101,7 +102,7 @@ const NewAppointment = ({ moveToggle }) => {
 
   return (
     <>
-      <div className="flex justify-start w-full">
+      <div className="flex justify-start w-full items-center">
         <button className="absolute" onClick={() => moveToggle("home")}><img src={arrowBack} className="w-6" /></button>
         <h2 className="w-full font-black text-xl text-center">Nuevo Turno</h2>
       </div>
@@ -129,7 +130,7 @@ const NewAppointment = ({ moveToggle }) => {
                 value={apellido}
               />
               {filterLastName.length > 0 && apellido.length > 0 && (
-                <div className="border-2 border-[#e5e7eb] bg-white rounded-b-md border-t-0 w-full">
+                <div className="border-2 border-[#e5e7eb] bg-white rounded-b-md border-t-0 w-full max-h-28 overflow-auto">
                   {filterLastName.map((e) => (
                     <button
                       className="block w-full text-start py-2 cursor-pointer hover:bg-zinc-300"
@@ -156,12 +157,13 @@ const NewAppointment = ({ moveToggle }) => {
       )}
       {Object.keys(currentPacient).length > 0 && (
         <>
-          <h2>
+          <h2 className="font-semibold">
             Desea agendar un turno para el {day} de {months[month]} a las{" "}
             {time.substring(0, 2)}:{time.substring(2)}?
           </h2>
-          <div className="bg-white text-sm rounded-md shadow-[0px_3px_5px_2px_rgba(67,56,202,0.3)] max-h-max px-5 py-3 lg:mb-0">
-            <p>Nombre: {currentPacient.nombre}</p>
+          <div className="bg-header-green text-brighter-yellow text-start text-lg rounded-md shadow-[0px_3px_5px_2px_rgba(67,56,202,0.3)] max-h-max px-5 py-3">
+            <p>Paciente: {currentPacient.apellido}, {currentPacient.nombre}</p>
+            {/* <p>Nombre: {currentPacient.nombre}</p>
             <p>Apellido: {currentPacient.apellido}</p>
             <p>
               Email:{" "}
@@ -174,16 +176,17 @@ const NewAppointment = ({ moveToggle }) => {
               <a href={"https://wa.me/" + currentPacient.telefono}>
                 {currentPacient.telefono}
               </a>
-            </p>
+            </p> */}
           </div>
           <button
-            className="border-2  border-red-500 px-2 rounded-2xl"
+            className="bg-header-green px-4 py-2 text-white uppercase rounded-md"
             onClick={() => saveAppointment()}
             // disabled={index !== undefined && index.length > 0}
           >
             Agendar
           </button>
           <button
+            className="bg-red-500 px-4 py-2 text-white rounded-md"
             onClick={() => dispatch(pacientsActions.setCurrentPacient({}))}
           >
             Reset

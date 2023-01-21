@@ -12,7 +12,7 @@ const Header = () => {
 
   if (width <= 750) {
     if (responsive) {
-      navClass += " flex-col absolute top-0 w-full animate-menu-animation py-4";
+      navClass += " flex-col absolute top-0 w-full animate-menu-animation py-4 z-10";
     } else {
       navClass = "hidden";
     }

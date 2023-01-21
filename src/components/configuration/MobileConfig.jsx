@@ -8,8 +8,9 @@ import arrowNext from "../../assets/arrow_forward_ios_FILL0_wght400_GRAD0_opsz48
 import Modal from "../UI/Modal";
 
 const MobileConfig = () => {
-  const [modal, setModal] = useState(false);
+  const [modal, setModal] = useState(["", "", false]);
   const [day, setDay] = useState(1);
+  const [] = useState();
   const [refresh, setRefresh] = useState(true);
 
   const defAppointments = useSelector(
@@ -20,31 +21,35 @@ const MobileConfig = () => {
 
   const time = useSelector((state) => state.appointments.time);
 
-  console.log(time);
-  console.log(defAppointments);
-
   const defDayAppointments = defAppointments.find(
     (el) => el.day === day.toString()
   );
 
-  console.log(defDayAppointments);
-
-  const toggleModal = () => {
-    setModal(state => !state)
+  const toggleHour = (available, hour) => {
+    setModal((state) => [available, hour, !state[2]]);
   };
 
-  const toggleAvailable = async (checked, id) => {
-    const defDayRef = doc(firestore, `${place}/turnos/predeterminados/${day}`);
+  const toggleModal = () => {
+    setModal((state) => ["", "", !state[2]]);
+  };
+  const defDayRef = doc(firestore, `${place}/turnos/predeterminados/${day}`);
 
+  const toggleAvailable = async () => {
     await setDoc(
       defDayRef,
       {
-        [id]: {
-          available: !checked,
+        [modal[1]]: {
+          available: !modal[0],
         },
       },
       { merge: true }
     );
+
+    toggleModal();
+  };
+
+  const addHour = async () => {
+    await setDoc(defDayRef, {});
   };
 
   let defDayDisplay = [];
@@ -53,42 +58,21 @@ const MobileConfig = () => {
     defDayDisplay = Object.entries(defDayAppointments)
       .filter((el) => el[0] !== "id" && el[0] !== "day")
       .map((el) => {
-        console.log(el);
         return (
           <div
             className={
-              "flex flex-col text-center rounded-md  text-white font-semibold bg-header-green p-2"
+              "flex flex-col text-center rounded-md uppercase text-white font-semibold bg-header-green p-2"
             }
+            onClick={() => toggleHour(el[1].available, el[1].hour)}
           >
             {el[1].hour.substring(0, 2)}:{el[1].hour.substring(2)}
-            <label
-              data-day={day}
-              data-time={el[1].hour}
-              key={Math.random().toString(32).slice(2)}
-              htmlFor={day.toString() + el[1].hour}
-              className="uppercase"
-              onClick={() => console.log("click")}
-            >
-              {el[1].available ? "Habilitado" : "Deshabilitado"}
-              <input
-                name={day.toString() + el[1].hour}
-                id={day.toString() + el[1].hour}
-                type="checkbox"
-                checked={el[1].available}
-                onChange={() => {
-                  toggleAvailable(el[1].available, el[1].hour);
-                }}
-                className="hidden"
-              />
-            </label>
+            <span>{el[1].available ? "Habilitado" : "Deshabilitado"}</span>
           </div>
         );
       });
   }
 
-  //   defDayDisplay.push(
-
-  //   );
+  console.log(defDayDisplay);
 
   return (
     <>
@@ -111,10 +95,17 @@ const MobileConfig = () => {
           </button>
         )}
       </div>
-      <div className="grid grid-cols-2 w-full px-4 my-8 gap-2">
-        {defDayDisplay}
+      <div className="grid grid-cols-2 gap-2 w-full px-4 my-8">
+        {defDayDisplay.length > 0 ? (
+          defDayDisplay
+        ) : (
+          <p className="col-span-2 text-center font-semibold bg-brighter-yellow text-header-green rounded-md text-xl mx-auto px-4 py-2">
+            No hay horarios en <span className="font-bold">{place}</span>
+          </p>
+        )}
       </div>
-      <div
+      {/* Add date button */}
+      {/* <div
         className={"flex justify-between w-full mx-4 rounded-md bg-green-300"}
       >
         <button
@@ -123,10 +114,32 @@ const MobileConfig = () => {
         >
           Agregar un horario más
         </button>
-      </div>
-      {modal && (
+      </div> */}
+      {/* Add date option  */}
+      {/* {modal[2] && modal[0] === "" && (
         <Modal Toggle={toggleModal}>
-          <div className="bg-white">Desea deshabilitar?</div>
+          <form className="bg-white p-6 rounded-md">
+            <select name="hour" id="hour">
+              <option value="">Hour1</option>
+              <option value="">hour2</option>
+            </select>
+          </form>
+        </Modal>
+      )} */}
+      {modal[2] && modal[0] !== "" && (
+        <Modal Toggle={toggleModal}>
+          <div className="bg-white p-6 flex flex-wrap justify-center items-center gap-4">
+            <span className="w-full">
+              Habilitar/Deshabilitar {modal[1]} {modal[0]}
+            </span>
+            <button
+              className="bg-green-500 px-4 py-2 rounded-md"
+              onClick={() => toggleAvailable()}
+            >
+              Si
+            </button>
+            <button className="bg-red-500 px-4 py-2 rounded-md">No</button>
+          </div>
         </Modal>
       )}
     </>

@@ -30,6 +30,14 @@ const Router = () => {
     onAuthStateChanged(auth, setUser);
 
     if (user !== null) {
+      onSnapshot(collection(firestore, "places"), snapshot => {
+        let placesArray = snapshot.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id
+        }))
+        dispatch(appointmentsActions.storePlaces(placesArray))
+      })
+
       onSnapshot(collection(firestore, "pacientes"), (snapshot) => {
         let pacientsArray = snapshot.docs.map((doc) => ({
           ...doc.data(),

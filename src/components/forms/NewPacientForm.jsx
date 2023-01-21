@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import { collection, addDoc } from "firebase/firestore";
 import { firestore } from "../../firebase";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { pacientsActions } from "../../store/states/pacients";
+import arrowBack from "../../assets/arrow_back_ios_FILL0_wght400_GRAD0_opsz48.svg";
 
 const NewPacientForm = ({ moveToggle, Toggle }) => {
+  const pacients = useSelector((state) => state.pacients.pacients);
+  console.log(pacients)
   const [nombre, setNombre] = useState("");
   const [apellido, setApellido] = useState("");
   const [email, setEmail] = useState("");
@@ -12,6 +15,9 @@ const NewPacientForm = ({ moveToggle, Toggle }) => {
   const dispatch = useDispatch();
 
   const [alert, setAlert] = useState({});
+
+  const example = pacients.find((el) => el.email === email);
+  console.log(example);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,7 +31,44 @@ const NewPacientForm = ({ moveToggle, Toggle }) => {
       });
       setTimeout(() => {
         setAlert({});
-      }, 1500);
+      }, 2500);
+      return;
+    }
+
+    const repeatedEmail = pacients.find((el) => el.email === email);
+
+    const repeatedTelefono = pacients.find((el) => el.telefono === telefono)
+
+    if(telefono.length !== 13) {
+      setAlert({
+        msg: "El telefono debe tener 13 digitos",
+        error: true,
+      });
+      setTimeout(() => {
+        setAlert({});
+      }, 2500);
+      return;
+    }
+
+    if(repeatedTelefono) {
+      setAlert({
+        msg: "El telefono ya existe",
+        error: true,
+      });
+      setTimeout(() => {
+        setAlert({});
+      }, 2500);
+      return;
+    }
+
+    if(repeatedEmail) {
+      setAlert({
+        msg: "Ya existe un usuario con ese email",
+        error: true,
+      });
+      setTimeout(() => {
+        setAlert({});
+      }, 2500);
       return;
     }
 
@@ -34,9 +77,9 @@ const NewPacientForm = ({ moveToggle, Toggle }) => {
     const newPaciente = {
       nombre,
       apellido,
-      telefono,
+      telefono: "+549" + telefono,
       email,
-      appointments: []
+      appointments: [],
     };
 
     await addDoc(turnosRef, newPaciente);
@@ -57,79 +100,90 @@ const NewPacientForm = ({ moveToggle, Toggle }) => {
   const { msg } = alert;
 
   return (
-    <div className="bg-white text-sm rounded-md max-h-max px-5 py-3 mb-10 lg:mb-0">
-      <button onClick={() => moveToggle("home")}>BACK</button>
-      <h2 className="font-black text-xl mt-2 mb-2 text-center">
-        Añade tu nuevo {""}
-        <span className="text-header-green font-bold">Paciente</span>
-      </h2>
-      <form className="px-5 py-3 mb-10 lg:mb-0" onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="nombre" className="text-zinc-700 uppercase font-bold">
-            Nombre
-          </label>
+    <>
+      <div className="flex justify-start w-full items-center">
+        <button className="absolute" onClick={() => moveToggle("home")}>
+          <img src={arrowBack} className="w-6" />
+        </button>
+        <h2 className="w-full font-black text-xl mt-2 mb-2 text-center">
+          Añade tu nuevo {""}
+          <span className="text-header-green font-bold">Paciente</span>
+        </h2>
+      </div>
+      <div className="relative text-sm rounded-md max-h-max px-5">
+        <form className="px-5 mb-12" onSubmit={handleSubmit}>
+          <div>
+            <label
+              htmlFor="nombre"
+              className="text-zinc-700 uppercase font-bold"
+            >
+              Nombre
+            </label>
+            <input
+              id="nombre"
+              type="text"
+              placeholder="Nombre del paciente"
+              className="border-2 w-full p-2 my-2 placeholder-zinc-400 rounded-md"
+              onChange={(e) => setNombre(e.target.value)}
+              value={nombre}
+            />
+          </div>
+          <div>
+            <label
+              htmlFor="apellido"
+              className="text-zinc-700 uppercase font-bold"
+            >
+              Apellido
+            </label>
+            <input
+              id="apellido"
+              type="text"
+              placeholder="Apellido del paciente"
+              className="border-2 w-full p-2 my-2 placeholder-zinc-400 rounded-md"
+              onChange={(e) => setApellido(e.target.value)}
+              value={apellido}
+            />
+          </div>
+          <div>
+            <label
+              htmlFor="email"
+              className="text-zinc-700 uppercase font-bold"
+            >
+              Email
+            </label>
+            <input
+              id="email"
+              type="text"
+              placeholder="Email del paciente"
+              className="border-2 w-full p-2 my-2 placeholder-zinc-400 rounded-md"
+              onChange={(e) => setEmail(e.target.value)}
+              value={email}
+            />
+          </div>
+          <div className="mb-5">
+            <label
+              htmlFor="telefono"
+              className="text-zinc-700 uppercase font-bold"
+            >
+              Telefono
+            </label>
+            <input
+              id="telefono"
+              type="text"
+              placeholder="Sin el 0 y sin el 15"
+              className="border-2 w-full p-2 my-2 placeholder-zinc-400 rounded-md"
+              onChange={(e) => setTelefono(e.target.value)}
+              value={telefono}
+            />
+          </div>
           <input
-            id="nombre"
-            type="text"
-            placeholder="Nombre del paciente"
-            className="border-2 w-full p-2 my-2 placeholder-zinc-400 rounded-md"
-            onChange={(e) => setNombre(e.target.value)}
-            value={nombre}
+            type="submit"
+            className="bg-indigo-600 rounded-md w-full p-3 text-white uppercase font-bold hover:bg-indigo-700 cursor-pointer transition-colors"
           />
-        </div>
-        <div>
-          <label
-            htmlFor="apellido"
-            className="text-zinc-700 uppercase font-bold"
-          >
-            Apellido
-          </label>
-          <input
-            id="apellido"
-            type="text"
-            placeholder="Apellido del paciente"
-            className="border-2 w-full p-2 my-2 placeholder-zinc-400 rounded-md"
-            onChange={(e) => setApellido(e.target.value)}
-            value={apellido}
-          />
-        </div>
-        <div>
-          <label htmlFor="email" className="text-zinc-700 uppercase font-bold">
-            Email
-          </label>
-          <input
-            id="email"
-            type="text"
-            placeholder="Email del paciente"
-            className="border-2 w-full p-2 my-2 placeholder-zinc-400 rounded-md"
-            onChange={(e) => setEmail(e.target.value)}
-            value={email}
-          />
-        </div>
-        <div className="mb-5">
-          <label
-            htmlFor="telefono"
-            className="text-zinc-700 uppercase font-bold"
-          >
-            Telefono
-          </label>
-          <input
-            id="telefono"
-            type="text"
-            placeholder="Telefono del paciente"
-            className="border-2 w-full p-2 my-2 placeholder-zinc-400 rounded-md"
-            onChange={(e) => setTelefono(e.target.value)}
-            value={telefono}
-          />
-        </div>
-        <input
-          type="submit"
-          className="bg-indigo-600 rounded-md w-full p-3 text-white uppercase font-bold hover:bg-indigo-700 cursor-pointer transition-colors"
-        />
-      </form>
-
-      {msg}
-    </div>
+        {msg && <p className="w-full absolute right-0 bottom-0 text-md uppercase font-bold">{msg}</p>}
+        </form>
+      </div>
+    </>
   );
 };
 

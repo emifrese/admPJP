@@ -4,6 +4,7 @@ const actualDate = new Date();
 
 const initialTurnosState = {
   place: "BIGG",
+  places: [],
   defAppointments: [],
   appointments: [],
   day: actualDate.getDate(),
@@ -16,9 +17,12 @@ const appointmentsSlice = createSlice({
   name: "appointments",
   initialState: initialTurnosState,
   reducers: {
+    storePlaces(state, action){
+      return { ...state, places: action.payload}
+    },
     togglePlace(state, action) {
       if (action.payload !== state.place) {
-        return { ...state, ...action.payload };
+        return { ...state, place: action.payload };
       } else {
         return state;
       }
