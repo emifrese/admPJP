@@ -58,6 +58,7 @@ const MobileConfig = () => {
     defDayDisplay = Object.entries(defDayAppointments)
       .filter((el) => el[0] !== "id" && el[0] !== "day")
       .map((el) => {
+        console.log(el)
         return (
           <div
             className={

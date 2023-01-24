@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import NewAppointment from "./NewAppointment";
 import NewPacientForm from "./NewPacientForm";
-import RecurringPacient from "./RecurringPacients";
 
 const NewOrRecurring = ({ Toggle }) => {
   const [answer, setAnswer] = useState(null);

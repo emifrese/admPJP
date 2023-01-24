@@ -39,9 +39,9 @@ const NewPacientForm = ({ moveToggle, Toggle }) => {
 
     const repeatedTelefono = pacients.find((el) => el.telefono === telefono)
 
-    if(telefono.length !== 13) {
+    if(telefono.length !== 10) {
       setAlert({
-        msg: "El telefono debe tener 13 digitos",
+        msg: "El telefono debe tener 10 digitos",
         error: true,
       });
       setTimeout(() => {
