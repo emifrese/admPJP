@@ -65,6 +65,7 @@ const MobileConfig = () => {
               "flex flex-col text-center rounded-md uppercase text-white font-semibold bg-header-green p-2"
             }
             onClick={() => toggleHour(el[1].available, el[1].hour)}
+            key={Math.random().toString(32).slice(2)}
           >
             {el[1].hour.substring(0, 2)}:{el[1].hour.substring(2)}
             <span>{el[1].available ? "Habilitado" : "Deshabilitado"}</span>

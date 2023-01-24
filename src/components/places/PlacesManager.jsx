@@ -12,6 +12,7 @@ const PlacesManager = ({ Toggle }) => {
     .filter((el) => el.name !== place)
     .map((el) => (
       <button
+        key={Math.random().toString(32).slice(2)}
         className="px-4 py-2 rounded-md bg-header-green"
         onClick={() => {
           dispatch(appointmentsActions.togglePlace(el.name));
