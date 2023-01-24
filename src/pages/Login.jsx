@@ -8,7 +8,3 @@ const Login = () => {
         <LoginHeader/>
         <LoginCard />
     </>
-  )
-}
-
-export default Login
