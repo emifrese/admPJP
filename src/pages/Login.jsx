@@ -1,10 +1,14 @@
-import React from 'react'
-import LoginCard from '../components/UI/LoginCard'
-import LoginHeader from '../components/UI/LoginHeader'
+import React from "react";
+import LoginCard from "../components/UI/LoginCard";
+import LoginHeader from "../components/UI/LoginHeader";
 
 const Login = () => {
   return (
     <>
-        <LoginHeader/>
-        <LoginCard />
+      <LoginHeader />
+      <LoginCard />
     </>
+  );
+};
+
+export default Login;
