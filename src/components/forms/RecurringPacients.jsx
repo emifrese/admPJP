@@ -8,6 +8,7 @@ import {
 import { useSelector } from "react-redux";
 import { firestore } from "../../firebase";
 import { months } from "../../helpers/date";
+import { useEffect } from "react";
 
 const RecurringPacient = ({ Toggle }) => {
   const [nombre, setNombre] = useState("");
@@ -15,7 +16,7 @@ const RecurringPacient = ({ Toggle }) => {
   const [email, setEmail] = useState("");
   const [telefono, setTelefono] = useState("");
   const currentPacient = useSelector((state) => state.pacients.currentPacient);
-  console.log(currentPacient);
+
   const currentPlace = useSelector((state) => state.appointments.place);
   console.log(currentPacient);
   const year = useSelector((state) => state.appointments.year);
@@ -23,6 +24,8 @@ const RecurringPacient = ({ Toggle }) => {
   const day = useSelector((state) => state.appointments.day);
   const time = parseInt(useSelector((state) => state.appointments.time));
   const [alert, setAlert] = useState({});
+
+  console.log('render')
 
   const appointmentRef = doc(
     firestore,
@@ -102,6 +105,8 @@ const RecurringPacient = ({ Toggle }) => {
   console.log(currentPacient.nombre)
 
   const { msg } = alert;
+
+  console.log(currentPacient)
 
   return (
     <div className="bg-brighter-yellow text-header-green text-sm rounded-md max-h-max px-5 py-3 mb-10 lg:mb-0">
