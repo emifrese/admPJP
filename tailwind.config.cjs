@@ -3,6 +3,9 @@ module.exports = {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      boxShadow: {
+        "month-day": "rgba(0, 0, 0, 0.35) 0px 5px 15px;",
+      },
       colors: {
         "header-green": "#227777",
         "brighter-yellow": "#f9ff41",
@@ -15,6 +18,7 @@ module.exports = {
       keyframes: {
         growth: {
           "0%": {
+            boxShadow: "none",
             transform: "scale(1)",
           },
           "100%": {

@@ -16,7 +16,7 @@ const NewOrRecurring = ({ Toggle }) => {
   };
 
   return (
-    <div className="bg-brighter-yellow flex flex-col gap-6 items-center text-md rounded-md min-w-[50vw] px-5 py-3 mb-10 lg:mb-0">
+    <div className="w-full bg-brighter-yellow flex flex-col gap-6 justify-center items-center text-md rounded-md px-5 py-3 mb-10 h-80 lg:mb-0">
       {!answer && (
         <>
           <h2 className="text-xl uppercase font-bold">Ya se atendió antes?</h2>
@@ -28,7 +28,7 @@ const NewOrRecurring = ({ Toggle }) => {
               Si
             </button>
             <button
-              className="bg-red-600 px-4 py-2 rounded-xl text-white cursor-pointer uppercase w-1/2 transition-all hover:bg-green-600"
+              className="bg-red-600 px-4 py-2 rounded-xl text-white cursor-pointer uppercase w-1/2 transition-all"
               onClick={() => setAnswer("new")}
             >
               No

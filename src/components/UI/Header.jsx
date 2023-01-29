@@ -31,7 +31,7 @@ const Header = () => {
           <PlacesManager Toggle={toggleModal} />
         </Modal>
       )}
-      <header className="flex justify-center h-16 py-4 bg-header-green">
+      <header className="absolute w-full top-0 flex justify-center h-16 py-4 bg-header-green">
         <div className="container flex justify-center items-center">
           <h1 className="font-bold text-xl w-full text-zinc-800 text-start ">
             {width > 750 ? "Administrador de Pacientes " : "A "}

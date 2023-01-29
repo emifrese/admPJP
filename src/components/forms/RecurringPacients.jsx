@@ -1,13 +1,10 @@
 import React, { useState } from "react";
-import {
-  collection,
-  doc,
-  updateDoc,
-  deleteField,
-} from "firebase/firestore";
+import { collection, doc, updateDoc, deleteField } from "firebase/firestore";
 import { useSelector } from "react-redux";
 import { firestore } from "../../firebase";
 import { months } from "../../helpers/date";
+import whatsappIcon from "../../assets/whatsapp.png";
+import emailIcon from "../../assets/email.png";
 
 const RecurringPacient = ({ Toggle }) => {
   const [nombre, setNombre] = useState("");
@@ -15,7 +12,7 @@ const RecurringPacient = ({ Toggle }) => {
   const [email, setEmail] = useState("");
   const [telefono, setTelefono] = useState("");
   const currentPacient = useSelector((state) => state.pacients.currentPacient);
-  console.log(currentPacient);
+
   const currentPlace = useSelector((state) => state.appointments.place);
   console.log(currentPacient);
   const year = useSelector((state) => state.appointments.year);
@@ -24,15 +21,14 @@ const RecurringPacient = ({ Toggle }) => {
   const time = parseInt(useSelector((state) => state.appointments.time));
   const [alert, setAlert] = useState({});
 
+  console.log("render");
+
   const appointmentRef = doc(
     firestore,
     `${currentPlace}/turnos/${months[month].toLowerCase()}${year}/${day}`
   );
 
-  const pacientRef = doc(
-    firestore,
-    `pacientes/${currentPacient.id}`
-  )
+  const pacientRef = doc(firestore, `pacientes/${currentPacient.id}`);
   console.log(appointmentRef);
 
   const deleteAppointment = async () => {
@@ -40,16 +36,26 @@ const RecurringPacient = ({ Toggle }) => {
       [time]: deleteField(),
     });
 
-    const appointments = Object.entries(currentPacient).filter(el => el[0] === "appointments").length > 0 ? [...Object.entries(currentPacient).filter(el => el[0] === "appointments")[0][1]] : [];
-    
+    const appointments =
+      Object.entries(currentPacient).filter((el) => el[0] === "appointments")
+        .length > 0
+        ? [
+            ...Object.entries(currentPacient).filter(
+              (el) => el[0] === "appointments"
+            )[0][1],
+          ]
+        : [];
+
     const dayString = day.toString().length === 1 ? `0${day}` : day;
     const monthString = month.toString().length === 1 ? `0${month}` : month;
 
-    const newAppointments = appointments.filter(el => el !== `${time}${dayString}${monthString}${year}`)
+    const newAppointments = appointments.filter(
+      (el) => el !== `${time}${dayString}${monthString}${year}`
+    );
 
     await updateDoc(pacientRef, {
-      appointments: newAppointments
-    })
+      appointments: newAppointments,
+    });
 
     Toggle("");
   };
@@ -99,76 +105,42 @@ const RecurringPacient = ({ Toggle }) => {
     setEmail("");
   };
 
-  console.log(currentPacient.nombre)
+  // ---------------------------------------------------
+
+  console.log(currentPacient.nombre);
 
   const { msg } = alert;
 
+  console.log(currentPacient);
+
   return (
-    <div className="bg-brighter-yellow text-header-green text-sm rounded-md max-h-max px-5 py-3 mb-10 lg:mb-0">
-      <h2 className="text-black font-bold text-2xl text-center">Agenda un turno</h2>
+    <div className="bg-brighter-yellow text-header-green text-sm rounded-md max-h-max px-5 py-3 lg:mb-0">
+      <h2 className="text-gray-700 uppercase font-bold text-2xl text-center">
+        Información del paciente
+      </h2>
       <div
-        className="px-5 py-3 mb-10 lg:mb-0"
+        className="px-5 py-3 lg:mb-0"
         // onSubmit={handleSubmit}
       >
-        <div className="flex justify-between items-center">
-          <label htmlFor="nombre" className="text-base uppercase font-bold">
-            Nombre
-          </label>
-          <input
-            id="nombre"
-            type="text"
-            placeholder="Nombre del paciente"
-            className="bg-transparent font-semibold text-black p-2 my-2 placeholder-zinc-400 rounded-md"
-            // onChange={(e) => setNombre(e.target.value)}
-            value={currentPacient.nombre}
-          />
-        </div>
-        <div className="flex justify-between items-center">
-          <label
-            htmlFor="apellido"
-            className="text-base uppercase font-bold"
+        <div className="flex flex-wrap justify-around items-center mb-10">
+          <h3 className="w-full text-lg text-center font-semibold text-black p-2 my-2 placeholder-zinc-400 rounded-md">
+            {currentPacient.apellido}, {currentPacient.nombre}
+          </h3>
+          <a href={"https://wa.me/" + currentPacient.telefono} target="_blank"
+          className=""
           >
-            Apellido
-          </label>
-          <input
-            id="apellido"
-            type="text"
-            placeholder="Apellido del paciente"
-            className="bg-transparent font-semibold text-black p-2 my-2 placeholder-zinc-400 rounded-md"
-            // onChange={(e) => setApellido(e.target.value)}
-            value={currentPacient.apellido}
-          />
+            <img src={whatsappIcon} alt="" className="w-8" />
+          </a>
+          <a href={"mailto:" + currentPacient.email} target="_blank">
+            <img src={emailIcon} className="w-8" />
+          </a>
         </div>
-        <div className="flex justify-between items-center">
-          <label htmlFor="email" className="text-base uppercase font-bold">
-            Email
-          </label>
-          <input
-            id="email"
-            type="text"
-            placeholder="Email del paciente"
-            className="bg-transparent font-semibold text-black p-2 my-2 placeholder-zinc-400 rounded-md"
-            // onChange={(e) => setEmail(e.target.value)}
-            value={currentPacient.email}
-          />
-        </div>
-        <div className="flex justify-between items-center mb-5">
-          <label
-            htmlFor="telefono"
-            className="text-base uppercase font-bold"
-          >
-            Telefono
-          </label>
-          <input
-            id="telefono"
-            type="text"
-            placeholder="Telefono del paciente"
-            className="bg-transparent font-semibold text-black p-2 my-2 placeholder-zinc-400 rounded-md"
-            // onChange={(e) => setTelefono(e.target.value)}
-            value={currentPacient.telefono}
-          />
-        </div>
-        <button className="border-2 border-red-500 w-full py-2 rounded-md text-lg bg-red-600 text-white font-semibold uppercase" onClick={() => deleteAppointment()}>Eliminar turno</button>
+        <button
+          className="border-2 border-red-500 w-full py-2 rounded-md text-lg bg-red-600 text-white font-semibold uppercase"
+          onClick={() => deleteAppointment()}
+        >
+          Eliminar turno
+        </button>
       </div>
 
       {/* {msg && <p>Faltan datos</p>} */}
