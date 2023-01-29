@@ -172,25 +172,10 @@ const NewAppointment = ({ moveToggle }) => {
             <p>
               Paciente: {currentPacient.apellido}, {currentPacient.nombre}
             </p>
-            {/* <p>Nombre: {currentPacient.nombre}</p>
-            <p>Apellido: {currentPacient.apellido}</p>
-            <p>
-              Email:{" "}
-              <a href={"mailto:" + currentPacient.email}>
-                {currentPacient.email}
-              </a>
-            </p>
-            <p>
-              Telefono:{" "}
-              <a href={"https://wa.me/" + currentPacient.telefono}>
-                {currentPacient.telefono}
-              </a>
-            </p> */}
           </div>
           <button
             className="bg-header-green px-4 py-2 text-white uppercase rounded-md"
             onClick={() => saveAppointment()}
-            // disabled={index !== undefined && index.length > 0}
           >
             Agendar
           </button>

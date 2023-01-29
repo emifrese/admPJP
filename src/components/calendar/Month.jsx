@@ -1,11 +1,13 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { days, getDays, months } from "../../helpers/date";
+import { getDays, months } from "../../helpers/date";
 import { appointmentsActions } from "../../store/states/appointments";
 import { pacientsActions } from "../../store/states/pacients";
 import NewOrRecurring from "../forms/NewOrRecurring";
 import RecurringPacient from "../forms/RecurringPacients";
-import Modal from "../UI/Modal";
+import MonthDayWrapper from "./MonthDayWrapper";
+import arrowPrev from "../../assets/arrow_back_ios_FILL0_wght400_GRAD0_opsz48.svg";
+import arrowNext from "../../assets/arrow_forward_ios_FILL0_wght400_GRAD0_opsz48.svg";
 
 const Month = ({ toggleModal, modal }) => {
   //   console.log('render')
@@ -22,13 +24,12 @@ const Month = ({ toggleModal, modal }) => {
 
   const dayOne = new Date(year, month, 1);
   const dayEnd = new Date(year, month, totalDays);
-
-  console.log(defAppointments);
+  // console.log(defAppointments);
   const appointmentsWeekDays = defAppointments
     .map((el) => parseInt(el.day))
     .sort();
 
-  console.log(appointmentsWeekDays);
+  // console.log(appointmentsWeekDays);
 
   let squareDays = [];
 
@@ -46,10 +47,14 @@ const Month = ({ toggleModal, modal }) => {
       appointmentsDisplay = Object.entries(defDayAppointments)
         .filter((el) => el[0] !== "id" && el[0] !== "day")
         .map((el) => {
+          const hourText = `${el[1].hour.substring(
+            0,
+            2
+          )}:${el[1].hour.substring(2)}`;
           return (
             <p
               className={
-                "cursor-pointer border-2 w-16 text-center border-zinc-300 rounded-md bg-green-300"
+                "cursor-pointer m-1 w-14 text-center rounded-md bg-header-green text-white"
               }
               onClick={(e) => {
                 dispatch(
@@ -62,13 +67,14 @@ const Month = ({ toggleModal, modal }) => {
                     e.target.getAttribute("data-time")
                   )
                 );
+                dispatch(pacientsActions.setCurrentPacient({}));
                 toggleModal("new");
               }}
               data-day={day.getDate()}
               data-time={el[1].hour}
               key={Math.random().toString(32).slice(2)}
             >
-              {el[1].hour}
+              {hourText}
             </p>
           );
         });
@@ -84,24 +90,26 @@ const Month = ({ toggleModal, modal }) => {
       Object.keys(appointmentsDisplay).length > 0
     ) {
       for (let el of scheduleAppointments) {
+        console.log(el[0]);
         const temp = {
-          ...appointmentsDisplay.filter((app) => app.props.children === el[0]),
+          ...appointmentsDisplay.filter(
+            (app) =>
+              app.props.children ===
+              `${el[1].hour.substring(0, 2)}:${el[1].hour.substring(2)}`
+          ),
         };
         const index = appointmentsDisplay.indexOf(temp[0]);
         const newTemp = Object.keys(temp).length > 0 && {
           ...temp[0],
           props: {
             ...temp[0].props,
-            className:
-              "cursor-pointer border-2 w-16 text-center border-zinc-300 rounded-md bg-red-300",
+            className: temp[0].props.className + " bg-red-500",
             onClick: (e) => {
-              // console.log(e.target.getAttribute("id"));
               const id = e.target.getAttribute("id");
-              const currentPacient = pacients.filter(
-                (pacient) => pacient.id === id
-              );
-              console.log(currentPacient[0])
-              dispatch(pacientsActions.setCurrentPacient(currentPacient[0]));
+              const pacient = pacients.filter((pacient) => pacient.id === id);
+              console.log(pacient[0]);
+              dispatch(pacientsActions.setCurrentPacient(pacient[0]));
+              console.log("here");
               dispatch(appointmentsActions.setDay(newTemp.props["data-day"]));
               dispatch(appointmentsActions.setTime(newTemp.props["data-time"]));
               toggleModal("recurring");
@@ -113,20 +121,21 @@ const Month = ({ toggleModal, modal }) => {
       }
     }
     if (appointmentsDisplay !== undefined) {
-      const colStart =
-        "col-start-" + (appointmentsWeekDays.indexOf(day.getDay()) + 1);
+      const colStart = `col-start-${
+        appointmentsWeekDays.indexOf(day.getDay()) + 1
+      }`;
+
       squareDays.push(
-        <div
+        <MonthDayWrapper
           key={Math.random().toString(32).slice(2)}
-          className={`bg-white border-2 border-zinc-300 hover:animate-day-animation overflow-hidden w-40 max-h-40 ${colStart} ${
-            day.getDate() === today.getDate() &&
-            day.getMonth() === today.getMonth() &&
-            " bg-red-500"
-          }`}
+          day={day}
+          today={today}
+          colStart={colStart}
         >
-          {days[day.getDay()]} {day.getDate()} de {months[day.getMonth()]}
-          <div className="flex flex-wrap">{appointmentsDisplay}</div>
-        </div>
+          <div className="flex flex-wrap h-full justify-center content-center">
+            {appointmentsDisplay}
+          </div>
+        </MonthDayWrapper>
       );
     }
   }
@@ -134,33 +143,31 @@ const Month = ({ toggleModal, modal }) => {
   return (
     <>
       <div className="flex flex-col w-full">
-        {/* Test new redux logic for date */}
-        <button className=""></button>
-        <h2 className="w-full text-center">{months[month]}</h2>
+        <div className="w-full flex justify-between">
+          <button
+            onClick={() => dispatch(appointmentsActions.moveMonth("reduction"))}
+          >
+            <img className="w-8" src={arrowPrev} />
+          </button>
+          <h2 className="text-4xl uppercase font-bold text-center">
+            {months[month]}
+          </h2>
+          <button
+            onClick={() => dispatch(appointmentsActions.moveMonth("increment"))}
+          >
+            <img className="w-8" src={arrowNext} />
+          </button>
+        </div>
         <div className="flex w-full justify-between">
           <div className="w-1/2 grid justify-between content-center gap-y-2 grid-cols-3">
             {squareDays}
           </div>
-          <div className="w-1/2">
-            <h3>Turnos del dia</h3>
-            {modal[1] && modal[0] === "new" && (
-              <NewOrRecurring Toggle={toggleModal} />
-            )}
-            {modal[1] && modal[0] === "recurring" && (
-              <RecurringPacient Toggle={toggleModal} />
-            )}
+          <div className="relative w-1/2 flex flex-col justify-center items-center gap-10 px-12">
+            <h3 className="absolute top-0 text-2xl font-semibold">Turnos del dia</h3>
+            {modal[1] && modal[0] === "new" && <NewOrRecurring />}
+            {modal[1] && modal[0] === "recurring" && <RecurringPacient />}
           </div>
         </div>
-        <button
-          onClick={() => dispatch(appointmentsActions.moveMonth("reduction"))}
-        >
-          Prev month
-        </button>
-        <button
-          onClick={() => dispatch(appointmentsActions.moveMonth("increment"))}
-        >
-          Next month
-        </button>
       </div>
     </>
   );
