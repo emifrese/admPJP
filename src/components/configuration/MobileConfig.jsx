@@ -10,8 +10,6 @@ import Modal from "../UI/Modal";
 const MobileConfig = () => {
   const [modal, setModal] = useState(["", "", false]);
   const [day, setDay] = useState(1);
-  const [] = useState();
-  const [refresh, setRefresh] = useState(true);
 
   const defAppointments = useSelector(
     (state) => state.appointments.defAppointments
@@ -54,6 +52,7 @@ const MobileConfig = () => {
 
   let defDayDisplay = [];
 
+
   if (defDayAppointments !== undefined) {
     defDayDisplay = Object.entries(defDayAppointments)
       .filter((el) => el[0] !== "id" && el[0] !== "day")
@@ -74,7 +73,8 @@ const MobileConfig = () => {
       });
   }
 
-  console.log(defDayDisplay);
+  console.log(defAppointments)
+  console.log(defDayAppointments);
 
   return (
     <>

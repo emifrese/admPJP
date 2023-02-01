@@ -54,7 +54,7 @@ const Month = ({ toggleModal, modal }) => {
           return (
             <p
               className={
-                "cursor-pointer m-1 w-14 text-center rounded-md bg-header-green text-white"
+                `cursor-pointer m-1 w-14 text-center rounded-md bg-header-green text-white ${el[1].available ? "inline-block" : "hidden"}`
               }
               onClick={(e) => {
                 dispatch(
@@ -84,6 +84,7 @@ const Month = ({ toggleModal, modal }) => {
         (el) => el[0] !== "id" && el[0] !== "day"
       );
     }
+    console.log(appointmentsDisplay)
     if (
       scheduleAppointments &&
       appointmentsDisplay &&
@@ -103,7 +104,7 @@ const Month = ({ toggleModal, modal }) => {
           ...temp[0],
           props: {
             ...temp[0].props,
-            className: temp[0].props.className + " bg-red-500",
+            className: temp[0].props.className.replace("hidden", "inline-block").replace("bg-header-green", "bg-red-500"),
             onClick: (e) => {
               const id = e.target.getAttribute("id");
               const pacient = pacients.filter((pacient) => pacient.id === id);
