@@ -22,7 +22,6 @@ const Day = () => {
   const pacients = useSelector((state) => state.pacients.pacients);
 
   const places = useSelector(state => state.appointments.places)
-  console.log(places)
  
   const dispatch = useDispatch();
   const totalDays = getDays(year, month);
@@ -85,16 +84,26 @@ const Day = () => {
       let temp = {
         ...freeAppointments.filter((app) => app.props["data-time"] === el[0]),
       };
+      let index;
+
+      if(Object.keys(temp).length < 1){
+        temp = [{...freeAppointments[0], props: {
+          ...freeAppointments[0].props,
+          children: `${el[1].hour.substring(0, 2)}:${el[1].hour.substring(2)}`,
+          ["data-time"]: el[1].hour
+        }}]
+        index = null;
+      } else {
+        index = freeAppointments.indexOf(temp[0]);
+      }
 
       const currentPacient = pacients.filter(
         (pacient) => pacient.id === el[1].pacientId
       );
-      const index = freeAppointments.indexOf(temp[0]);
       let newChildren = [...temp[0].props.children];
       newChildren.push(
         ` ${currentPacient[0].nombre} ${currentPacient[0].apellido}`
       );
-      console.log(newChildren);
       const newTemp = Object.keys(temp).length > 0 && {
         ...temp[0],
         props: {
@@ -121,9 +130,10 @@ const Day = () => {
           {whatsapp}
         </div>
       );
-      freeAppointments.splice(index, 1);
+      if(index !== null){
+        freeAppointments.splice(index, 1);
+      }
       appointmentsDisplay.push(appointment);
-      console.log(appointmentsDisplay);
     }
   }
 

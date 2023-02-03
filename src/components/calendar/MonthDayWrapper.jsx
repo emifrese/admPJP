@@ -1,11 +1,12 @@
 import React from "react";
 import { days, months } from "../../helpers/date";
 
-const MonthDayWrapper = ({ day, today, colStart, children }) => {
-  const classDiv = `flex flex-col content-center bg-white rounded-md hover:animate-day-animation shadow-month-day overflow-hidden w-36 h-28 ${colStart} ${
+const MonthDayWrapper = ({ day, today, rowStart, colStart, children }) => {
+  // console.log(rowStart, day)
+  const classDiv = `flex flex-col content-center bg-white rounded-md hover:animate-day-animation shadow-month-day overflow-hidden w-36 h-28 row-start-${rowStart} col-start-${colStart}${
     day.getDate() === today.getDate() &&
-    day.getMonth() === today.getMonth() &&
-    " bg-red-500"
+    day.getMonth() === today.getMonth() ?
+    " bg-red-500" : ""
   }`;
 
   return (
