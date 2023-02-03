@@ -6,7 +6,8 @@ import { days } from "../../helpers/date";
 import Modal from "../UI/Modal";
 
 const DesktopConfig = () => {
-  const [modal, setModal] = useState(["", "", false, null]);
+  const [modal, setModal] = useState([null, "", false, null]);
+  const [archive, setArchive] = useState(false);
 
   const defAppointments = useSelector(
     (state) => state.appointments.defAppointments
@@ -19,7 +20,7 @@ const DesktopConfig = () => {
   };
 
   const toggleModal = () => {
-    setModal((state) => ["", "", !state[2]]);
+    setModal((state) => [null, "", !state[2], null]);
   };
 
   const defDayRef = doc(
@@ -50,7 +51,7 @@ const DesktopConfig = () => {
         Object.entries(defAppointments[i])
           .filter((el) => el[0] !== "id" && el[0] !== "day" && el[1].available)
           .map((el) => {
-            console.log(defAppointments[i]);
+            // console.log(defAppointments[i]);
             return (
               <div
                 className={
@@ -76,7 +77,7 @@ const DesktopConfig = () => {
         Object.entries(defAppointments[i])
           .filter((el) => el[0] !== "id" && el[0] !== "day" && !el[1].available)
           .map((el) => {
-            console.log(defAppointments[i]);
+            console.log(defAppointments[i], el);
             return (
               <div
                 className={
@@ -97,28 +98,39 @@ const DesktopConfig = () => {
               </div>
             );
           })
-      )
+      );
     }
   }
 
-  console.log(defDayDisplay);
+  console.log(defDayDisplay, archiveDayDisplay)
 
   return (
     <>
-      <div className="flex gap-4">
+      <div className="flex justify-center gap-4 w-1/2">
         {defDayDisplay.map((el) => (
           <div className="flex flex-col text-center">
             <h2>{days[parseInt(el[0].props["data-day"])]}</h2>
             {el}
           </div>
         ))}
-        {archiveDayDisplay}
+      </div>
+      <div className="flex justify-between w-1/2">
+        <button
+          className="bg-white h-full"
+          onClick={() => setArchive((state) => !state)}
+        >
+          Mostrar archivados
+        </button>
+        {archive && archiveDayDisplay.map(el => el.length > 0 && (<div className="flex flex-col text-center">
+            <h2>{days[parseInt(el[0].props["data-day"])]}</h2>
+            {el}
+          </div>))}
       </div>
       {modal[2] && modal[0] !== "" && (
         <Modal Toggle={toggleModal}>
           <div className="bg-white p-6 flex flex-wrap justify-center items-center gap-4">
             <span className="w-full">
-              Habilitar/Deshabilitar {modal[1]} {modal[0]}
+              {modal[0] ? "Deshabilitar" : "Habilitar"} {days[modal[3]]} {modal[1]}
             </span>
             <button
               className="bg-green-500 px-4 py-2 rounded-md"

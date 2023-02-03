@@ -10,7 +10,6 @@ import arrowPrev from "../../assets/arrow_back_ios_FILL0_wght400_GRAD0_opsz48.sv
 import arrowNext from "../../assets/arrow_forward_ios_FILL0_wght400_GRAD0_opsz48.svg";
 
 const Month = ({ toggleModal, modal }) => {
-  //   console.log('render')
   const today = new Date();
   const month = useSelector((state) => state.appointments.month);
   const year = useSelector((state) => state.appointments.year);
@@ -22,14 +21,9 @@ const Month = ({ toggleModal, modal }) => {
   const dispatch = useDispatch();
   const totalDays = getDays(year, month);
 
-  const dayOne = new Date(year, month, 1);
-  const dayEnd = new Date(year, month, totalDays);
-  // console.log(defAppointments);
   const appointmentsWeekDays = defAppointments
     .map((el) => parseInt(el.day))
     .sort();
-
-  // console.log(appointmentsWeekDays);
 
   let squareDays = [];
 
@@ -53,9 +47,9 @@ const Month = ({ toggleModal, modal }) => {
           )}:${el[1].hour.substring(2)}`;
           return (
             <p
-              className={
-                `cursor-pointer m-1 w-14 text-center rounded-md bg-header-green text-white ${el[1].available ? "inline-block" : "hidden"}`
-              }
+              className={`cursor-pointer m-1 w-14 text-center rounded-md bg-header-green text-white ${
+                el[1].available ? "inline-block" : "hidden"
+              }`}
               onClick={(e) => {
                 dispatch(
                   appointmentsActions.setDay(
@@ -84,33 +78,45 @@ const Month = ({ toggleModal, modal }) => {
         (el) => el[0] !== "id" && el[0] !== "day"
       );
     }
-    console.log(appointmentsDisplay)
     if (
       scheduleAppointments &&
       appointmentsDisplay &&
       Object.keys(appointmentsDisplay).length > 0
     ) {
       for (let el of scheduleAppointments) {
-        console.log(el[0]);
-        const temp = {
+        let temp = {
           ...appointmentsDisplay.filter(
             (app) =>
               app.props.children ===
               `${el[1].hour.substring(0, 2)}:${el[1].hour.substring(2)}`
           ),
         };
+        if (Object.keys(temp).length < 1) {
+          temp = [
+            {
+              ...appointmentsDisplay[0],
+              props: {
+                ...appointmentsDisplay[0].props,
+                children: `${el[1].hour.substring(0, 2)}:${el[1].hour.substring(
+                  2
+                )}`,
+                ["data-time"]: el[1].hour,
+              },
+            },
+          ];
+        }
         const index = appointmentsDisplay.indexOf(temp[0]);
         const newTemp = Object.keys(temp).length > 0 && {
           ...temp[0],
           props: {
             ...temp[0].props,
-            className: temp[0].props.className.replace("hidden", "inline-block").replace("bg-header-green", "bg-red-500"),
+            className: temp[0].props.className
+              .replace("hidden", "inline-block")
+              .replace("bg-header-green", "bg-red-500"),
             onClick: (e) => {
               const id = e.target.getAttribute("id");
               const pacient = pacients.filter((pacient) => pacient.id === id);
-              console.log(pacient[0]);
               dispatch(pacientsActions.setCurrentPacient(pacient[0]));
-              console.log("here");
               dispatch(appointmentsActions.setDay(newTemp.props["data-day"]));
               dispatch(appointmentsActions.setTime(newTemp.props["data-time"]));
               toggleModal("recurring");
@@ -118,7 +124,41 @@ const Month = ({ toggleModal, modal }) => {
             id: el[1].pacientId,
           },
         };
-        appointmentsDisplay[index] = newTemp;
+        if (index === -1) {
+          // console.log('here', el)
+          if (
+            parseInt(el[0]) <
+            parseInt(appointmentsDisplay[0].props["data-time"])
+          ) {
+            appointmentsDisplay.unshift(newTemp);
+          } else if (
+            parseInt(el[0]) >
+            parseInt(
+              appointmentsDisplay[appointmentsDisplay.length - 1].props[
+                "data-time"
+              ]
+            )
+          ) {
+            appointmentsDisplay.push(newTemp);
+          } else {
+            for (let i = 1; i < appointmentsDisplay.length - 1; i++) {
+              if (
+                parseInt(el[0]) >
+                  parseInt(appointmentsDisplay[i - 1].props["data-time"]) &&
+                parseInt(el[0]) <
+                  parseInt(appointmentsDisplay[i].props["data-time"])
+              ) {
+                appointmentsDisplay.splice(i, 0, newTemp);
+              }
+            }
+          }
+        } else {
+          appointmentsDisplay[index] = newTemp;
+        }
+        if (el[0] === "1700") {
+          // console.log(el, temp, appointmentsDisplay);
+          // console.log(index)
+        }
       }
     }
     if (appointmentsDisplay !== undefined) {
@@ -140,6 +180,8 @@ const Month = ({ toggleModal, modal }) => {
       );
     }
   }
+  const amountOfCols = "grid-cols-" + defAppointments.length;
+
 
   return (
     <>
@@ -160,11 +202,17 @@ const Month = ({ toggleModal, modal }) => {
           </button>
         </div>
         <div className="flex w-full justify-between">
-          <div className="w-1/2 grid justify-between content-center gap-y-2 grid-cols-3">
+          <div
+            className={
+              `w-1/2 grid justify-between content-center gap-y-2 ${amountOfCols}`
+            }
+          >
             {squareDays}
           </div>
           <div className="relative w-1/2 flex flex-col justify-center items-center gap-10 px-12">
-            <h3 className="absolute top-0 text-2xl font-semibold">Turnos del dia</h3>
+            <h3 className="absolute top-0 text-2xl font-semibold">
+              Turnos del dia
+            </h3>
             {modal[1] && modal[0] === "new" && <NewOrRecurring />}
             {modal[1] && modal[0] === "recurring" && <RecurringPacient />}
           </div>
