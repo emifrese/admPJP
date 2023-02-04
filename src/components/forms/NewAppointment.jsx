@@ -143,7 +143,7 @@ const NewAppointment = ({ moveToggle }) => {
                         dispatch(pacientsActions.setCurrentPacient(e));
                         setApellido("");
                       }}
-                      key={Math.random().toString(32).slice(2)}
+                      key={Math.random().toString(28).slice(2)}
                     >
                       {e.apellido}, {e.nombre}
                     </button>

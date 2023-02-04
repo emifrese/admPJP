@@ -9,6 +9,8 @@ const store = configureStore({
     pacients: pacientsReducer,
     responsive: responsiveReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({ serializableCheck: false }),
 });
 
 export default store;

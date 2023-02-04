@@ -23,11 +23,16 @@ const Router = () => {
   const place = useSelector((state) => state.appointments.place);
   const currentPacient = useSelector((state) => state.pacients.currentPacient);
   // console.log(currentPacient);
+  const appointmentsState = useSelector((state) => state.appointments);
+  
+  const monthString = appointmentsState.monthString()
 
-  const monthString = months[month].toLowerCase();
+  // console.log(monthString)
 
   useEffect(() => {
     onAuthStateChanged(auth, setUser);
+
+    console.log('change')
 
     if (user !== null) {
       onSnapshot(collection(firestore, "places"), snapshot => {
@@ -37,14 +42,6 @@ const Router = () => {
         }))
         dispatch(appointmentsActions.storePlaces(placesArray))
       })
-
-      onSnapshot(collection(firestore, "pacientes"), (snapshot) => {
-        let pacientsArray = snapshot.docs.map((doc) => ({
-          ...doc.data(),
-          id: doc.id,
-        }));
-        dispatch(pacientsActions.fetchPacients(pacientsArray));
-      });
 
       onSnapshot(
         collection(firestore, `${place}/turnos/${monthString}${year}`),
@@ -57,6 +54,14 @@ const Router = () => {
         }
       );
 
+      onSnapshot(collection(firestore, "pacientes"), (snapshot) => {
+        let pacientsArray = snapshot.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        }));
+        dispatch(pacientsActions.fetchPacients(pacientsArray));
+      });
+
       onSnapshot(
         collection(firestore, `${place}/turnos/predeterminados`),
         (snapshot) => {
@@ -68,7 +73,7 @@ const Router = () => {
         }
       );
     }
-  }, [auth, user, month, place]);
+  }, [auth, user, month]);
 
 
   return (
