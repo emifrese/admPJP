@@ -64,7 +64,7 @@ const Day = () => {
           }}
           data-day={day}
           data-time={el[1].hour}
-          key={Math.random().toString(32).slice(2)}
+          key={Math.random().toString(33).slice(2)}
         >
           {el[1].hour.substring(0, 2)}:{el[1].hour.substring(2)}
         </p>
@@ -142,7 +142,7 @@ const Day = () => {
   if (defDayAppointments) {
     busySquare = (
       <div
-        key={Math.random().toString(32).slice(2)}
+        key={Math.random().toString(34).slice(2)}
         className={
           "flex place-content-start items-start flex-wrap justify-center w-64 text-center my-8 gap-2"
         }
@@ -160,7 +160,7 @@ const Day = () => {
 
   const freeSquare = (
     <div
-      key={Math.random().toString(32).slice(2)}
+      key={Math.random().toString(35).slice(2)}
       className={
         "w-64 text-center grid grid-cols-2 place-content-start gap-2 justify-center"
       }

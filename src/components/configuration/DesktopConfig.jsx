@@ -68,7 +68,7 @@ const DesktopConfig = () => {
                     defAppointments[i].day
                   )
                 }
-                key={Math.random().toString(32).slice(2)}
+                key={Math.random().toString(31).slice(2)}
               >
                 {el[1].hour.substring(0, 2)}:{el[1].hour.substring(2)}
                 <span>{el[1].available ? "Habilitado" : "Deshabilitado"}</span>
@@ -93,7 +93,7 @@ const DesktopConfig = () => {
                     defAppointments[i].day
                   )
                 }
-                key={Math.random().toString(32).slice(2)}
+                key={Math.random().toString(31).slice(2)}
               >
                 {el[1].hour.substring(0, 2)}:{el[1].hour.substring(2)}
                 <span>{el[1].available ? "Habilitado" : "Deshabilitado"}</span>
@@ -131,7 +131,7 @@ const DesktopConfig = () => {
         {defDayDisplay.map((el) => (
           <div
             className="flex flex-col text-center"
-            key={Math.random().toString(32).slice(2)}
+            key={Math.random().toString(30).slice(2)}
           >
             <h2>{days[parseInt(el[0].props["data-day"])]}</h2>
             {el}
