@@ -31,12 +31,8 @@ const Month = ({ toggleModal, modal }) => {
 
     setTimeout(() => {
       setLoader((state) => !state);
-    }, 2000);
+    }, 1000);
   };
-
-  useEffect(() => {
-    console.log(month);
-  }, [month]);
 
   let squareDays = [];
   let lastDay = 0;

@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { firestore } from "../../firebase";
 import { days } from "../../helpers/date";
+import NewHour from "../forms/NewHour";
 import Modal from "../UI/Modal";
 
 const DesktopConfig = () => {
@@ -120,10 +121,7 @@ const DesktopConfig = () => {
         Sin turnos
       </div>,
     ];
-    // console.log('here')
   }
-
-  console.log(defDayDisplay);
 
   return (
     <>
@@ -163,7 +161,12 @@ const DesktopConfig = () => {
       </div>
       {modal[2] && modal[4] === "ADD" && (
         <Modal Toggle={toggleModal}>
-          <div className="bg-white">
+          <NewHour
+            day={modal[3]}
+            place={place}
+            defAppointments={defAppointments[modal[3] - 1]}
+          />
+          {/* <div className="bg-white">
             <h2>{days[modal[3]]}</h2>
             <div>Horarios ya existentes</div>
 
@@ -172,7 +175,7 @@ const DesktopConfig = () => {
             <div>
               <button>Si</button><button>No</button>
             </div>
-          </div>
+          </div> */}
         </Modal>
       )}
       {modal[2] && modal[4] === "TOGGLE" && (
