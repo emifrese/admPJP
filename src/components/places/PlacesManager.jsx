@@ -27,6 +27,7 @@ const PlacesManager = ({ Toggle }) => {
     <div className="flex flex-col gap-4 bg-white px-8 py-4 rounded-md">
       <h2>Cambia a otro lugar</h2>
       {placesDisplay}
+      <button className="bg-brighter-yellow px-2 py-2 rounded-md font-bold">Agregar nuevo lugar</button>
     </div>
   );
 };

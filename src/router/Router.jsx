@@ -73,7 +73,7 @@ const Router = () => {
         }
       );
     }
-  }, [auth, user, month]);
+  }, [auth, user, month, place]);
 
 
   return (

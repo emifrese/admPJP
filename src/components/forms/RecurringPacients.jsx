@@ -18,7 +18,7 @@ const RecurringPacient = ({ Toggle }) => {
   const year = useSelector((state) => state.appointments.year);
   const month = useSelector((state) => state.appointments.month);
   const day = useSelector((state) => state.appointments.day);
-  const time = parseInt(useSelector((state) => state.appointments.time));
+  const time = useSelector((state) => state.appointments.time);
   const [alert, setAlert] = useState({});
 
   console.log("render");
@@ -27,6 +27,8 @@ const RecurringPacient = ({ Toggle }) => {
     firestore,
     `${currentPlace}/turnos/${months[month].toLowerCase()}${year}/${day}`
   );
+
+  console.log(appointmentRef, time)
 
   const pacientRef = doc(firestore, `pacientes/${currentPacient.id}`);
   console.log(appointmentRef);
