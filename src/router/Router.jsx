@@ -93,7 +93,6 @@ const Router = () => {
           )}
         </Routes>
       </BrowserRouter>
-      <Loader />
     </Suspense>
   );
 };
