@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { days, getDays, months } from "../../helpers/date";
-import { appointmentsActions } from "../../store/states/appointments";
+import appointments, {
+  appointmentsActions,
+} from "../../store/states/appointments";
 import { pacientsActions } from "../../store/states/pacients";
 import NewOrRecurring from "../forms/NewOrRecurring";
 import RecurringPacient from "../forms/RecurringPacients";
@@ -22,28 +24,18 @@ const Month = ({ toggleModal, modal }) => {
   const dispatch = useDispatch();
   const totalDays = getDays(year, month);
 
-  const appointmentsWeekDays = defAppointments
-    .map((el) => parseInt(el.day))
-    .sort();
-
   const toggleLoader = () => {
     setLoader((state) => !state);
 
     setTimeout(() => {
       setLoader((state) => !state);
-    }, 2000);
+    }, 1000);
   };
-
-  useEffect(() => {
-    console.log(month);
-  }, [month]);
 
   let squareDays = [];
   let lastDay = 0;
   let rowStart = 2;
   let colStart;
-
-  // console.log(turnos)
 
   if (!loader) {
     for (let i = 0; i < totalDays; i++) {
@@ -58,7 +50,7 @@ const Month = ({ toggleModal, modal }) => {
       let scheduleAppointments;
       if (defDayAppointments) {
         appointmentsDisplay = Object.entries(defDayAppointments)
-          .filter((el) => el[0] !== "id" && el[0] !== "day")
+          .filter((el) => el[0] !== "id" && el[0] !== "day" && el[1].available)
           .map((el) => {
             const hourText = `${el[1].hour.substring(
               0,
@@ -66,9 +58,7 @@ const Month = ({ toggleModal, modal }) => {
             )}:${el[1].hour.substring(2)}`;
             return (
               <p
-                className={`cursor-pointer m-1 w-14 text-center rounded-md bg-header-green text-white ${
-                  el[1].available ? "inline-block" : "hidden"
-                }`}
+                className="cursor-pointer m-1 w-14 text-center rounded-md bg-header-green text-white inline-block"
                 onClick={(e) => {
                   dispatch(
                     appointmentsActions.setDay(
@@ -84,7 +74,10 @@ const Month = ({ toggleModal, modal }) => {
                   toggleModal("new");
                 }}
                 data-day={day.getDate()}
-                data-time={el[1].hour}
+                data-time={`${el[1].hour.substring(
+                  0,
+                  2
+                )}${el[1].hour.substring(2)}`}
                 key={
                   Math.random().toString(32).slice(2) + day.getMilliseconds()
                 }
@@ -97,6 +90,7 @@ const Month = ({ toggleModal, modal }) => {
           appointmentsDisplay.push(
             <p
               key={Math.random().toString(36).slice(2) + day.getMilliseconds()}
+              className="cursor-pointer m-1 w-full text-center rounded-md bg-header-green text-white inline-block"
             >
               NO SE ATIENDE
             </p>
@@ -113,8 +107,8 @@ const Month = ({ toggleModal, modal }) => {
         appointmentsDisplay &&
         Object.keys(appointmentsDisplay).length > 0
       ) {
-        // console.log(scheduleAppointments, appointmentsDisplay)
         for (let el of scheduleAppointments) {
+          console.log(appointmentsDisplay);
           let temp = {
             ...appointmentsDisplay.filter(
               (app) =>
@@ -132,20 +126,24 @@ const Month = ({ toggleModal, modal }) => {
                     0,
                     2
                   )}:${el[1].hour.substring(2)}`,
-                  ["data-time"]: el[1].hour,
+                  ["data-time"]: `${el[1].hour.substring(
+                    0,
+                    2
+                  )}${el[1].hour.substring(2)}`,
+                  ["data-day"]: day.getDate()
                 },
               },
             ];
           }
           const index = appointmentsDisplay.indexOf(temp[0]);
-          // console.log(temp)
-          const newTemp = Object.keys(temp).length > 0 && {
+          let newTemp = Object.keys(temp).length > 0 && {
             ...temp[0],
             props: {
               ...temp[0].props,
-              className: temp[0].props.className
-                .replace("hidden", "inline-block")
-                .replace("bg-header-green", "bg-red-500"),
+              className: temp[0].props.className.replace(
+                "bg-header-green",
+                "bg-red-500"
+              ).replace("w-full", "w-14"),
               onClick: (e) => {
                 const id = e.target.getAttribute("id");
                 const pacient = pacients.filter((pacient) => pacient.id === id);
@@ -174,6 +172,10 @@ const Month = ({ toggleModal, modal }) => {
               )
             ) {
               appointmentsDisplay.push(newTemp);
+            } else if (
+              appointmentsDisplay[0].props.children === "NO SE ATIENDE"
+            ) {
+              appointmentsDisplay[0] = newTemp;
             } else {
               for (let i = 1; i < appointmentsDisplay.length - 1; i++) {
                 if (
@@ -275,7 +277,7 @@ const Month = ({ toggleModal, modal }) => {
             Turnos del dia
           </h3>
           {modal[1] && modal[0] === "new" && <NewOrRecurring />}
-          {modal[1] && modal[0] === "recurring" && <RecurringPacient />}
+          {modal[1] && modal[0] === "recurring" && <RecurringPacient Toggle={toggleModal}/>}
         </div>
       </div>
     </>

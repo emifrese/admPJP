@@ -18,10 +18,8 @@ const RecurringPacient = ({ Toggle }) => {
   const year = useSelector((state) => state.appointments.year);
   const month = useSelector((state) => state.appointments.month);
   const day = useSelector((state) => state.appointments.day);
-  const time = parseInt(useSelector((state) => state.appointments.time));
+  const time = useSelector((state) => state.appointments.time);
   const [alert, setAlert] = useState({});
-
-  console.log("render");
 
   const appointmentRef = doc(
     firestore,
@@ -107,11 +105,7 @@ const RecurringPacient = ({ Toggle }) => {
 
   // ---------------------------------------------------
 
-  console.log(currentPacient.nombre);
-
   const { msg } = alert;
-
-  console.log(currentPacient);
 
   return (
     <div className="bg-brighter-yellow text-header-green text-sm rounded-md max-h-max px-5 py-3 lg:mb-0">
