@@ -5,10 +5,13 @@ module.exports = {
     extend: {
       boxShadow: {
         "month-day": "rgba(0, 0, 0, 0.35) 0px 5px 15px;",
+        "login-card": "rgba(113, 184, 250, 1) 0px 0px 0px 3px;",
       },
       colors: {
         "header-green": "#227777",
         "brighter-yellow": "#f9ff41",
+        "background-blue": "#71B8FA",
+        "slightly-darker-blue": "#3e87c3"
       },
       animation: {
         "day-animation": "growth 0.3s linear 1 forwards",

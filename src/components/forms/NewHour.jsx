@@ -93,9 +93,9 @@ const NewHour = ({ day, place, defAppointments }) => {
   }
 
   return (
-    <div className="bg-white px-20 py-6">
-      <h2>{days[day]}</h2>
-      <div className="grid grid-cols-4 gap-2 justify-items-center">
+    <div className="bg-white px-6 py-4 rounded-md">
+      <h2 className="text-xl font-bold uppercase mb-2">{days[day]}</h2>
+      <div className="grid grid-cols-3 gap-2 justify-items-center">
         {hoursAvailable}
       </div>
     </div>

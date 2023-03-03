@@ -4,10 +4,12 @@
 
 @layer base {
   :root {
-    --background-yellow: #F6FA84;
+    /* --background-yellow: #F6FA84;
+    --background-blue: #71B8FA; */
   }
 }
 
 body {
-  background-image: url('./assets/background.svg')
+  background-image: url('./assets/background.svg');
+  background-size: 75px
 }
