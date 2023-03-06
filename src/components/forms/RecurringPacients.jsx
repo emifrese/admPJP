@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import { collection, doc, updateDoc, deleteField } from "firebase/firestore";
 import { useSelector } from "react-redux";
 import { firestore } from "../../firebase";
-import { months } from "../../helpers/date";
-import whatsappIcon from "../../assets/whatsapp.png";
-import emailIcon from "../../assets/email.png";
+import { days, months } from "../../helpers/date";
+import whatsappIcon from "../../assets/whatsapp.svg";
+import emailIcon from "../../assets/mail_FILL0_wght400_GRAD0_opsz48.svg";
+import deleteIcon from "../../assets/delete_FILL0_wght400_GRAD0_opsz48.svg";
 
 const RecurringPacient = ({ Toggle }) => {
   const [nombre, setNombre] = useState("");
@@ -19,6 +20,7 @@ const RecurringPacient = ({ Toggle }) => {
   const month = useSelector((state) => state.appointments.month);
   const day = useSelector((state) => state.appointments.day);
   const time = useSelector((state) => state.appointments.time);
+  const weekDay = new Date(year, month, day);
   const [alert, setAlert] = useState({});
 
   const appointmentRef = doc(
@@ -108,32 +110,37 @@ const RecurringPacient = ({ Toggle }) => {
   const { msg } = alert;
 
   return (
-    <div className="bg-brighter-yellow text-header-green text-sm rounded-md max-h-max px-5 py-3 lg:mb-0">
-      <h2 className="text-gray-700 uppercase font-bold text-2xl text-center">
-        Información del paciente
+    <div className="bg-white text-sm w-80 h-60 rounded-md max-h-max lg:mb-0">
+      <h2 className="font-bold text-lg text-start m-2">
+        {days[weekDay.getDay()]} {day} de {months[month]}
       </h2>
-      <div
-        className="px-5 py-3 lg:mb-0"
-        // onSubmit={handleSubmit}
-      >
-        <div className="flex flex-wrap justify-around items-center mb-10">
-          <h3 className="w-full text-lg text-center font-semibold text-black p-2 my-2 placeholder-zinc-400 rounded-md">
+      <div className="flex flex-col h-full bg-background-blue p-3 rounded-[inherit] lg:mb-0">
+        <div className="flex flex-col h-full items-center mb-2">
+          <h3 className="w-full text-lg text-start font-semibold text-black my-2 placeholder-zinc-400 rounded-md">
             {currentPacient.apellido}, {currentPacient.nombre}
           </h3>
-          <a href={"https://wa.me/" + currentPacient.telefono} target="_blank"
-          className=""
-          >
-            <img src={whatsappIcon} alt="" className="w-8" />
-          </a>
-          <a href={"mailto:" + currentPacient.email} target="_blank">
-            <img src={emailIcon} className="w-8" />
-          </a>
+          <div className="w-full flex gap-2">
+            <a
+              href={"https://wa.me/" + currentPacient.telefono}
+              target="_blank"
+              className="bg-whatsapp hover:bg-whatsapp-hover hover:border-2 hover:border-whatsapp transition-all w-8 h-8 rounded-md hover:rounded-[50%] flex justify-center items-center p-[6px]"
+            >
+              {/* Whatsapp */}
+              <img src={whatsappIcon} alt="" className="object-cover filter invert-[100%] saturate-[7500%] hue-rotate-[15deg] brightness-[107%] contrast-[105%]" />
+            </a>
+            <a href={"mailto:" + currentPacient.email} target="_blank" className="bg-slightly-darker-blue hover:bg-background-blue hover:border-2 hover:border-slightly-darker-blue transition-all w-8 h-8 rounded-md hover:rounded-[50%] flex justify-center items-center p-[6px]">
+              <img src={emailIcon} className="object-cover filter invert-[100%] saturate-[7500%] hue-rotate-[15deg] brightness-[107%] contrast-[105%]" />
+            </a>
+          </div>
         </div>
         <button
-          className="border-2 border-red-500 w-full py-2 rounded-md text-lg bg-red-600 text-white font-semibold uppercase"
+          className="self-end p-1 bg-email hover:bg-email-hover hover:border-email hover:border-2 rounded-md hover:rounded-[50%] transition-all w-8 h-8 flex justify-center items-center"
           onClick={() => deleteAppointment()}
         >
-          Eliminar turno
+          <img
+            className="filter invert-[100%] saturate-[7500%] hue-rotate-[15deg] brightness-[107%] contrast-[105%] object-cover"
+            src={deleteIcon}
+          />
         </button>
       </div>
 

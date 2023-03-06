@@ -9,9 +9,16 @@ module.exports = {
       },
       colors: {
         "header-green": "#227777",
-        "brighter-yellow": "#f9ff41",
+        "brighter-yellow": "#87C33E",
         "background-blue": "#71B8FA",
-        "slightly-darker-blue": "#3e87c3"
+        "slightly-darker-blue": "#3e87c3",
+        "off-blue": "#4d6a81",
+        "whatsapp": "#128C7E",
+        "whatsapp-hover": "#075E54",
+        "email": "#e63946",
+        "email-hover": "#ef5753",
+        "green": "#6CED55",
+        "green-hover": "#89f27f" 
       },
       animation: {
         "day-animation": "growth 0.3s linear 1 forwards",

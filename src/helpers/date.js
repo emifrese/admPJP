@@ -27,8 +27,10 @@ export const getDays = (year, month) => {
   return new Date(year, month + 1, 0).getDate();
 };
 
-export const compareHours = (a, b) =>
-  parseInt(a.props.children.toString().replaceAll(/(\W)/g, "")) <
-  parseInt(b.props.children.toString().replaceAll(/(\W)/g, ""))
+export const compareHours = (a, b) => {
+  
+  return parseInt(a.props.children.toString().replaceAll(/(\W)/g, "")) <
+    parseInt(b.props.children.toString().replaceAll(/(\W)/g, ""))
     ? -1
     : 1;
+};

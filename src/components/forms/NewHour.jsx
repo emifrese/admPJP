@@ -65,7 +65,7 @@ const NewHour = ({ day, place, defAppointments }) => {
     const findHour = defArray.indexOf(text);
 
     if (findHour !== -1) {
-      classHour = classHour.replace("bg-gray-500", "bg-header-green");
+      classHour = classHour.replace("bg-gray-500", "bg-slightly-darker-blue");
       available = true
     }
 

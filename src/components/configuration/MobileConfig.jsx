@@ -36,7 +36,7 @@ const MobileConfig = () => {
         return (
           <p
             className={
-              "flex flex-col text-center rounded-md uppercase text-white font-semibold bg-header-green p-2"
+              "flex flex-col text-center rounded-md uppercase text-white font-semibold bg-slightly-darker-blue p-2"
             }
             data-day={defAppointments[day - 1].day}
             key={Math.random().toString(36).slice(2)}
@@ -59,7 +59,6 @@ const MobileConfig = () => {
         Sin turnos
       </p>]
   }
-  console.log(defDayDisplay);
 
   return (
     <>
@@ -91,7 +90,7 @@ const MobileConfig = () => {
             {defDayDisplay}
           </div>
           <button
-            className="flex justify-center p-2 rounded-md border-2 bg-brighter-yellow"
+            className="flex justify-center p-2 rounded-md border-2 hover:border-green bg-green hover:bg-green-hover"
             onClick={() =>
               toggleAddHour(parseInt(defDayDisplay[0].props["data-day"]))
             }

@@ -58,7 +58,7 @@ const Month = ({ toggleModal, modal }) => {
             )}:${el[1].hour.substring(2)}`;
             return (
               <p
-                className="cursor-pointer m-1 w-14 text-center rounded-md bg-header-green text-white inline-block"
+                className="cursor-pointer m-1 w-14 text-center rounded-md bg-slightly-darker-blue text-white inline-block"
                 onClick={(e) => {
                   dispatch(
                     appointmentsActions.setDay(
@@ -90,7 +90,7 @@ const Month = ({ toggleModal, modal }) => {
           appointmentsDisplay.push(
             <p
               key={Math.random().toString(36).slice(2) + day.getMilliseconds()}
-              className="cursor-pointer m-1 w-full text-center rounded-md bg-header-green text-white inline-block"
+              className="cursor-pointer m-1 w-full text-center rounded-md bg-slightly-darker-blue text-white inline-block"
             >
               NO SE ATIENDE
             </p>
@@ -141,7 +141,7 @@ const Month = ({ toggleModal, modal }) => {
             props: {
               ...temp[0].props,
               className: temp[0].props.className.replace(
-                "bg-header-green",
+                "bg-slightly-darker-blue",
                 "bg-red-500"
               ).replace("w-full", "w-14"),
               onClick: (e) => {
