@@ -18,7 +18,7 @@ const PlacesManager = ({ Toggle }) => {
     .map((el) => (
       <button
         key={Math.random().toString(27).slice(2)}
-        className="px-4 py-2 rounded-md bg-header-green"
+        className="px-4 py-2 rounded-md bg-slightly-darker-blue"
         onClick={() => {
           dispatch(appointmentsActions.togglePlace(el.name));
           Toggle();
@@ -150,7 +150,7 @@ const PlacesManager = ({ Toggle }) => {
             </label>
             <button
               type="submit"
-              className="bg-header-green text-white uppercase text-lg w-1/2 self-center rounded-md hover:bg-green-800"
+              className="bg-slightly-darker-blue text-white uppercase text-lg w-1/2 self-center rounded-md hover:bg-green-800"
             >
               Enviar
             </button>

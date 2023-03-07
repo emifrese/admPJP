@@ -7,7 +7,7 @@ import arrowBack from "../../assets/arrow_back_ios_FILL0_wght400_GRAD0_opsz48.sv
 
 const NewPacientForm = ({ moveToggle, Toggle }) => {
   const pacients = useSelector((state) => state.pacients.pacients);
-  console.log(pacients)
+  console.log(pacients);
   const [nombre, setNombre] = useState("");
   const [apellido, setApellido] = useState("");
   const [email, setEmail] = useState("");
@@ -15,16 +15,23 @@ const NewPacientForm = ({ moveToggle, Toggle }) => {
   const dispatch = useDispatch();
 
   const [alert, setAlert] = useState({});
-
-  const example = pacients.find((el) => el.email === email);
-  console.log(example);
+  const [warningInput, setWarningInput] = useState([]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log(nombre, apellido, telefono);
+    let emptyInputs = [];
+    const newTelefono = telefono.replace(/[(]*[)]*[-\s\./]*/g, "");
+  
 
-    if ([nombre, apellido, telefono, email].includes("")) {
+    nombre.trim() === "" && emptyInputs.push("nombre");
+    apellido.trim() === "" && emptyInputs.push
+    ("apellido");
+    newTelefono.trim() === "" && emptyInputs.push("telefono");
+    email.trim() === "" && emptyInputs.push("email");
+
+    if (emptyInputs.length !== 0) {
+      setWarningInput(emptyInputs);
       setAlert({
         msg: "Todos los campos son obligatorios",
         error: true,
@@ -35,13 +42,10 @@ const NewPacientForm = ({ moveToggle, Toggle }) => {
       return;
     }
 
-    const repeatedEmail = pacients.find((el) => el.email === email);
-
-    const repeatedTelefono = pacients.find((el) => el.telefono === telefono)
-
-    if(telefono.length !== 10) {
+    const re = /\S+@\S+\.\S+/;
+    if (!re.test(email)) {
       setAlert({
-        msg: "El telefono debe tener 10 digitos",
+        msg: "Email no válido",
         error: true,
       });
       setTimeout(() => {
@@ -50,7 +54,22 @@ const NewPacientForm = ({ moveToggle, Toggle }) => {
       return;
     }
 
-    if(repeatedTelefono) {
+    const repeatedEmail = pacients.find((el) => el.email === email);
+
+    const repeatedTelefono = pacients.find((el) => el.telefono === newTelefono);
+
+    if (telefono.length < 10) {
+      setAlert({
+        msg: "El telefono debe tener al menos 10 digitos",
+        error: true,
+      });
+      setTimeout(() => {
+        setAlert({});
+      }, 2500);
+      return;
+    }
+
+    if (repeatedTelefono) {
       setAlert({
         msg: "El telefono ya existe",
         error: true,
@@ -61,7 +80,7 @@ const NewPacientForm = ({ moveToggle, Toggle }) => {
       return;
     }
 
-    if(repeatedEmail) {
+    if (repeatedEmail) {
       setAlert({
         msg: "Ya existe un usuario con ese email",
         error: true,
@@ -74,10 +93,11 @@ const NewPacientForm = ({ moveToggle, Toggle }) => {
 
     const turnosRef = collection(firestore, "pacientes");
 
+    
     const newPaciente = {
       nombre,
       apellido,
-      telefono: "+549" + telefono,
+      telefono: newTelefono,
       email,
       appointments: [],
     };
@@ -123,8 +143,22 @@ const NewPacientForm = ({ moveToggle, Toggle }) => {
               id="nombre"
               type="text"
               placeholder="Nombre del paciente"
-              className="border-2 w-full p-2 my-2 placeholder-zinc-400 rounded-md"
-              onChange={(e) => setNombre(e.target.value)}
+              className={`border-2 w-full p-2 my-2 placeholder-zinc-400 rounded-md${
+                warningInput.includes("nombre") || warningInput.includes("all")
+                  ? " border-red-700 focus:outline-red-700"
+                  : ""
+              }`}
+              onChange={(e) => {
+                if (
+                  e.target.value.trim() !== "" &&
+                  warningInput.includes("nombre")
+                ) {
+                  setWarningInput((state) =>
+                    state.filter((el) => el !== "nombre")
+                  );
+                }
+                setNombre(e.target.value);
+              }}
               value={nombre}
             />
           </div>
@@ -139,8 +173,23 @@ const NewPacientForm = ({ moveToggle, Toggle }) => {
               id="apellido"
               type="text"
               placeholder="Apellido del paciente"
-              className="border-2 w-full p-2 my-2 placeholder-zinc-400 rounded-md"
-              onChange={(e) => setApellido(e.target.value)}
+              className={`border-2 w-full p-2 my-2 placeholder-zinc-400 rounded-md${
+                +warningInput.includes("apellido") ||
+                warningInput.includes("all")
+                  ? " border-red-700 focus:outline-red-700"
+                  : ""
+              }`}
+              onChange={(e) => {
+                if (
+                  e.target.value.trim() !== "" &&
+                  warningInput.includes("apellido")
+                ) {
+                  setWarningInput((state) =>
+                    state.filter((el) => el !== "apellido")
+                  );
+                }
+                setApellido(e.target.value);
+              }}
               value={apellido}
             />
           </div>
@@ -155,8 +204,22 @@ const NewPacientForm = ({ moveToggle, Toggle }) => {
               id="email"
               type="text"
               placeholder="Email del paciente"
-              className="border-2 w-full p-2 my-2 placeholder-zinc-400 rounded-md"
-              onChange={(e) => setEmail(e.target.value)}
+              className={`border-2 w-full p-2 my-2 placeholder-zinc-400 rounded-md${
+                +warningInput.includes("email") || warningInput.includes("all")
+                  ? " border-red-700 focus:outline-red-700"
+                  : ""
+              }`}
+              onChange={(e) => {
+                if (
+                  e.target.value.trim() !== "" &&
+                  warningInput.includes("email")
+                ) {
+                  setWarningInput((state) =>
+                    state.filter((el) => el !== "email")
+                  );
+                }
+                setEmail(e.target.value);
+              }}
               value={email}
             />
           </div>
@@ -170,9 +233,24 @@ const NewPacientForm = ({ moveToggle, Toggle }) => {
             <input
               id="telefono"
               type="text"
-              placeholder="Sin el 0 y sin el 15"
-              className="border-2 w-full p-2 my-2 placeholder-zinc-400 rounded-md"
-              onChange={(e) => setTelefono(e.target.value)}
+              placeholder="Prefijo (+54), sin el 0 y sin el 15"
+              className={`border-2 w-full p-2 my-2 placeholder-zinc-400 rounded-md${
+                +warningInput.includes("telefono") ||
+                warningInput.includes("all")
+                  ? " border-red-700 focus:outline-red-700"
+                  : ""
+              }`}
+              onChange={(e) => {
+                if (
+                  e.target.value.trim() !== "" &&
+                  warningInput.includes("telefono")
+                ) {
+                  setWarningInput((state) =>
+                    state.filter((el) => el !== "telefono")
+                  );
+                }
+                setTelefono(e.target.value);
+              }}
               value={telefono}
             />
           </div>
@@ -180,7 +258,11 @@ const NewPacientForm = ({ moveToggle, Toggle }) => {
             type="submit"
             className="bg-indigo-600 rounded-md w-full p-3 text-white uppercase font-bold hover:bg-indigo-700 cursor-pointer transition-colors"
           />
-        {msg && <p className="w-full absolute right-0 bottom-0 text-md uppercase font-bold">{msg}</p>}
+          {msg && (
+            <p className="w-full absolute right-0 bottom-0 text-md uppercase font-bold">
+              {msg}
+            </p>
+          )}
         </form>
       </div>
     </>

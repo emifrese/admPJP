@@ -10,6 +10,7 @@ import RecurringPacient from "../forms/RecurringPacients";
 import MonthDayWrapper from "./MonthDayWrapper";
 import arrowPrev from "../../assets/arrow_back_ios_FILL0_wght400_GRAD0_opsz48.svg";
 import arrowNext from "../../assets/arrow_forward_ios_FILL0_wght400_GRAD0_opsz48.svg";
+import Day from "./Day";
 
 const Month = ({ toggleModal, modal }) => {
   const [loader, setLoader] = useState(false);
@@ -58,7 +59,7 @@ const Month = ({ toggleModal, modal }) => {
             )}:${el[1].hour.substring(2)}`;
             return (
               <p
-                className="cursor-pointer m-1 w-14 text-center rounded-md bg-header-green text-white inline-block"
+                className="cursor-pointer m-1 w-14 text-center rounded-md bg-slightly-darker-blue text-white inline-block"
                 onClick={(e) => {
                   dispatch(
                     appointmentsActions.setDay(
@@ -90,7 +91,7 @@ const Month = ({ toggleModal, modal }) => {
           appointmentsDisplay.push(
             <p
               key={Math.random().toString(36).slice(2) + day.getMilliseconds()}
-              className="cursor-pointer m-1 w-full text-center rounded-md bg-header-green text-white inline-block"
+              className="cursor-pointer m-1 w-full text-center rounded-md bg-slightly-darker-blue text-white inline-block"
             >
               NO SE ATIENDE
             </p>
@@ -141,7 +142,7 @@ const Month = ({ toggleModal, modal }) => {
             props: {
               ...temp[0].props,
               className: temp[0].props.className.replace(
-                "bg-header-green",
+                "bg-slightly-darker-blue",
                 "bg-red-500"
               ).replace("w-full", "w-14"),
               onClick: (e) => {
@@ -215,6 +216,7 @@ const Month = ({ toggleModal, modal }) => {
             today={today}
             rowStart={rowStart}
             colStart={colStart}
+            toggleModal={toggleModal}
           >
             <div
               className="flex flex-wrap h-full justify-center content-center"
@@ -268,7 +270,7 @@ const Month = ({ toggleModal, modal }) => {
       </div>
       <div className="flex w-full justify-between">
         <div
-          className={`w-1/2 grid justify-between content-center gap-y-2 grid-cols-${defAppointments.length}`}
+          className={`w-1/2 grid justify-between content-center gap-2 grid-cols-${defAppointments.length}`}
         >
           {loader ? <div>Loading</div> : squareDays}
         </div>
@@ -276,6 +278,9 @@ const Month = ({ toggleModal, modal }) => {
           <h3 className="absolute top-0 text-2xl font-semibold">
             Turnos del dia
           </h3>
+          {/* {
+            modal[1] && modal[0] === "day" && <Day/>
+          } */}
           {modal[1] && modal[0] === "new" && <NewOrRecurring />}
           {modal[1] && modal[0] === "recurring" && <RecurringPacient Toggle={toggleModal}/>}
         </div>

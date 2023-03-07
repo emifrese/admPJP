@@ -11,77 +11,6 @@ import calendar from "../../assets/edit_calendar_FILL0_wght400_GRAD0_opsz48.svg"
 
 const MobileConfig = () => {
   const [day, setDay] = useState(1);
-
-  // return (
-  //   <>
-  //     <div className="w-full flex justify-center items-center gap-2">
-  //       {day > 1 && (
-  //         <button
-  //           onClick={() => setDay((state) => (state > 1 ? state - 1 : state))}
-  //           className="absolute left-2"
-  //         >
-  //           <img className="w-6" src={arrowPrev} />
-  //         </button>
-  //       )}
-  //       <h2 className="text-2xl font-semibold">{days[day]}</h2>
-  //       {day < 5 && (
-  //         <button
-  //           onClick={() => setDay((state) => (state < 5 ? state + 1 : state))}
-  //           className="absolute right-2"
-  //         >
-  //           <img className="w-6" src={arrowNext} />
-  //         </button>
-  //       )}
-  //     </div>
-  //     <div className="grid grid-cols-2 gap-2 w-full px-4 my-8">
-  //       {defDayDisplay.length > 0 ? (
-  //         defDayDisplay
-  //       ) : (
-  //         <p className="col-span-2 text-center font-semibold bg-brighter-yellow text-header-green rounded-md text-xl mx-auto px-4 py-2">
-  //           No hay horarios en <span className="font-bold">{place}</span>
-  //         </p>
-  //       )}
-  //     </div>
-  //     {/* Add date button */}
-  //     {/* <div
-  //       className={"flex justify-between w-full mx-4 rounded-md bg-green-300"}
-  //     >
-  //       <button
-  //         className="bg-brighter-yellow uppercase font-bold w-full flex justify-center py-2"
-  //         onClick={toggleModal}
-  //       >
-  //         Agregar un horario más
-  //       </button>
-  //     </div> */}
-  //     {/* Add date option  */}
-  //     {/* {modal[2] && modal[0] === "" && (
-  //       <Modal Toggle={toggleModal}>
-  //         <form className="bg-white p-6 rounded-md">
-  //           <select name="hour" id="hour">
-  //             <option value="">Hour1</option>
-  //             <option value="">hour2</option>
-  //           </select>
-  //         </form>
-  //       </Modal>
-  //     )} */}
-  //     {modal[2] && modal[0] !== "" && (
-  //       <Modal Toggle={toggleModal}>
-  //         <div className="bg-white p-6 flex flex-wrap justify-center items-center gap-4">
-  //           <span className="w-full">
-  //             Habilitar/Deshabilitar {modal[1]} {modal[0]}
-  //           </span>
-  //           <button
-  //             className="bg-green-500 px-4 py-2 rounded-md"
-  //             onClick={() => toggleAvailable()}
-  //           >
-  //             Si
-  //           </button>
-  //           <button className="bg-red-500 px-4 py-2 rounded-md">No</button>
-  //         </div>
-  //       </Modal>
-  //     )}
-  //   </>
-  // );
   const [modal, setModal] = useState([false, null]);
 
   const defAppointments = useSelector(
@@ -107,7 +36,7 @@ const MobileConfig = () => {
         return (
           <p
             className={
-              "flex flex-col text-center rounded-md uppercase text-white font-semibold bg-header-green p-2"
+              "flex flex-col text-center rounded-md uppercase text-white font-semibold bg-slightly-darker-blue p-2"
             }
             data-day={defAppointments[day - 1].day}
             key={Math.random().toString(36).slice(2)}
@@ -130,7 +59,6 @@ const MobileConfig = () => {
         Sin turnos
       </p>]
   }
-  console.log(defDayDisplay);
 
   return (
     <>
@@ -155,14 +83,14 @@ const MobileConfig = () => {
       </div>
       <div className="flex justify-center gap-4 w-full px-10 mt-10">
         <div
-          className="flex flex-col w-full text-center gap-2 bg-white bg-opacity-50 rounded-lg p-4 justify-between"
+          className="flex flex-col w-full text-center gap-2 bg-white bg-opacity-50 rounded-lg p-2 justify-between"
           key={Math.random().toString(36).slice(2)}
         >
           <div className="grid grid-cols-2 gap-2 text-center">
             {defDayDisplay}
           </div>
           <button
-            className="flex justify-center p-2 rounded-md border-2 bg-brighter-yellow"
+            className="flex justify-center p-2 rounded-md border-2 hover:border-green bg-green hover:bg-green-hover"
             onClick={() =>
               toggleAddHour(parseInt(defDayDisplay[0].props["data-day"]))
             }

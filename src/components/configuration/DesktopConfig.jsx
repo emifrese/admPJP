@@ -33,7 +33,7 @@ const DesktopConfig = () => {
             return (
               <p
                 className={
-                  "flex flex-col text-center rounded-md uppercase text-white font-semibold bg-header-green p-2"
+                  "flex flex-col text-center rounded-md uppercase text-white font-semibold bg-slightly-darker-blue p-2"
                 }
                 data-day={defAppointments[i].day}
                 key={Math.random().toString(36).slice(2)}

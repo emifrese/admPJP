@@ -13,9 +13,9 @@ const Header = () => {
 
   const {pathname} = useLocation();
 
-  let navClass = "flex items-center gap-4 bg-header-green";
+  let navClass = "flex items-center gap-4 bg-slightly-darker-blue";
 
-  let headerClass = "text-zinc-300 absolute w-full top-0 flex justify-center h-16 py-4 bg-header-green";
+  let headerClass = "text-zinc-300 absolute w-full top-0 flex justify-center h-16 py-4 bg-slightly-darker-blue";
 
   if (width <= 750) {
     headerClass += " px-2"

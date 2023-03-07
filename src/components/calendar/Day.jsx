@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { days, getDays, months } from "../../helpers/date";
+import { compareHours, days, getDays, months } from "../../helpers/date";
 import { appointmentsActions } from "../../store/states/appointments";
 import { pacientsActions } from "../../store/states/pacients";
 import NewOrRecurring from "../forms/NewOrRecurring";
 import RecurringPacient from "../forms/RecurringPacients";
 import Modal from "../UI/Modal";
-import whatsappPNG from "../../assets/whatsapp.png";
 import arrowPrev from "../../assets/arrow_back_ios_FILL0_wght400_GRAD0_opsz48.svg";
-import arrowNext from "../../assets/arrow_forward_ios_FILL0_wght400_GRAD0_opsz48.svg"
+import arrowNext from "../../assets/arrow_forward_ios_FILL0_wght400_GRAD0_opsz48.svg";
 
 const Day = () => {
   const [modal, setModal] = useState(["", false]);
@@ -21,8 +20,8 @@ const Day = () => {
   );
   const pacients = useSelector((state) => state.pacients.pacients);
 
-  const places = useSelector(state => state.appointments.places)
- 
+  const places = useSelector((state) => state.appointments.places);
+
   const dispatch = useDispatch();
   const totalDays = getDays(year, month);
 
@@ -48,7 +47,7 @@ const Day = () => {
       .filter((el) => el[0] !== "id" && el[0] !== "day")
       .map((el) => (
         <p
-          className={`font-bold text-white rounded-md py-2 px-4 bg-header-green ${
+          className={`font-bold text-white rounded-md py-2 px-4 bg-slightly-darker-blue ${
             el[1].available ? "inline-block" : "hidden"
           }`}
           onClick={(e) => {
@@ -68,7 +67,8 @@ const Day = () => {
         >
           {el[1].hour.substring(0, 2)}:{el[1].hour.substring(2)}
         </p>
-      ));
+      ))
+      .sort((a, b) => compareHours(a, b));
   }
   if (dayAppointments) {
     scheduleAppointments = Object.entries(dayAppointments).filter(
@@ -86,12 +86,19 @@ const Day = () => {
       };
       let index;
 
-      if(Object.keys(temp).length < 1){
-        temp = [{...freeAppointments[0], props: {
-          ...freeAppointments[0].props,
-          children: `${el[1].hour.substring(0, 2)}:${el[1].hour.substring(2)}`,
-          ["data-time"]: el[1].hour
-        }}]
+      if (Object.keys(temp).length < 1) {
+        temp = [
+          {
+            ...freeAppointments[0],
+            props: {
+              ...freeAppointments[0].props,
+              children: `${el[1].hour.substring(0, 2)}:${el[1].hour.substring(
+                2
+              )}`,
+              ["data-time"]: el[1].hour,
+            },
+          },
+        ];
         index = null;
       } else {
         index = freeAppointments.indexOf(temp[0]);
@@ -108,7 +115,7 @@ const Day = () => {
         ...temp[0],
         props: {
           ...temp[0].props,
-          className: "text-header-green uppercase font-bold",
+          className: "uppercase font-bold",
           onClick: () => {
             dispatch(pacientsActions.setCurrentPacient(currentPacient[0]));
             dispatch(appointmentsActions.setDay(newTemp.props["data-day"]));
@@ -119,27 +126,27 @@ const Day = () => {
           children: newChildren,
         },
       };
-      const whatsapp = (
-        <a target="_blank" href={"https://wa.me/" + currentPacient[0].telefono} className="p-2">
-          <img className="w-4" src={whatsappPNG} />
-        </a>
-      );
       const appointment = (
         <div className="w-full flex justify-between items-center rounded-md py-2 px-4 gap-2  bg-brighter-yellow">
           {newTemp}
-          {whatsapp}
         </div>
       );
-      if(index !== null){
+      if (index !== null) {
         freeAppointments.splice(index, 1);
       }
       appointmentsDisplay.push(appointment);
+      appointmentsDisplay.sort((a, b) =>
+        compareHours(a.props.children, b.props.children)
+      );
     }
   }
 
   let busySquare;
 
-  if (defDayAppointments) {
+  console.log(appointmentsDisplay);
+
+  if (appointmentsDisplay.length > 0 || Object.entries(defDayAppointments)
+  .filter((el) => el[0] !== "id" && el[0] !== "day").filter(el => el[1].available).length > 0) {
     busySquare = (
       <div
         key={Math.random().toString(34).slice(2)}
@@ -147,16 +154,19 @@ const Day = () => {
           "flex place-content-start items-start flex-wrap justify-center w-64 text-center my-8 gap-2"
         }
       >
-        {appointmentsDisplay.length > 0 ? (
-          appointmentsDisplay
-        ) : (
-          <p className="bg-brighter-yellow font-bold text-header-green uppercase rounded-md w-full text-xl py-2">
+        {appointmentsDisplay.length > 0 && appointmentsDisplay}
+        {Object.entries(defDayAppointments)
+          .filter((el) => el[0] !== "id" && el[0] !== "day")
+          .filter((el) => el[1].available).length > 0 && appointmentsDisplay.length === 0 && (
+          <p className="bg-background-blue font-bold text-black uppercase rounded-md w-full text-xl py-2">
             No hay turnos agendados
           </p>
         )}
       </div>
     );
   }
+
+  console.log(freeAppointments);
 
   const freeSquare = (
     <div
@@ -165,13 +175,17 @@ const Day = () => {
         "w-64 text-center grid grid-cols-2 place-content-start gap-2 justify-center"
       }
     >
-      {freeAppointments.length > 0 ? (
+      {Object.entries(defDayAppointments)
+        .filter((el) => el[0] !== "id" && el[0] !== "day")
+        .filter((el) => el[1].available).length > 0 ? (
         <>
           <h2 className="w-full text-2xl col-span-2">Turnos disponibles</h2>
           {freeAppointments}
         </>
       ) : (
-        <h2 className="col-span-2 bg-header-green text-brighter-yellow mx-auto mt-6 px-4 py-2 text-xl uppercase font-bold rounded-md">No hay horarios disponibles</h2>
+        <h2 className="col-span-2 bg-email mx-auto mt-6 px-4 py-2 text-xl uppercase font-bold rounded-md">
+          No hay horarios disponibles
+        </h2>
       )}
     </div>
   );
@@ -195,7 +209,7 @@ const Day = () => {
             }
           }}
         >
-          <img className="w-8" src={arrowPrev}/>
+          <img className="w-8" src={arrowPrev} />
         </button>
         <h2 className="text-2xl font-semibold">
           {days[weekDay.getDay()]} {day} de {months[month]}
@@ -210,7 +224,7 @@ const Day = () => {
             }
           }}
         >
-          <img className="w-8" src={arrowNext}/>
+          <img className="w-8" src={arrowNext} />
         </button>
       </div>
       {busySquare}
