@@ -2,7 +2,14 @@ import React from "react";
 import { days, months } from "../../helpers/date";
 import { rowClassToggle, colClassToggle } from "../../helpers/calendar";
 
-const MonthDayWrapper = ({ day, today, rowStart, colStart, children, toggleModal }) => {
+const MonthDayWrapper = ({
+  day,
+  today,
+  rowStart,
+  colStart,
+  children,
+  toggleModal,
+}) => {
   const rowClass = rowClassToggle(rowStart);
   const colClass = colClassToggle(colStart);
 
@@ -14,7 +21,10 @@ const MonthDayWrapper = ({ day, today, rowStart, colStart, children, toggleModal
   }`;
 
   return (
-    <div className={classDiv} onClick={toggleModal("day")}>
+    <div
+      className={classDiv}
+      // onClick={toggleModal("day")}
+    >
       <span className="w-full text-center">
         {day.getDate()} de {months[day.getMonth()]}
       </span>

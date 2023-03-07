@@ -277,9 +277,10 @@ const Month = ({ toggleModal, modal }) => {
         <div className="relative w-1/2 flex flex-col justify-center items-center gap-10 px-12">
           <h3 className="absolute top-0 text-2xl font-semibold">
             Turnos del dia
-          </h3>{
+          </h3>
+          {/* {
             modal[1] && modal[0] === "day" && <Day/>
-          }
+          } */}
           {modal[1] && modal[0] === "new" && <NewOrRecurring />}
           {modal[1] && modal[0] === "recurring" && <RecurringPacient Toggle={toggleModal}/>}
         </div>
