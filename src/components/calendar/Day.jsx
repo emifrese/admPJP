@@ -7,7 +7,7 @@ import NewOrRecurring from "../forms/NewOrRecurring";
 import RecurringPacient from "../forms/RecurringPacients";
 import Modal from "../UI/Modal";
 import arrowPrev from "../../assets/arrow_back_ios_FILL0_wght400_GRAD0_opsz48.svg";
-import arrowNext from "../../assets/arrow_forward_ios_FILL0_wght400_GRAD0_opsz48.svg"
+import arrowNext from "../../assets/arrow_forward_ios_FILL0_wght400_GRAD0_opsz48.svg";
 
 const Day = () => {
   const [modal, setModal] = useState(["", false]);
@@ -20,8 +20,8 @@ const Day = () => {
   );
   const pacients = useSelector((state) => state.pacients.pacients);
 
-  const places = useSelector(state => state.appointments.places)
- 
+  const places = useSelector((state) => state.appointments.places);
+
   const dispatch = useDispatch();
   const totalDays = getDays(year, month);
 
@@ -67,7 +67,8 @@ const Day = () => {
         >
           {el[1].hour.substring(0, 2)}:{el[1].hour.substring(2)}
         </p>
-      )).sort((a, b) => compareHours(a, b));
+      ))
+      .sort((a, b) => compareHours(a, b));
   }
   if (dayAppointments) {
     scheduleAppointments = Object.entries(dayAppointments).filter(
@@ -85,12 +86,19 @@ const Day = () => {
       };
       let index;
 
-      if(Object.keys(temp).length < 1){
-        temp = [{...freeAppointments[0], props: {
-          ...freeAppointments[0].props,
-          children: `${el[1].hour.substring(0, 2)}:${el[1].hour.substring(2)}`,
-          ["data-time"]: el[1].hour
-        }}]
+      if (Object.keys(temp).length < 1) {
+        temp = [
+          {
+            ...freeAppointments[0],
+            props: {
+              ...freeAppointments[0].props,
+              children: `${el[1].hour.substring(0, 2)}:${el[1].hour.substring(
+                2
+              )}`,
+              ["data-time"]: el[1].hour,
+            },
+          },
+        ];
         index = null;
       } else {
         index = freeAppointments.indexOf(temp[0]);
@@ -123,20 +131,22 @@ const Day = () => {
           {newTemp}
         </div>
       );
-      if(index !== null){
+      if (index !== null) {
         freeAppointments.splice(index, 1);
       }
-      appointmentsDisplay.push(appointment)
-      appointmentsDisplay.sort((a, b) => compareHours(a.props.children, b.props.children));
+      appointmentsDisplay.push(appointment);
+      appointmentsDisplay.sort((a, b) =>
+        compareHours(a.props.children, b.props.children)
+      );
     }
   }
-  
-
-  
 
   let busySquare;
 
-  if (defDayAppointments) {
+  console.log(appointmentsDisplay);
+
+  if (appointmentsDisplay.length > 0 || Object.entries(defDayAppointments)
+  .filter((el) => el[0] !== "id" && el[0] !== "day").filter(el => el[1].available).length > 0) {
     busySquare = (
       <div
         key={Math.random().toString(34).slice(2)}
@@ -144,9 +154,10 @@ const Day = () => {
           "flex place-content-start items-start flex-wrap justify-center w-64 text-center my-8 gap-2"
         }
       >
-        {appointmentsDisplay.length > 0 ? (
-          appointmentsDisplay
-        ) : (
+        {appointmentsDisplay.length > 0 && appointmentsDisplay}
+        {Object.entries(defDayAppointments)
+          .filter((el) => el[0] !== "id" && el[0] !== "day")
+          .filter((el) => el[1].available).length > 0 && appointmentsDisplay.length === 0 && (
           <p className="bg-background-blue font-bold text-black uppercase rounded-md w-full text-xl py-2">
             No hay turnos agendados
           </p>
@@ -155,6 +166,8 @@ const Day = () => {
     );
   }
 
+  console.log(freeAppointments);
+
   const freeSquare = (
     <div
       key={Math.random().toString(35).slice(2)}
@@ -162,13 +175,17 @@ const Day = () => {
         "w-64 text-center grid grid-cols-2 place-content-start gap-2 justify-center"
       }
     >
-      {freeAppointments.length > 0 ? (
+      {Object.entries(defDayAppointments)
+        .filter((el) => el[0] !== "id" && el[0] !== "day")
+        .filter((el) => el[1].available).length > 0 ? (
         <>
           <h2 className="w-full text-2xl col-span-2">Turnos disponibles</h2>
           {freeAppointments}
         </>
       ) : (
-        <h2 className="col-span-2 bg-email mx-auto mt-6 px-4 py-2 text-xl uppercase font-bold rounded-md">No hay horarios disponibles</h2>
+        <h2 className="col-span-2 bg-email mx-auto mt-6 px-4 py-2 text-xl uppercase font-bold rounded-md">
+          No hay horarios disponibles
+        </h2>
       )}
     </div>
   );
@@ -192,7 +209,7 @@ const Day = () => {
             }
           }}
         >
-          <img className="w-8" src={arrowPrev}/>
+          <img className="w-8" src={arrowPrev} />
         </button>
         <h2 className="text-2xl font-semibold">
           {days[weekDay.getDay()]} {day} de {months[month]}
@@ -207,7 +224,7 @@ const Day = () => {
             }
           }}
         >
-          <img className="w-8" src={arrowNext}/>
+          <img className="w-8" src={arrowNext} />
         </button>
       </div>
       {busySquare}

@@ -47,11 +47,15 @@ const NewAppointment = ({ moveToggle }) => {
       ? pacients.filter((el) => {
           const surFirstName =
             el.apellido.toLowerCase() + " " + el.nombre.toLowerCase();
-          const firstSurName = el.nombre.toLowerCase() + " " + el.apellido.toLowerCase();
+          const firstSurName =
+            el.nombre.toLowerCase() + " " + el.apellido.toLowerCase();
           if (apellido.trim() === "") {
             return null;
           } else {
-            return surFirstName.includes(apellido.toLowerCase().trim()) || firstSurName.includes(apellido.toLowerCase().trim());
+            return (
+              surFirstName.includes(apellido.toLowerCase().trim()) ||
+              firstSurName.includes(apellido.toLowerCase().trim())
+            );
           }
         })
       : [];
@@ -103,7 +107,7 @@ const NewAppointment = ({ moveToggle }) => {
   console.log(filterLastName);
 
   return (
-    <div className="">
+    <>
       <div className="flex justify-start w-full items-center">
         <button className="absolute" onClick={() => moveToggle("home")}>
           <img src={arrowBack} className="w-6" />
@@ -117,12 +121,9 @@ const NewAppointment = ({ moveToggle }) => {
             Busca a tu paciente por {""}
             <span className="font-bold">APELLIDO</span>
           </p>
-          <div className="text-sm rounded-md max-h-max px-5 py-3 mb-10 lg:mb-0">
+          <div className="text-md rounded-md max-h-max px-5 py-3 mb-10 lg:mb-0">
             <div className="relative">
-              <label
-                htmlFor="apellido"
-                className="text-header-green uppercase font-bold"
-              >
+              <label htmlFor="apellido" className="uppercase font-bold">
                 Paciente
               </label>
               <input
@@ -152,10 +153,11 @@ const NewAppointment = ({ moveToggle }) => {
               )}
               {filterLastName.length === 0 && apellido.length > 0 && (
                 <button
-                onClick={() => moveToggle("new")} 
-                className="block border-2 border-[#e5e7eb] bg-white rounded-b-md border-t-0 w-full py-2 cursor-pointer hover:bg-zinc-300"
+                  onClick={() => moveToggle("new")}
+                  className="block border-2 border-[#e5e7eb] bg-white rounded-b-md border-t-0 w-full py-2 cursor-pointer hover:bg-zinc-300"
                 >
-                  No existe paciente <span className="uppercase font-bold">añadelo</span>
+                  No existe paciente{" "}
+                  <span className="uppercase font-bold">añadelo</span>
                 </button>
               )}
             </div>
@@ -168,26 +170,28 @@ const NewAppointment = ({ moveToggle }) => {
             Desea agendar un turno para el {day} de {months[month]} a las{" "}
             {time.substring(0, 2)}:{time.substring(2)}?
           </h2>
-          <div className="bg-slightly-darker-blue text-white text-start text-lg rounded-md shadow-[0px_3px_5px_2px_rgba(67,56,202,0.3)] max-h-max px-5 py-3">
+          <div className="bg-slightly-darker-blue text-white text-start text-lg rounded-md shadow-[0px_3px_5px_2px_rgba(67,56,202,0.3)] max-h-max m-4 px-5 py-3">
             <p>
               Paciente: {currentPacient.apellido}, {currentPacient.nombre}
             </p>
           </div>
-          <button
-            className="bg-slightly-darker-blue px-4 py-2 text-white uppercase rounded-md"
-            onClick={() => saveAppointment()}
-          >
-            Agendar
-          </button>
-          <button
-            className="bg-red-500 px-4 py-2 text-white rounded-md"
-            onClick={() => dispatch(pacientsActions.setCurrentPacient({}))}
-          >
-            Reset
-          </button>
+          <div className="flex w-full justify-around">
+            <button
+              className="bg-slightly-darker-blue px-4 py-2 text-white uppercase rounded-md"
+              onClick={() => saveAppointment()}
+            >
+              Agendar
+            </button>
+            <button
+              className="bg-red-500 px-4 py-2 text-white rounded-md uppercase"
+              onClick={() => dispatch(pacientsActions.setCurrentPacient({}))}
+            >
+              Reset
+            </button>
+          </div>
         </>
       )}
-    </div>
+    </>
   );
 };
 

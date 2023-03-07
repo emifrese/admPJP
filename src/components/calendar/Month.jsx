@@ -10,6 +10,7 @@ import RecurringPacient from "../forms/RecurringPacients";
 import MonthDayWrapper from "./MonthDayWrapper";
 import arrowPrev from "../../assets/arrow_back_ios_FILL0_wght400_GRAD0_opsz48.svg";
 import arrowNext from "../../assets/arrow_forward_ios_FILL0_wght400_GRAD0_opsz48.svg";
+import Day from "./Day";
 
 const Month = ({ toggleModal, modal }) => {
   const [loader, setLoader] = useState(false);
@@ -215,6 +216,7 @@ const Month = ({ toggleModal, modal }) => {
             today={today}
             rowStart={rowStart}
             colStart={colStart}
+            toggleModal={toggleModal}
           >
             <div
               className="flex flex-wrap h-full justify-center content-center"
@@ -268,14 +270,16 @@ const Month = ({ toggleModal, modal }) => {
       </div>
       <div className="flex w-full justify-between">
         <div
-          className={`w-1/2 grid justify-between content-center gap-y-2 grid-cols-${defAppointments.length}`}
+          className={`w-1/2 grid justify-between content-center gap-2 grid-cols-${defAppointments.length}`}
         >
           {loader ? <div>Loading</div> : squareDays}
         </div>
         <div className="relative w-1/2 flex flex-col justify-center items-center gap-10 px-12">
           <h3 className="absolute top-0 text-2xl font-semibold">
             Turnos del dia
-          </h3>
+          </h3>{
+            modal[1] && modal[0] === "day" && <Day/>
+          }
           {modal[1] && modal[0] === "new" && <NewOrRecurring />}
           {modal[1] && modal[0] === "recurring" && <RecurringPacient Toggle={toggleModal}/>}
         </div>

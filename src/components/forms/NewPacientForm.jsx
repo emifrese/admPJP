@@ -17,19 +17,21 @@ const NewPacientForm = ({ moveToggle, Toggle }) => {
   const [alert, setAlert] = useState({});
   const [warningInput, setWarningInput] = useState([]);
 
-  const example = pacients.find((el) => el.telefono === telefono);
-
-  console.log(warningInput);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log(nombre, apellido, telefono);
+    let emptyInputs = [];
+    const newTelefono = telefono.replace(/[(]*[)]*[-\s\./]*/g, "");
+  
 
-    if ([nombre, apellido, telefono, email].includes("")) {
-      setWarningInput((state) =>
-        state.length === 4 ? state : ["nombre", "apellido", "email", "telefono"]
-      );
+    nombre.trim() === "" && emptyInputs.push("nombre");
+    apellido.trim() === "" && emptyInputs.push
+    ("apellido");
+    newTelefono.trim() === "" && emptyInputs.push("telefono");
+    email.trim() === "" && emptyInputs.push("email");
+
+    if (emptyInputs.length !== 0) {
+      setWarningInput(emptyInputs);
       setAlert({
         msg: "Todos los campos son obligatorios",
         error: true,
@@ -54,11 +56,11 @@ const NewPacientForm = ({ moveToggle, Toggle }) => {
 
     const repeatedEmail = pacients.find((el) => el.email === email);
 
-    const repeatedTelefono = pacients.find((el) => el.telefono === telefono);
+    const repeatedTelefono = pacients.find((el) => el.telefono === newTelefono);
 
     if (telefono.length < 10) {
       setAlert({
-        msg: "El telefono debe tener 10 digitos",
+        msg: "El telefono debe tener al menos 10 digitos",
         error: true,
       });
       setTimeout(() => {
@@ -91,10 +93,11 @@ const NewPacientForm = ({ moveToggle, Toggle }) => {
 
     const turnosRef = collection(firestore, "pacientes");
 
+    
     const newPaciente = {
       nombre,
       apellido,
-      telefono,
+      telefono: newTelefono,
       email,
       appointments: [],
     };
@@ -230,7 +233,7 @@ const NewPacientForm = ({ moveToggle, Toggle }) => {
             <input
               id="telefono"
               type="text"
-              placeholder="Sin el 0 y sin el 15"
+              placeholder="Prefijo (+54), sin el 0 y sin el 15"
               className={`border-2 w-full p-2 my-2 placeholder-zinc-400 rounded-md${
                 +warningInput.includes("telefono") ||
                 warningInput.includes("all")
@@ -238,10 +241,16 @@ const NewPacientForm = ({ moveToggle, Toggle }) => {
                   : ""
               }`}
               onChange={(e) => {
-                if(e.target.value.trim() !== "" && warningInput.includes("telefono")){
-                  setWarningInput(state => state.filter(el => el !== "telefono"))
+                if (
+                  e.target.value.trim() !== "" &&
+                  warningInput.includes("telefono")
+                ) {
+                  setWarningInput((state) =>
+                    state.filter((el) => el !== "telefono")
+                  );
                 }
-                setTelefono(e.target.value)}}
+                setTelefono(e.target.value);
+              }}
               value={telefono}
             />
           </div>

@@ -83,7 +83,7 @@ const MobileConfig = () => {
       </div>
       <div className="flex justify-center gap-4 w-full px-10 mt-10">
         <div
-          className="flex flex-col w-full text-center gap-2 bg-white bg-opacity-50 rounded-lg p-4 justify-between"
+          className="flex flex-col w-full text-center gap-2 bg-white bg-opacity-50 rounded-lg p-2 justify-between"
           key={Math.random().toString(36).slice(2)}
         >
           <div className="grid grid-cols-2 gap-2 text-center">
