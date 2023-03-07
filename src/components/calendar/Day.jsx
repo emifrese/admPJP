@@ -69,6 +69,8 @@ const Day = () => {
         </p>
       ))
       .sort((a, b) => compareHours(a, b));
+  } else {
+    return;
   }
   if (dayAppointments) {
     scheduleAppointments = Object.entries(dayAppointments).filter(
@@ -142,8 +144,6 @@ const Day = () => {
   }
 
   let busySquare;
-
-  console.log(appointmentsDisplay);
 
   if (appointmentsDisplay.length > 0 || Object.entries(defDayAppointments)
   .filter((el) => el[0] !== "id" && el[0] !== "day").filter(el => el[1].available).length > 0) {
