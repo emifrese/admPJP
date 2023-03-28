@@ -12,7 +12,6 @@ import { auth, firestore } from "../firebase";
 import { collection, onSnapshot } from "firebase/firestore";
 import { pacientsActions } from "../store/states/pacients";
 import { appointmentsActions } from "../store/states/appointments";
-import { months } from "../helpers/date";
 import Configuracion from "../pages/Configuracion";
 
 const Router = () => {
@@ -21,18 +20,12 @@ const Router = () => {
   const month = useSelector((state) => state.appointments.month);
   const year = useSelector((state) => state.appointments.year);
   const place = useSelector((state) => state.appointments.place);
-  const currentPacient = useSelector((state) => state.pacients.currentPacient);
-  // console.log(currentPacient);
   const appointmentsState = useSelector((state) => state.appointments);
-  
   const monthString = appointmentsState.monthString()
 
-  // console.log(monthString)
 
   useEffect(() => {
     onAuthStateChanged(auth, setUser);
-
-    console.log('change')
 
     if (user !== null) {
       onSnapshot(collection(firestore, "places"), snapshot => {
