@@ -40,6 +40,8 @@ export const colClassToggle = (colNumber) => {
         break;
       case 6:
         return "col-start-6";
+      case 7:
+        return "col-start-7"
         break;
     }
   };

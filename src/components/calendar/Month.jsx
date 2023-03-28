@@ -11,6 +11,7 @@ import MonthDayWrapper from "./MonthDayWrapper";
 import arrowPrev from "../../assets/arrow_back_ios_FILL0_wght400_GRAD0_opsz48.svg";
 import arrowNext from "../../assets/arrow_forward_ios_FILL0_wght400_GRAD0_opsz48.svg";
 import Day from "./Day";
+import { colClassToggle } from "../../helpers/calendar";
 
 const Month = ({ toggleModal, modal }) => {
   const [loader, setLoader] = useState(false);
@@ -75,10 +76,9 @@ const Month = ({ toggleModal, modal }) => {
                   toggleModal("new");
                 }}
                 data-day={day.getDate()}
-                data-time={`${el[1].hour.substring(
-                  0,
+                data-time={`${el[1].hour.substring(0, 2)}${el[1].hour.substring(
                   2
-                )}${el[1].hour.substring(2)}`}
+                )}`}
                 key={
                   Math.random().toString(32).slice(2) + day.getMilliseconds()
                 }
@@ -131,7 +131,7 @@ const Month = ({ toggleModal, modal }) => {
                     0,
                     2
                   )}${el[1].hour.substring(2)}`,
-                  ["data-day"]: day.getDate()
+                  ["data-day"]: day.getDate(),
                 },
               },
             ];
@@ -141,10 +141,9 @@ const Month = ({ toggleModal, modal }) => {
             ...temp[0],
             props: {
               ...temp[0].props,
-              className: temp[0].props.className.replace(
-                "bg-slightly-darker-blue",
-                "bg-red-500"
-              ).replace("w-full", "w-14"),
+              className: temp[0].props.className
+                .replace("bg-slightly-darker-blue", "bg-red-500")
+                .replace("w-full", "w-14"),
               onClick: (e) => {
                 const id = e.target.getAttribute("id");
                 const pacient = pacients.filter((pacient) => pacient.id === id);
@@ -205,6 +204,7 @@ const Month = ({ toggleModal, modal }) => {
         } else {
           colStart += 1;
         }
+        console.log(colStart);
         if (day.getDay() < lastDay) {
           rowStart += 1;
         }
@@ -230,12 +230,13 @@ const Month = ({ toggleModal, modal }) => {
     }
 
     for (let [i, day] of defAppointments.entries()) {
+      let classCol = colClassToggle(i + 1);
       squareDays.push(
         <div
-          className={`row-start-1 col-start-${i + 1}`}
+          className={`row-start-1 ${classCol}`}
           key={Math.random().toString(36).slice(2)}
         >
-          {days[i + 1]}
+          {days[i]}
         </div>
       );
     }
@@ -282,7 +283,9 @@ const Month = ({ toggleModal, modal }) => {
             modal[1] && modal[0] === "day" && <Day/>
           } */}
           {modal[1] && modal[0] === "new" && <NewOrRecurring />}
-          {modal[1] && modal[0] === "recurring" && <RecurringPacient Toggle={toggleModal}/>}
+          {modal[1] && modal[0] === "recurring" && (
+            <RecurringPacient Toggle={toggleModal} />
+          )}
         </div>
       </div>
     </>
