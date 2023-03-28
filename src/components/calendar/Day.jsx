@@ -39,6 +39,8 @@ const Day = () => {
     setModal((state) => [type, !state[1]]);
   };
 
+  console.log(defDayAppointments);
+
   let appointmentsDisplay = [];
   let freeAppointments = [];
   let scheduleAppointments;
@@ -145,8 +147,12 @@ const Day = () => {
 
   let busySquare;
 
-  if (appointmentsDisplay.length > 0 || Object.entries(defDayAppointments)
-  .filter((el) => el[0] !== "id" && el[0] !== "day").filter(el => el[1].available).length > 0) {
+  if (
+    appointmentsDisplay.length > 0 ||
+    Object.entries(defDayAppointments)
+      .filter((el) => el[0] !== "id" && el[0] !== "day")
+      .filter((el) => el[1].available).length > 0
+  ) {
     busySquare = (
       <div
         key={Math.random().toString(34).slice(2)}
@@ -157,11 +163,12 @@ const Day = () => {
         {appointmentsDisplay.length > 0 && appointmentsDisplay}
         {Object.entries(defDayAppointments)
           .filter((el) => el[0] !== "id" && el[0] !== "day")
-          .filter((el) => el[1].available).length > 0 && appointmentsDisplay.length === 0 && (
-          <p className="bg-background-blue font-bold text-black uppercase rounded-md w-full text-xl py-2">
-            No hay turnos agendados
-          </p>
-        )}
+          .filter((el) => el[1].available).length > 0 &&
+          appointmentsDisplay.length === 0 && (
+            <p className="bg-background-blue font-bold text-black uppercase rounded-md w-full text-xl py-2">
+              No hay turnos agendados
+            </p>
+          )}
       </div>
     );
   }
@@ -183,6 +190,11 @@ const Day = () => {
           {freeAppointments}
         </>
       ) : (
+        <h2 className="col-span-2 bg-email mx-auto mt-6 px-4 py-2 text-xl uppercase font-bold rounded-md">
+          No hay horarios disponibles
+        </h2>
+      )}
+      {defDayAppointments === undefined && (
         <h2 className="col-span-2 bg-email mx-auto mt-6 px-4 py-2 text-xl uppercase font-bold rounded-md">
           No hay horarios disponibles
         </h2>
